@@ -22,6 +22,7 @@ class LedgerServiceProvider extends ServiceProvider
             'LedgerCreateTablesV2',
         ],
     ];
+
     private int $migrationCount;
 
     public function boot()
@@ -31,8 +32,8 @@ class LedgerServiceProvider extends ServiceProvider
         }
 
         if ($this->app->runningInConsole()) {
-            $base = __DIR__ . '/../';
-            $migrateFrom = $base . 'database/migrations/';
+            $base = __DIR__.'/../';
+            $migrateFrom = $base.'database/migrations/';
 
             // Export migrations
             $this->migrationCount = count(self::$branches);
@@ -43,8 +44,8 @@ class LedgerServiceProvider extends ServiceProvider
             $branch = $this->getWorkingBranch($published);
             foreach (self::$branches[$branch] as $migrationClass) {
                 $migrationFile = Str::snake($migrationClass);
-                if (!isset($published[$migrationFile])) {
-                    $publishes[$migrateFrom . $migrationClass . '.stub.php'] =
+                if (! isset($published[$migrationFile])) {
+                    $publishes[$migrateFrom.$migrationClass.'.stub.php'] =
                         $this->migratePath($migrationFile);
                 }
             }
@@ -52,13 +53,13 @@ class LedgerServiceProvider extends ServiceProvider
             $this->publishes($publishes, 'migrations');
 
             $this->publishes(
-                [$base . 'config/config.php' => config_path('ledger.php')],
+                [$base.'config/config.php' => config_path('ledger.php')],
                 'config'
             );
             $this->commands([
                 ImportFeatureTests::class,
                 Install::class,
-                Templates::class
+                Templates::class,
             ]);
         }
     }
@@ -93,20 +94,21 @@ class LedgerServiceProvider extends ServiceProvider
     private function migratePath(string $file): string
     {
         $timeKludge = date('Y_m_d_His', time() - --$this->migrationCount);
+
         return database_path(
-            'migrations/' . $timeKludge . "_$file.php"
+            'migrations/'.$timeKludge."_$file.php"
         );
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'ledger');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'ledger');
     }
 
     protected function registerRoutes()
     {
         Route::group($this->routeConfiguration(), function () {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         });
     }
 
@@ -117,5 +119,4 @@ class LedgerServiceProvider extends ServiceProvider
             'middleware' => config('ledger.middleware'),
         ];
     }
-
 }

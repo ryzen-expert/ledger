@@ -7,7 +7,6 @@ use Abivia\Ledger\Helpers\Revision;
 use Abivia\Ledger\Messages\Reference;
 use Abivia\Ledger\Traits\CommonResponseProperties;
 use Abivia\Ledger\Traits\HasRevisions;
-use Abivia\Ledger\Traits\UuidPrimaryKey;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,26 +24,32 @@ use Illuminate\Support\HigherOrderCollectionProxy;
  * @property string $journalReferenceUuid UUID primary key.
  * @property Carbon $revision Revision timestamp to detect race condition on update.
  * @property Carbon $updated_at
+ *
  * @mixin Builder
  */
 class JournalReference extends Model
 {
-    use CommonResponseProperties, HasFactory, HasRevisions, UuidPrimaryKey;
+    use CommonResponseProperties, HasFactory, HasRevisions;
 
     protected $casts = [
         'revision' => 'datetime',
     ];
+
     protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = ['code', 'domainUuid', 'extra'];
+
     public $incrementing = false;
-    protected $keyType = 'string';
+
+    protected $keyType = 'int';
+
     protected $primaryKey = 'journalReferenceUuid';
 
     /**
      * The revision Hash is computationally expensive, only calculated when required.
      *
-     * @param $key
      * @return HigherOrderCollectionProxy|mixed|string|null
+     *
      * @throws Exception
      */
     public function __get($key)
@@ -52,6 +57,7 @@ class JournalReference extends Model
         if ($key === 'revisionHash') {
             return $this->getRevisionHash();
         }
+
         return parent::__get($key);
     }
 
@@ -82,9 +88,8 @@ class JournalReference extends Model
     }
 
     /**
-     * @param Reference $reference
-     * @return Builder
      * @throws Exception
+     *
      * @noinspection PhpIncompatibleReturnTypeInspection
      * @noinspection PhpDynamicAsStaticMethodCallInspection
      */
@@ -103,7 +108,6 @@ class JournalReference extends Model
     }
 
     /**
-     * @return array
      * @throws Exception
      */
     public function toResponse(): array
@@ -113,5 +117,4 @@ class JournalReference extends Model
 
         return $this->commonResponses($response, ['names']);
     }
-
 }

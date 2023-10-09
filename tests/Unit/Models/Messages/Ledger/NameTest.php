@@ -1,17 +1,16 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Abivia\Ledger\Tests\Unit\Models\Messages\Ledger;
 
 use Abivia\Ledger\Exceptions\Breaker;
-use Abivia\Ledger\Messages\Name;
 use Abivia\Ledger\Messages\Message;
+use Abivia\Ledger\Messages\Name;
 use Abivia\Ledger\Tests\TestCase;
-
 
 class NameTest extends TestCase
 {
-
     public function testFromRequestAdd()
     {
         $name = Name::fromArray(
@@ -77,5 +76,4 @@ class NameTest extends TestCase
             );
         }
     }
-
 }

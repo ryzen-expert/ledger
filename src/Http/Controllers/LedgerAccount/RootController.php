@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Http\Controllers\LedgerAccount;
@@ -25,6 +26,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use stdClass;
+
 use function pathinfo;
 
 /**
@@ -78,9 +80,9 @@ class RootController extends LedgerAccountController
     private function buildSectionMap(int $key, Section $section, bool $overwrite)
     {
         foreach ($section->codes as $code) {
-            if (!$overwrite && isset($this->codeToSection[$code])) {
+            if (! $overwrite && isset($this->codeToSection[$code])) {
                 $this->errors[] = __(
-                    "Account code :code cannot appear in multiple sections.",
+                    'Account code :code cannot appear in multiple sections.',
                     ['code' => $code]
                 );
                 throw Breaker::withCode(Breaker::INVALID_DATA);
@@ -107,8 +109,6 @@ class RootController extends LedgerAccountController
     /**
      * Initialize a new Ledger.
      *
-     * @param Create $message
-     * @return LedgerAccount
      * @throws Breaker
      * @throws Exception
      */
@@ -151,6 +151,7 @@ class RootController extends LedgerAccountController
             $inTransaction = false;
             $this->auditLog($message);
         } catch (Exception $exception) {
+            //            dd($exception);
             if ($inTransaction) {
                 DB::rollBack();
             }
@@ -214,7 +215,7 @@ class RootController extends LedgerAccountController
         // Create the accounts
         $errors = [];
         $emptyRun = false;
-        while (!$emptyRun) {
+        while (! $emptyRun) {
             $emptyRun = true;
             foreach ($this->templateAccounts as $code => $account) {
                 $parentCode = $account->parent->code ?? null;
@@ -280,7 +281,7 @@ class RootController extends LedgerAccountController
 
         foreach ($this->initData->balances as $balance) {
             $balance->validate(Message::OP_CREATE);
-            if (!isset($this->currencies[$balance->currency])) {
+            if (! isset($this->currencies[$balance->currency])) {
                 throw Breaker::withCode(
                     Breaker::INVALID_DATA,
                     __(
@@ -327,30 +328,32 @@ class RootController extends LedgerAccountController
                 // The opening balance is special as it can have any number of debits and credits.
                 /** @noinspection PhpDynamicAsStaticMethodCallInspection */
                 $journalEntry = JournalEntry::create([
-                    'currency'=> $currencyCode,
-                    'description'=> 'Opening Balance',
-                    'domainUuid'=> $ledgerDomain->domainUuid,
-                    'arguments'=> [],
-                    'language'=> $language,
-                    'opening'=> true,
-                    'reviewed'=> true,
-                    'transDate'=> $transDate,
+                    'currency' => $currencyCode,
+                    'description' => 'Opening Balance',
+                    'domainUuid' => $ledgerDomain->domainUuid,
+                    'arguments' => [],
+                    'language' => $language,
+                    'opening' => true,
+                    'reviewed' => true,
+                    'transDate' => $transDate,
                 ]);
 
                 foreach ($balances as $detail) {
                     $ledgerAccount = $this->accounts[$detail->account->code] ?? null;
                     if ($ledgerAccount === null) {
                         $errors[] = __(
-                            "Account :code is not defined.",
+                            'Account :code is not defined.',
                             ['code' => $detail->account->code]
                         );
+
                         continue;
                     }
-                    if (!($ledgerAccount->debit || $ledgerAccount->credit)) {
+                    if (! ($ledgerAccount->debit || $ledgerAccount->credit)) {
                         $errors[] = __(
                             "Account :code can't be posted to.",
                             ['code' => $detail->account->code]
                         );
+
                         continue;
                     }
                     $journalDetail = new JournalDetail();
@@ -375,8 +378,6 @@ class RootController extends LedgerAccountController
 
     /**
      * Create the Ledger's currencies.
-     *
-     * @return void
      */
     private function initializeCurrencies(): void
     {
@@ -404,9 +405,9 @@ class RootController extends LedgerAccountController
             $domain->validate(Message::OP_ADD | Message::OP_CREATE);
             $domainCode = $domain->code;
             $domain->currencyDefault = $domain->currencyDefault ?? $this->firstCurrency;
-            if (!($this->currencies[$domain->currencyDefault] ?? false)) {
+            if (! ($this->currencies[$domain->currencyDefault] ?? false)) {
                 $this->errors[] = __(
-                    "Domain :domain has an undefined currency :currency.",
+                    'Domain :domain has an undefined currency :currency.',
                     ['domain' => $domainCode, 'currency' => $domain->currencyDefault]
                 );
                 throw Breaker::withCode(Breaker::BAD_REQUEST);
@@ -423,7 +424,7 @@ class RootController extends LedgerAccountController
         // Validate or set the default domain
         $defaultDomain = LedgerAccount::rules(required: false)->domain->default ?? null;
         if ($defaultDomain !== null) {
-            if (!isset($this->domains[$defaultDomain])) {
+            if (! isset($this->domains[$defaultDomain])) {
                 throw Breaker::withCode(
                     Breaker::BAD_REQUEST,
                     [__(
@@ -435,8 +436,8 @@ class RootController extends LedgerAccountController
         } else {
             $ruleUpdate = (object) [
                 'domain' => (object) [
-                    'default' => array_key_first($this->domains)
-                ]
+                    'default' => array_key_first($this->domains),
+                ],
             ];
             LedgerAccount::setRules($ruleUpdate);
         }
@@ -464,6 +465,7 @@ class RootController extends LedgerAccountController
      * Validate, reorganize and save section settings.
      *
      * @return void
+     *
      * @throws Breaker
      */
     private function initializeSections()
@@ -480,7 +482,7 @@ class RootController extends LedgerAccountController
         // Rebuild the code lists
         ksort($this->codeToSection);
         foreach ($this->codeToSection as $code => $key) {
-            if (!isset($sectionMap[$key])) {
+            if (! isset($sectionMap[$key])) {
                 $this->sections[$key]->codes = [];
                 $newSections[] = $this->sections[$key];
                 $sectionMap[$key] = array_key_last($newSections);
@@ -499,8 +501,6 @@ class RootController extends LedgerAccountController
 
     /**
      * Get a list of the names and title of the predefined templates.
-     *
-     * @return array
      */
     public static function listTemplates(): array
     {
@@ -536,20 +536,20 @@ class RootController extends LedgerAccountController
             );
             if ($template === false) {
                 $this->errors[] = __(
-                    "Template :template is not valid JSON.",
+                    'Template :template is not valid JSON.',
                     ['template' => $this->initData->template]
                 );
                 throw Breaker::withCode(Breaker::INVALID_DATA);
             }
             // If no account format has been set, see if we can inherit from the template
             if (
-                !isset($this->initData->rules->account->codeFormat)
+                ! isset($this->initData->rules->account->codeFormat)
                 && isset($template['codeFormat'])
             ) {
                 $ruleUpdate = (object) [
                     'account' => (object) [
-                        'codeFormat' => $template['codeFormat']
-                    ]
+                        'codeFormat' => $template['codeFormat'],
+                    ],
                 ];
                 LedgerAccount::setRules($ruleUpdate);
             }
@@ -562,7 +562,7 @@ class RootController extends LedgerAccountController
                 } catch (Breaker $exception) {
                     $errors = $exception->getErrors();
                     $errors[] = __(
-                        "Template :template is badly structured.",
+                        'Template :template is badly structured.',
                         ['template' => $this->initData->template]
                     );
                     throw Breaker::withCode(Breaker::INVALID_DATA, $errors);
@@ -575,10 +575,9 @@ class RootController extends LedgerAccountController
              * @var int $key
              * @var array $section */
             foreach ($template['sections'] ?? [] as $key => $section) {
-                $this->sections[$key] = Section::fromArray($section, ['checkAccount' =>false]);
+                $this->sections[$key] = Section::fromArray($section, ['checkAccount' => false]);
                 $this->buildSectionMap($key, $this->sections[$key], false);
             }
         }
     }
-
 }

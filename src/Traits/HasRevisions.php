@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Traits;
@@ -20,7 +21,9 @@ trait HasRevisions
 
     /**
      * Throw a Breaker exception if the request revision doesn't match the stored value.
-     * @param ?string $revision
+     *
+     * @param  ?string  $revision
+     *
      * @throws Breaker
      */
     public function checkRevision(?string $revision)
@@ -34,7 +37,7 @@ trait HasRevisions
 
         if (
             $revision !== $this->revisionHash
-            && !(Revision::checkBatchRevision($batchKey, $revision, $this->revisionHash))
+            && ! (Revision::checkBatchRevision($batchKey, $revision, $this->revisionHash))
         ) {
             throw Breaker::withCode(Breaker::BAD_REVISION);
         }
@@ -45,13 +48,14 @@ trait HasRevisions
         $this->revisionHashCached = null;
     }
 
-    private function getBatchKey(): string{
-        return static::class . ':' . $this->{$this->primaryKey};
+    private function getBatchKey(): string
+    {
+        return static::class.':'.$this->{$this->primaryKey};
     }
 
     public function getRevisionHash()
     {
-        if (!isset($this->revisionHashCached)) {
+        if (! isset($this->revisionHashCached)) {
             $this->revisionHashCached = Revision::create(
                 $this->revision, $this->updated_at
             );
@@ -65,5 +69,4 @@ trait HasRevisions
         parent::refresh();
         Revision::saveBatchRevision($this->getBatchKey(), $this->getRevisionHash());
     }
-
 }

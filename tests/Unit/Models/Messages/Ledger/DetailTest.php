@@ -1,16 +1,15 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Abivia\Ledger\Tests\Unit\Models\Messages\Ledger;
 
 use Abivia\Ledger\Exceptions\Breaker;
 use Abivia\Ledger\Messages\Detail;
-use Abivia\Ledger\Messages\Message;
 use Abivia\Ledger\Tests\TestCase;
 
-
-class DetailTest extends TestCase {
-
+class DetailTest extends TestCase
+{
     public function testNormalizeAmount()
     {
         $detail = new Detail();
@@ -76,5 +75,4 @@ class DetailTest extends TestCase {
         $this->expectException(Breaker::class);
         $detail->normalizeAmount();
     }
-
 }

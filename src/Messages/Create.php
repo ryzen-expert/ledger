@@ -74,7 +74,7 @@ class Create extends Message
 
     /**
      * Property get.
-     * @param $name
+     *
      * @return string|null
      */
     public function __get($name)
@@ -82,6 +82,7 @@ class Create extends Message
         if ($name === 'templatePath') {
             return $this->templatePath;
         }
+
         return null;
     }
 
@@ -92,13 +93,13 @@ class Create extends Message
         foreach ($data['accounts'] ?? [] as $index => $accountData) {
             try {
                 $message = Account::fromArray(
-                    $accountData, self::OP_ADD| self::OP_CREATE
+                    $accountData, self::OP_ADD | self::OP_CREATE
                 );
                 $this->accounts[$message->code] = $message;
             } catch (Breaker $exception) {
                 $errors[] = __(
-                    ":Property in position :index "
-                    . implode(', ', $exception->getErrors()) . ".",
+                    ':Property in position :index '
+                    .implode(', ', $exception->getErrors()).'.',
                     ['property' => 'Account', 'index' => $index + 1]
                 );
             }
@@ -119,8 +120,8 @@ class Create extends Message
                 $this->balances[] = $message;
             } catch (Breaker $exception) {
                 $errors[] = __(
-                    ":Property in position :index "
-                    . implode(', ', $exception->getErrors()) . ".",
+                    ':Property in position :index '
+                    .implode(', ', $exception->getErrors()).'.',
                     ['property' => 'Balance', 'index' => $index + 1]
                 );
             }
@@ -129,7 +130,7 @@ class Create extends Message
         return $errors;
     }
 
-    private function extractCurrencies(array$data): array
+    private function extractCurrencies(array $data): array
     {
         $errors = [];
         $this->currencies = [];
@@ -139,7 +140,7 @@ class Create extends Message
                 $this->currencies[$message->code] = $message;
             } catch (Breaker $exception) {
                 $errors[] = __(
-                    ":Property in position :index: " . $exception->getErrors(),
+                    ':Property in position :index: '.$exception->getErrors(),
                     ['property' => 'Currency', 'index' => $index + 1]
                 );
             }
@@ -158,12 +159,13 @@ class Create extends Message
                 $this->domains[] = $domain;
             } catch (Breaker $exception) {
                 $errors[] = __(
-                    ":Property in position :index "
-                    . implode(', ', $exception->getErrors()) . ".",
+                    ':Property in position :index '
+                    .implode(', ', $exception->getErrors()).'.',
                     ['property' => 'Domain', 'index' => $index + 1]
                 );
             }
         }
+
         return $errors;
     }
 
@@ -179,12 +181,13 @@ class Create extends Message
                 $this->journals[$journal->code] = $journal;
             } catch (Breaker $exception) {
                 $errors[] = __(
-                    ":Property in position :index "
-                    . implode(', ', $exception->getErrors()) . ".",
+                    ':Property in position :index '
+                    .implode(', ', $exception->getErrors()).'.',
                     ['property' => 'Journal', 'index' => $index + 1]
                 );
             }
         }
+
         return $errors;
     }
 
@@ -194,20 +197,21 @@ class Create extends Message
         $this->sections = [];
         foreach ($data['sections'] ?? [] as $index => $sectionData) {
             try {
-                $this->sections[] = Section::fromArray($sectionData, ['checkAccount' =>false]);
+                $this->sections[] = Section::fromArray($sectionData, ['checkAccount' => false]);
             } catch (Breaker $exception) {
                 $errors[] = __(
-                    ":Property in position :index "
-                    . implode(', ', $exception->getErrors()) . ".",
+                    ':Property in position :index '
+                    .implode(', ', $exception->getErrors()).'.',
                     ['property' => 'Section', 'index' => $index + 1]
                 );
             }
         }
+
         return $errors;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_CREATE): self
     {
@@ -235,10 +239,9 @@ class Create extends Message
                 $create->transDate = new Carbon($data['date']);
             }
             // Convert the array into a stdClass
-            $ruleArray = $data['rules'] ?? (object)[];
+            $ruleArray = $data['rules'] ?? (object) [];
             $create->rules = json_decode(json_encode($ruleArray));
-        }
-        catch (TypeError $exception) {
+        } catch (TypeError $exception) {
             if (
                 preg_match(
                     '!Cannot assign (\S+) .*?\$(\S+) of type \??(\S+)!',
@@ -263,9 +266,9 @@ class Create extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
         $this->transDate ??= Carbon::now();
@@ -274,7 +277,7 @@ class Create extends Message
                 "ledger/charts/$this->template.json"
             );
             $this->templatePath = Package::chartPath("$this->template.json");
-            if (!file_exists($this->templatePath)) {
+            if (! file_exists($this->templatePath)) {
                 throw Breaker::withCode(
                     Breaker::BAD_REQUEST, [__('Specified template not found in ledger/charts.')]
                 );

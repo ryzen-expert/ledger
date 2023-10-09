@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpParamsInspection */
 
 declare(strict_types=1);
@@ -14,7 +15,8 @@ use Abivia\Ledger\Models\LedgerAccount;
 use Carbon\Carbon;
 use Exception;
 
-trait CreateLedgerTrait {
+trait CreateLedgerTrait
+{
     protected array $createRequest = [
         'language' => 'en-CA',
         'date' => '2021-01-01',
@@ -24,50 +26,51 @@ trait CreateLedgerTrait {
                 'names' => [
                     [
                         'name' => 'General Corporate',
-                        'language' => 'en-CA'
+                        'language' => 'en-CA',
                     ],
                     [
                         'name' => 'Général Corporatif',
-                        'language' => 'fr-CA'
-                    ]
-                ]
-            ]
+                        'language' => 'fr-CA',
+                    ],
+                ],
+            ],
         ],
         'currencies' => [
             [
                 'code' => 'CAD',
-                'decimals' => 2
+                'decimals' => 2,
             ],
             [
                 'code' => 'ZZZ',
-                'decimals' => 4
-            ]
+                'decimals' => 4,
+            ],
         ],
         'names' => [
             [
                 'name' => 'General Ledger Test',
-                'language' => 'en-CA'
+                'language' => 'en-CA',
             ],
             [
                 'name' => 'Tester le grand livre',
-                'language' => 'fr-CA'
-            ]
+                'language' => 'fr-CA',
+            ],
         ],
         'rules' => [
-//            'account' => [
-//                'codeFormat' => '/^[a-z0-9\-]+$/i'
-//            ],
+            //            'account' => [
+            //                'codeFormat' => '/^[a-z0-9\-]+$/i'
+            //            ],
             'pageSize' => 25,
             '_myAppRule' => [1, 2, 3],
         ],
         'extra' => 'arbitrary string',
-        'template' => 'sections'
+        'template' => 'sections',
     ];
 
     /**
      * @throws Exception
      */
-    protected function addRandomTransactions(int $count) {
+    protected function addRandomTransactions(int $count)
+    {
         // Get a list of accounts in the ledger
         $codes = $this->getPostingAccounts();
         $forDate = new Carbon('2001-01-02');
@@ -86,22 +89,22 @@ trait CreateLedgerTrait {
                 $entry->description = "Random entry $transId";
                 $entry->transDate = clone $forDate;
                 $entry->transDate->addDays(random_int(0, $count));
-                $amount = (float)random_int(-99999, 99999);
+                $amount = (float) random_int(-99999, 99999);
                 $entry->details = [
                     new Detail(
                         new EntityRef(array_pop($shuffled)),
-                        (string)($amount / 100)
+                        (string) ($amount / 100)
                     ),
                     new Detail(
                         new EntityRef(array_pop($shuffled)),
-                        (string)(-$amount / 100)
+                        (string) (-$amount / 100)
                     ),
                 ];
                 $controller->add($entry);
             }
         } catch (Breaker $exception) {
-            echo $exception->getMessage() . "\n"
-                . implode("\n", $exception->getErrors());
+            echo $exception->getMessage()."\n"
+                .implode("\n", $exception->getErrors());
         }
     }
 
@@ -118,6 +121,7 @@ trait CreateLedgerTrait {
         $response = $this->postJson(
             'api/ledger/root/create', $create
         );
+        //        $response->dump();
         $response->assertStatus(200);
         $this->assertTrue(isset($response['time']));
         $this->assertEquals(
@@ -135,11 +139,11 @@ trait CreateLedgerTrait {
         $codes = [];
         foreach (LedgerAccount::all() as $account) {
             // Get rid of the root and any category accounts
-            if ($account->code != '' && !$account->category) {
+            if ($account->code != '' && ! $account->category) {
                 $codes[] = $account->code;
             }
         }
+
         return $codes;
     }
-
 }

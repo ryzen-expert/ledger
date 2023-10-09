@@ -22,7 +22,7 @@ abstract class ApiController
         if (
             env('LEDGER_API_DEBUG_ALLOWED', true)
             && session(
-                (config('ledger.session_key_prefix') ?? 'ledger.') . 'api_debug', 0
+                (config('ledger.session_key_prefix') ?? 'ledger.').'api_debug', 0
             ) > 0
         ) {
             $response['version'] = Version::core();
@@ -36,11 +36,10 @@ abstract class ApiController
     /**
      * Convert an operation request into a bitmask.
      *
-     * @param string $operation
-     * @return int
      * @throws Breaker
      */
-    public static function getOpFlags(string $operation): int {
+    public static function getOpFlags(string $operation): int
+    {
         return Message::toOpFlags(
             $operation, ['add' => Message::F_API, 'disallow' => Message::OP_CREATE]
         );
@@ -48,10 +47,6 @@ abstract class ApiController
 
     /**
      * Perform an API operation.
-     *
-     * @param Request $request
-     * @param string $operation
-     * @return array
      */
     public function run(Request $request, string $operation = ''): array
     {
@@ -74,11 +69,7 @@ abstract class ApiController
     }
 
     /**
-     * @param Request $request
-     * @param string $operation
-     * @return array
      * @throws Breaker
      */
     abstract protected function runCore(Request $request, string $operation): array;
-
 }

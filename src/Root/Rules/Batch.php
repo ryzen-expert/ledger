@@ -11,6 +11,7 @@ class Batch implements Hydratable
      * @var bool Set if report generation is allowed in a batch
      */
     public bool $allowReports = true;
+
     /**
      * @var int Limit to the number of transactions in a batch (zero if none)
      */
@@ -22,14 +23,14 @@ class Batch implements Hydratable
     private static Hydrator $hydrator;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hydrate($config, ?array $options = []): bool
     {
-        if (!isset(self::$hydrator)) {
+        if (! isset(self::$hydrator)) {
             self::$hydrator = Hydrator::make(self::class);
         }
+
         return self::$hydrator->hydrate($this, $config, $options);
     }
-
 }

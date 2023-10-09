@@ -1,7 +1,8 @@
-<?php /** @noinspection PhpParamsInspection */
+<?php
+
+/** @noinspection PhpParamsInspection */
 
 namespace Abivia\Ledger\Tests\Feature;
-
 
 use Abivia\Ledger\Http\Controllers\LedgerCurrencyController;
 use Abivia\Ledger\Messages\Currency;
@@ -25,10 +26,10 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
     private function createCurrencies()
     {
         $controller = new LedgerCurrencyController();
-        for ($id = 0; $id < 30; ++$id) {
+        for ($id = 0; $id < 30; $id++) {
             $data = [
-                'code' => 'C' . str_pad($id, 2, '0', STR_PAD_LEFT),
-                'decimals' => 2
+                'code' => 'C'.str_pad($id, 2, '0', STR_PAD_LEFT),
+                'decimals' => 2,
             ];
             $controller->add(Currency::fromArray($data));
         }
@@ -63,7 +64,7 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
         // Add a currency
         $requestData = [
             'code' => 'fud',
-            'decimals' => 4
+            'decimals' => 4,
         ];
         $response = $this->json(
             'post', 'api/ledger/currency/add', $requestData
@@ -85,7 +86,7 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
         // Add CAD again
         $requestData = [
             'code' => 'CAD',
-            'decimals' => 4
+            'decimals' => 4,
         ];
         $response = $this->json(
             'post', 'api/ledger/currency/add', $requestData
@@ -98,7 +99,7 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
         // Add a currency
         $requestData = [
             'code' => 'fud',
-            'decimals' => 4
+            'decimals' => 4,
         ];
         $response = $this->json(
             'post', 'api/ledger/currency/add', $requestData
@@ -124,7 +125,7 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
         // Add a currency
         $requestData = [
             'code' => 'fud',
-            'decimals' => 4
+            'decimals' => 4,
         ];
         $response = $this->json(
             'post', 'api/ledger/currency/add', $requestData
@@ -193,7 +194,7 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
         ];
         [$pages, $totalAccounts] = $this->getPagedCurrencies($requestData);
         $actualAccounts = LedgerCurrency::count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -215,7 +216,7 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
         [$pages, $totalAccounts] = $this->getPagedCurrencies($requestData);
         $actualAccounts = LedgerCurrency::whereBetween('code', ['C10', 'C19'])
             ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -236,7 +237,7 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
         [$pages, $totalAccounts] = $this->getPagedCurrencies($requestData);
         $actualAccounts = LedgerCurrency::where('code', '<=', 'C19')
             ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -257,7 +258,7 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
         [$pages, $totalAccounts] = $this->getPagedCurrencies($requestData);
         $actualAccounts = LedgerCurrency::where('code', '>=', 'C60')
             ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -291,7 +292,7 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
             'revision' => $actual->currency->revision,
             'code' => 'CAD',
             'decimals' => 4,
-            'toCode' => 'bob'
+            'toCode' => 'bob',
         ];
         $response = $this->json(
             'post', 'api/ledger/currency/update', $requestData
@@ -306,5 +307,4 @@ class LedgerCurrencyTest extends TestCaseWithMigrations
         );
         $this->isFailure($response);
     }
-
 }

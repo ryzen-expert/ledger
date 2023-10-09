@@ -29,15 +29,18 @@ class RootApiController extends ApiController
             // Add the ledger information to the response
             $response['ledger'] = $ledgerAccount->toResponse();
             //$this->success($message);
+
         } catch (Breaker $exception) {
+            //            dd($exception);
             $this->warning($exception);
         } catch (QueryException $exception) {
             $this->dbException($exception);
         } catch (Exception $exception) {
+            //                dd($exception);
             $response['errors'] = $this->errors;
             $response['errors'][] = $this->unexpectedException($exception);
         }
-
+//    dd($exception ,$this->errors);
         if (count($this->errors)) {
             $response['errors'] = $this->errors;
         }
@@ -83,5 +86,4 @@ class RootApiController extends ApiController
 
         return $this->commonInfo($response);
     }
-
 }

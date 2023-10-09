@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Http\Controllers;
@@ -23,8 +24,6 @@ class JournalReferenceController extends Controller
     /**
      * Add a reference for use in journal details.
      *
-     * @param Reference $message
-     * @return JournalReference
      * @throws Breaker
      * @throws Exception
      */
@@ -43,9 +42,9 @@ class JournalReferenceController extends Controller
                 Breaker::RULE_VIOLATION,
                 [
                     __(
-                        "Reference :code already exists.",
+                        'Reference :code already exists.',
                         ['code' => $message->code]
-                    )
+                    ),
                 ]
             );
         }
@@ -69,20 +68,21 @@ class JournalReferenceController extends Controller
 
     /**
      * Verify that the message refers to a valid domain.
-     * @param Reference $message
+     *
      * @return void
+     *
      * @throws Breaker
      */
     private function checkDomain(Reference $message)
     {
-        if (!isset($message->domain->uuid)) {
+        if (! isset($message->domain->uuid)) {
             /** @var LedgerDomain $ledgerDomain */
             $ledgerDomain = LedgerDomain::findWith($message->domain)->first();
             if ($ledgerDomain === null) {
                 throw Breaker::withCode(
                     Breaker::INVALID_DATA,
                     [
-                        __('Unknown domain :code.', ['code' => $message->domain->code])
+                        __('Unknown domain :code.', ['code' => $message->domain->code]),
                     ]
                 );
             }
@@ -93,8 +93,8 @@ class JournalReferenceController extends Controller
     /**
      * Delete a reference. The reference must be unused.
      *
-     * @param Reference $message
      * @return null
+     *
      * @throws Breaker
      */
     public function delete(Reference $message)
@@ -127,8 +127,6 @@ class JournalReferenceController extends Controller
     /**
      * Retrieve a reference by code.
      *
-     * @param Reference $message
-     * @return JournalReference
      * @throws Breaker
      */
     private function fetch(Reference $message): JournalReference
@@ -143,7 +141,7 @@ class JournalReferenceController extends Controller
                 Breaker::RULE_VIOLATION,
                 [
                     __('domain :code does not exist in domain :domain',
-                        ['code' => $message->code, 'domain' => $message->domain->code])
+                        ['code' => $message->code, 'domain' => $message->domain->code]),
                 ]
             );
         }
@@ -154,25 +152,21 @@ class JournalReferenceController extends Controller
     /**
      * Fetch a reference.
      *
-     * @param Reference $message
-     * @return JournalReference
      * @throws Breaker
      */
     public function get(Reference $message): JournalReference
     {
         $message->validate(Message::OP_GET);
+
         return $this->fetch($message);
     }
 
     /**
      * Perform a reference operation.
      *
-     * @param Reference $message
-     * @param int|null $opFlags
-     * @return JournalReference|null
      * @throws Breaker
      */
-    public function run(Reference $message, ?int $opFlags = null): ?JournalReference
+    public function run(Reference $message, int $opFlags = null): ?JournalReference
     {
         $opFlags ??= $message->getOpFlags();
         switch ($opFlags & Message::ALL_OPS) {
@@ -192,8 +186,6 @@ class JournalReferenceController extends Controller
     /**
      * Update a reference.
      *
-     * @param Reference $message
-     * @return JournalReference
      * @throws Breaker
      */
     public function update(Reference $message): JournalReference
@@ -230,5 +222,4 @@ class JournalReferenceController extends Controller
 
         return $journalReference;
     }
-
 }

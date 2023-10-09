@@ -23,17 +23,16 @@ abstract class Paginated extends Message
         'limit',
         'codes',
     ];
+
     /**
      * @var int The maximum number of elements to return.
      */
     public int $limit;
-    /**
-     * @var array
-     */
+
     public array $names = [];
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
@@ -58,19 +57,13 @@ abstract class Paginated extends Message
 
     /**
      * Apply a code range selection to a query.
-     * @param Builder|DbBuilder $query
-     * @param array $item
-     * @param bool $negate
-     * @param bool $wild
-     * @return Builder|DbBuilder
      */
     private function selectCodeRange(
         Builder|DbBuilder $query,
         array $item,
         bool $negate,
         bool $wild
-    ): Builder|DbBuilder
-    {
+    ): Builder|DbBuilder {
         if ($negate) {
             if ($item[0] === '') {
                 $query = $query->where('code', '>', $item[1]);
@@ -84,6 +77,7 @@ abstract class Paginated extends Message
                 foreach ($item as $search) {
                     $query = $query->where('code', 'like', $search);
                 }
+
                 return $query;
             });
         } else {
@@ -95,17 +89,17 @@ abstract class Paginated extends Message
                 } else {
                     $query = $query->whereBetween('code', $item);
                 }
+
                 return $query;
             });
         }
         $query->toSql();
+
         return $query;
     }
 
     /**
      * Apply code selections to a query
-     * @param Builder|DbBuilder $query
-     * @return Builder|DbBuilder
      */
     public function selectCodes(Builder|DbBuilder $query): Builder|DbBuilder
     {
@@ -145,8 +139,6 @@ abstract class Paginated extends Message
 
     /**
      * Apply name selections to a query.
-     * @param Builder|DbBuilder $query
-     * @return Builder|DbBuilder
      */
     public function selectNames(Builder|DbBuilder $query): Builder|DbBuilder
     {
@@ -176,17 +168,19 @@ abstract class Paginated extends Message
                     if ($name->name !== '') {
                         $query = $query->where('name', $operator, $name->name);
                     }
+
                     return $query;
                 });
             }
         }
+
         return $query;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
         // Limit results on API calls
@@ -202,7 +196,7 @@ abstract class Paginated extends Message
         foreach ($this->names as $name) {
             $name->validate($opFlags);
         }
+
         return $this;
     }
-
 }

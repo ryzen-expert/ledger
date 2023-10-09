@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Abivia\Ledger\Tests\Unit\Models\Messages\Ledger;
@@ -7,7 +8,6 @@ use Abivia\Ledger\Exceptions\Breaker;
 use Abivia\Ledger\Messages\Account;
 use Abivia\Ledger\Messages\Message;
 use Abivia\Ledger\Tests\TestCase;
-
 
 class AccountTest extends TestCase
 {
@@ -60,5 +60,4 @@ class AccountTest extends TestCase
         $this->assertEquals('1020', $account->toCode);
         $this->assertCount(2, $account->names);
     }
-
 }

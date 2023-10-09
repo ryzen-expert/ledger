@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Log;
 class TrialBalanceReport extends AbstractReport
 {
     private Collection $accounts;
+
     /**
      * @var string[][] A sparse list of sub-accounts for each account, indexed by code.
      */
@@ -56,17 +57,17 @@ class TrialBalanceReport extends AbstractReport
 
         // Grab the table names
         $dbPrefix = DB::getTablePrefix();
-        $detailTable = $dbPrefix . (new JournalDetail)->getTable();
-        $entryTable = $dbPrefix . (new JournalEntry)->getTable();
+        $detailTable = $dbPrefix.(new JournalDetail)->getTable();
+        $entryTable = $dbPrefix.(new JournalEntry)->getTable();
 
         // Get the balance changes for each account between the report date and now.
         $ledgerCurrency = LedgerCurrency::findOrBreaker($message->currency);
         $reportData->decimals = $ledgerCurrency->decimals;
-        $cast = 'decimal(' . LedgerCurrency::AMOUNT_SIZE . ", $ledgerCurrency->decimals)";
+        $cast = 'decimal('.LedgerCurrency::AMOUNT_SIZE.", $ledgerCurrency->decimals)";
         $balanceChangeQuery = DB::table($detailTable)
             ->select(DB::raw(
                 "`$detailTable`.`ledgerUuid` AS `uuid`,"
-                . " sum(cast(`amount` AS $cast)) AS `delta`")
+                ." sum(cast(`amount` AS $cast)) AS `delta`")
             )
             ->join(
                 $entryTable, "$detailTable.journalEntryId",
@@ -117,8 +118,7 @@ class TrialBalanceReport extends AbstractReport
 
     /**
      * Get the domain and make sure the uuid is set.
-     * @param Report $message
-     * @return LedgerDomain
+     *
      * @throws Breaker
      */
     private function loadDomain(Report $message): LedgerDomain
@@ -138,8 +138,7 @@ class TrialBalanceReport extends AbstractReport
 
     /**
      * Use a report's raw data to prepare report accounts.
-     * @param ReportData $reportData
-     * @return Collection
+     *
      * @throws Exception
      */
     public function prepare(ReportData $reportData): Collection
@@ -185,14 +184,14 @@ class TrialBalanceReport extends AbstractReport
         $result->put('accounts', $this->accounts);
         // Return domain information
         $domain = $reportData->request->domain;
-        $result -> put(
+        $result->put(
             'domain',
             [
                 'code' => $domain->code,
                 'uuid' => $domain->uuid,
                 'name' => LedgerName::localize(
                     $domain->uuid, $options['language']
-                )
+                ),
             ]
         );
 
@@ -201,7 +200,7 @@ class TrialBalanceReport extends AbstractReport
 
     /**
      * Get totals of sub-accounts for each account, add to the balance.
-     * @return void
+     *
      * @throws Exception
      */
     private function rollUp(): void
@@ -212,7 +211,7 @@ class TrialBalanceReport extends AbstractReport
          * @var string $code
          * @var ReportAccount $account
          */
-        foreach($this->accounts as $code => $account) {
+        foreach ($this->accounts as $code => $account) {
             $account->total = $account->balance;
             $this->byParent[$account->parent] ??= [];
             if ($code !== '') {
@@ -237,9 +236,8 @@ class TrialBalanceReport extends AbstractReport
     /**
      * Recursively compute rolled up totals for an account.
      *
-     * @param string $code Account code for the parent.
-     * @param int $depth Levels of nesting below the ledger root.
-     * @return void
+     * @param  string  $code Account code for the parent.
+     * @param  int  $depth Levels of nesting below the ledger root.
      */
     private function rollUpAccount(string $code, int $depth): void
     {

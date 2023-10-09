@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpParamsInspection */
 declare(strict_types=1);
 
@@ -8,7 +9,6 @@ use Abivia\Ledger\Models\LedgerAccount;
 use Abivia\Ledger\Tests\TestCaseWithMigrations;
 use Abivia\Ledger\Tests\ValidatesJson;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-
 
 /**
  * Test Journal Reference API calls.
@@ -24,10 +24,9 @@ class JournalReferenceTest extends TestCaseWithMigrations
         'code' => 'Customer 25',
         'extra' => [
             'customerId' => 25,
-            'name' => 'Testco Inc.'
+            'name' => 'Testco Inc.',
         ],
     ];
-
 
     public function setUp(): void
     {
@@ -179,7 +178,7 @@ class JournalReferenceTest extends TestCaseWithMigrations
             'revision' => $actual->reference->revision,
             'extra' => json_encode([
                 'customerId' => 25,
-                'name' => 'Testco (rev B) Inc.'
+                'name' => 'Testco (rev B) Inc.',
             ]),
         ];
         $response = $this->json(
@@ -193,5 +192,4 @@ class JournalReferenceTest extends TestCaseWithMigrations
             $extra->name
         );
     }
-
 }

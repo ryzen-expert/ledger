@@ -1,10 +1,11 @@
-<?php /** @noinspection ALL */
+<?php
+
+/** @noinspection ALL */
 
 namespace Abivia\Ledger\Tests\Feature;
 
 use Abivia\Ledger\Models\LedgerAccount;
 use Abivia\Ledger\Root\Flex;
-use Abivia\Ledger\Tests\TestCase;
 use Abivia\Ledger\Tests\TestCaseWithMigrations;
 use Abivia\Ledger\Tests\ValidatesJson;
 use Exception;
@@ -32,8 +33,8 @@ class LedgerAccountTest extends TestCaseWithMigrations
                 [
                     'name' => "Account $code with parent $parentCode",
                     'language' => 'en',
-                ]
-            ]
+                ],
+            ],
         ];
         $requestData[$debit ? 'debit' : 'credit'] = true;
         $response = $this->json(
@@ -54,7 +55,7 @@ class LedgerAccountTest extends TestCaseWithMigrations
     {
         // First we need a ledger
         $this->createLedger();
-
+        //        dd('dd');
         // Add an account
         $requestData = [
             'code' => '1010',
@@ -66,9 +67,9 @@ class LedgerAccountTest extends TestCaseWithMigrations
                 [
                     'name' => 'Cash Stash',
                     'language' => 'en-YO',
-                ]
+                ],
             ],
-            "debit" => true,
+            'debit' => true,
         ];
         $response = $this->json(
             'post', 'api/ledger/account/add', $requestData
@@ -113,8 +114,8 @@ class LedgerAccountTest extends TestCaseWithMigrations
                 [
                     'name' => 'Cash in Bank',
                     'language' => 'en',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = $this->json(
             'post', 'api/ledger/account/add', $requestData
@@ -140,9 +141,9 @@ class LedgerAccountTest extends TestCaseWithMigrations
                 [
                     'name' => 'Cash Stash',
                     'language' => 'en-YO',
-                ]
+                ],
             ],
-            "debit" => true,
+            'debit' => true,
         ];
         $response = $this->json(
             'post', 'api/ledger/account/add', $requestData
@@ -160,9 +161,9 @@ class LedgerAccountTest extends TestCaseWithMigrations
                 [
                     'name' => 'Cash Stash',
                     'language' => 'en-YO',
-                ]
+                ],
             ],
-            "debit" => true,
+            'debit' => true,
         ];
         $response = $this->json(
             'post', 'api/ledger/account/add', $requestData
@@ -181,13 +182,13 @@ class LedgerAccountTest extends TestCaseWithMigrations
         // Add an account
         $requestData = [
             'code' => '1010',
-            'parent' => ['code' => '1000',],
+            'parent' => ['code' => '1000'],
             'names' => [
                 [
                     'name' => 'Cash in Bank',
                     'language' => 'en',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = $this->json(
             'post', 'api/ledger/account/add', $requestData
@@ -212,9 +213,9 @@ class LedgerAccountTest extends TestCaseWithMigrations
                 [
                     'name' => 'Cash Stash',
                     'language' => 'en-YO',
-                ]
+                ],
             ],
-            "debit" => true,
+            'debit' => true,
         ];
         $response = $this->json(
             'post', 'api/ledger/account/add', $requestData
@@ -262,7 +263,6 @@ class LedgerAccountTest extends TestCaseWithMigrations
     /**
      * Create a valid ledger
      *
-     * @return void
      * @throws Exception
      */
     public function testCreate(): void
@@ -286,7 +286,6 @@ class LedgerAccountTest extends TestCaseWithMigrations
     /**
      * Create a valid ledger
      *
-     * @return void
      * @throws Exception
      */
     public function testCreateNoRules(): void
@@ -309,7 +308,6 @@ class LedgerAccountTest extends TestCaseWithMigrations
     /**
      * Create a more complex ledger and test parent links
      *
-     * @return void
      * @throws Exception
      */
     public function testCreateCommon(): void
@@ -333,7 +331,6 @@ class LedgerAccountTest extends TestCaseWithMigrations
     /**
      * Attempt to create a ledger with no currencies.
      *
-     * @return void
      * @throws Exception
      */
     public function testCreateNoCurrency(): void
@@ -354,7 +351,6 @@ class LedgerAccountTest extends TestCaseWithMigrations
     /**
      * Create a more complex ledger and test parent links
      *
-     * @return void
      * @throws Exception
      */
     public function testCreateSectionOverride(): void
@@ -383,129 +379,129 @@ class LedgerAccountTest extends TestCaseWithMigrations
         $sections = $rules->sections;
         foreach ($sections as &$section) {
             unset($section->ledgerUuids);
-            $section = (array)$section;
+            $section = (array) $section;
             foreach ($section['names'] as &$name) {
-                $name = (array)$name;
+                $name = (array) $name;
             }
         }
         $expect = [
             [
-                "codes" => ['1100', '1200', '1300'],
-                "names" => [
+                'codes' => ['1100', '1200', '1300'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Current Assets"
-                    ]
-                ]
-            ],
-            [
-                "codes" => ['1400'],
-                "names" => [
-                    [
-                        "language" => "en",
-                        "name" => "Inventory"
-                    ]
+                        'language' => 'en',
+                        'name' => 'Current Assets',
+                    ],
                 ],
             ],
             [
-                "codes" => ['1500'],
-                "names" => [
+                'codes' => ['1400'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Other Short Term Assets"
-                    ]
-                ]
+                        'language' => 'en',
+                        'name' => 'Inventory',
+                    ],
+                ],
             ],
             [
-                "codes" => ['1600', '1700', '1800'],
-                "names" => [
+                'codes' => ['1500'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Capital Assets"
-                    ]
-                ]
+                        'language' => 'en',
+                        'name' => 'Other Short Term Assets',
+                    ],
+                ],
             ],
             [
-                "codes" => ['2100'],
-                "names" => [
+                'codes' => ['1600', '1700', '1800'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Accounts Receivable"
-                    ]
-                ]
+                        'language' => 'en',
+                        'name' => 'Capital Assets',
+                    ],
+                ],
             ],
             [
-                "codes" => ['2200'],
-                "names" => [
+                'codes' => ['2100'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Other Liabilities"
-                    ]
-                ]
+                        'language' => 'en',
+                        'name' => 'Accounts Receivable',
+                    ],
+                ],
             ],
             [
-                "codes" => ['2300'],
-                "names" => [
+                'codes' => ['2200'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Long Term Liabilities"
-                    ]
-                ]
+                        'language' => 'en',
+                        'name' => 'Other Liabilities',
+                    ],
+                ],
             ],
             [
-                "codes" => ['3100'],
-                "names" => [
+                'codes' => ['2300'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Share Capital"
-                    ]
-                ]
+                        'language' => 'en',
+                        'name' => 'Long Term Liabilities',
+                    ],
+                ],
             ],
             [
-                "codes" => ['3200'],
-                "names" => [
+                'codes' => ['3100'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Retained Earnings"
-                    ]
-                ]
+                        'language' => 'en',
+                        'name' => 'Share Capital',
+                    ],
+                ],
             ],
             [
-                "codes" => ['4100'],
-                "names" => [
+                'codes' => ['3200'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Sales Revenue"
-                    ]
-                ]
+                        'language' => 'en',
+                        'name' => 'Retained Earnings',
+                    ],
+                ],
             ],
             [
-                "codes" => ['4200'],
-                "names" => [
+                'codes' => ['4100'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Other Revenue"
-                    ]
-                ]
+                        'language' => 'en',
+                        'name' => 'Sales Revenue',
+                    ],
+                ],
             ],
             [
-                "codes" => ['5000'],
-                "names" => [
+                'codes' => ['4200'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Cost of Sales"
-                    ]
-                ]
+                        'language' => 'en',
+                        'name' => 'Other Revenue',
+                    ],
+                ],
             ],
             [
-                "codes" => ['6000'],
-                "names" => [
+                'codes' => ['5000'],
+                'names' => [
                     [
-                        "language" => "en",
-                        "name" => "Expenses"
-                    ]
-                ]
-            ]
+                        'language' => 'en',
+                        'name' => 'Cost of Sales',
+                    ],
+                ],
+            ],
+            [
+                'codes' => ['6000'],
+                'names' => [
+                    [
+                        'language' => 'en',
+                        'name' => 'Expenses',
+                    ],
+                ],
+            ],
         ];
         $this->assertEquals($expect, $sections);
     }
@@ -513,7 +509,6 @@ class LedgerAccountTest extends TestCaseWithMigrations
     /**
      * Create a more complex ledger and test parent links
      *
-     * @return void
      * @throws Exception
      */
     public function testCreateSectionOverrideBad(): void
@@ -538,7 +533,6 @@ class LedgerAccountTest extends TestCaseWithMigrations
     /**
      * Create a more complex ledger and test parent links
      *
-     * @return void
      * @throws Exception
      */
     public function testCreateWithAccounts(): void
@@ -581,7 +575,6 @@ class LedgerAccountTest extends TestCaseWithMigrations
     /**
      * Create a valid ledger
      *
-     * @return void
      * @throws \Exception
      */
     public function testCreateWithBalances(): void
@@ -599,7 +592,7 @@ class LedgerAccountTest extends TestCaseWithMigrations
                 // A/P
                 ['code' => '2120', 'amount' => '500', 'currency' => 'CAD'],
             ],
-            'template' => 'manufacturer_1.0'
+            'template' => 'manufacturer_1.0',
         ];
         $response = $this->createLedger(['template'], $balancePart);
 
@@ -611,7 +604,6 @@ class LedgerAccountTest extends TestCaseWithMigrations
     /**
      * Create a valid ledger
      *
-     * @return void
      * @throws \Exception
      */
     public function testCreateWithBalances_bad(): void
@@ -625,7 +617,7 @@ class LedgerAccountTest extends TestCaseWithMigrations
                 // A/R
                 ['code' => '1310', 'amount' => '-1500', 'currency' => 'CAD'],
             ],
-            'template' => 'manufacturer_1.0'
+            'template' => 'manufacturer_1.0',
         ];
         $response = $this->createLedger(['template'], $balancePart, true);
 
@@ -635,7 +627,6 @@ class LedgerAccountTest extends TestCaseWithMigrations
     /**
      * Create a ledger with a preset account
      *
-     * @return void
      * @throws Exception
      */
     public function testCreateWithTemplateAndAccounts(): void
@@ -656,9 +647,9 @@ class LedgerAccountTest extends TestCaseWithMigrations
                             'code' => '1000',
                         ],
                         'debit' => true,
-                    ]
+                    ],
                 ],
-                'template' => 'sections'
+                'template' => 'sections',
             ]);
 
         $this->isSuccessful($response, 'ledger');
@@ -685,7 +676,7 @@ class LedgerAccountTest extends TestCaseWithMigrations
         $response = $this->json(
             'post', 'api/ledger/account/delete', $requestData
         );
-        $actual =$this->isSuccessful($response, 'success');
+        $actual = $this->isSuccessful($response, 'success');
         // Check the response against our schema
         $this->validateResponse($actual, 'entry-response');
 
@@ -874,10 +865,10 @@ class LedgerAccountTest extends TestCaseWithMigrations
             'code' => '1010',
             'names' => [
                 [
-                    'name' => "Account 1020 with parent 1000",
+                    'name' => 'Account 1020 with parent 1000',
                     'language' => 'en',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = $this->json(
             'post', 'api/ledger/account/update', $requestData
@@ -916,5 +907,4 @@ class LedgerAccountTest extends TestCaseWithMigrations
         );
         $result = $this->isFailure($response);
     }
-
 }

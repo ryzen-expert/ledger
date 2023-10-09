@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Messages;
@@ -38,11 +39,11 @@ class Batch extends Message
     public bool $transaction;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_BATCH): self
     {
-        if (!($opFlags & self::OP_BATCH)) {
+        if (! ($opFlags & self::OP_BATCH)) {
             throw Breaker::withCode(
                 Breaker::RULE_VIOLATION,
                 [__('Only a batch operation is allowed.')]
@@ -68,7 +69,7 @@ class Batch extends Message
             foreach ($data['list'] as $element) {
                 // The method is entry_point/operation
                 $method = strtolower(($element['method'] ?? ''));
-                $route = explode('/', $method . '/');
+                $route = explode('/', $method.'/');
                 $messageClass = self::getMessageClass($method, $route[0]);
                 if ($route[0] === '') {
                     throw Breaker::withCode(
@@ -77,7 +78,7 @@ class Batch extends Message
                     );
                 }
                 if ($route[0] === 'report') {
-                    if (!$rules->batch->allowReports) {
+                    if (! $rules->batch->allowReports) {
                         throw Breaker::withCode(
                             Breaker::BAD_REQUEST,
                             [__('Configuration prohibits reports in a batch.')]
@@ -107,9 +108,7 @@ class Batch extends Message
 
     /**
      * Get a route's entry point.
-     * @param string $method
-     * @param string $entry
-     * @return string|null
+     *
      * @throws Breaker
      */
     private static function getMessageClass(string $method, string $entry): ?string
@@ -122,6 +121,7 @@ class Batch extends Message
                 [__('Method :method is invalid.', ['method' => $method])]
             );
         }
+
         return $messageClass;
     }
 
@@ -151,7 +151,7 @@ class Batch extends Message
                 DB::rollBack();
             }
             if ($exception instanceof Breaker) {
-                $exception->addError(__("Failed in step :step.", ['step' => $step]));
+                $exception->addError(__('Failed in step :step.', ['step' => $step]));
             }
             throw $exception;
         } finally {
@@ -165,11 +165,10 @@ class Batch extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(?int $opFlags): self
     {
         return $this;
     }
-
 }

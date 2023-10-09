@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\App;
 class Name implements Hydratable
 {
     private static Hydrator $hydrator;
+
     public string $language;
+
     public string $name;
 
     public function __construct(string $name = null, string $language = null)
@@ -25,20 +27,19 @@ class Name implements Hydratable
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hydrate($config, ?array $options = []): bool
     {
-        if (!isset(self::$hydrator)) {
+        if (! isset(self::$hydrator)) {
             self::$hydrator = Hydrator::make(self::class);
         }
 
         $success = self::$hydrator->hydrate($this, $config, $options);
-        if ($success && !isset($this->language)) {
+        if ($success && ! isset($this->language)) {
             $this->language = App::getLocale();
         }
 
         return $success;
     }
-
 }

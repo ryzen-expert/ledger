@@ -12,9 +12,6 @@ class BatchApiController extends ApiController
     /**
      * Perform a batch operation.
      *
-     * @param Request $request
-     * @param string $operation
-     * @return array
      * @throws Breaker
      * @throws \Exception
      */
@@ -24,5 +21,4 @@ class BatchApiController extends ApiController
 
         return $message->run();
     }
-
 }

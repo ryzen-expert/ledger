@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Messages;
@@ -19,6 +20,7 @@ class SubJournalQuery extends Paginated
         foreach ($controller->query($this, $this->opFlags) as $entry) {
             $subJournals[] = $entry->toResponse([]);
         }
+
         return ['journals' => $subJournals];
     }
 }

@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpParamsInspection */
+<?php
+
+/** @noinspection PhpParamsInspection */
 
 namespace Abivia\Ledger\Tests\Feature;
 
@@ -60,5 +62,4 @@ class RootTest extends TestCase
         $this->assertEquals('manufacturer_1.0', $actual->templates[0]->name);
         $this->assertEquals('sections', $actual->templates[1]->name);
     }
-
 }

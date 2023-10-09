@@ -1,6 +1,5 @@
 <?php
 
-
 return [
     'api' => true,
     'api_debug' => env('LEDGER_API_DEBUG_ALLOWED', true),

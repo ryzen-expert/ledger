@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id Primary key
  * @property string $ledgerUuid ID of the ledger this balance applies to.
  * @property Carbon $updated_at When the record was updated.
+ *
  * @mixin Builder
  */
 class LedgerBalance extends Model

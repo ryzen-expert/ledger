@@ -2,9 +2,9 @@
 
 namespace Abivia\Ledger\Tests\Unit;
 
+use Abivia\Ledger\Tests\TestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use Abivia\Ledger\Tests\TestCase;
 
 class InstallLedgerTest extends TestCase
 {
@@ -62,7 +62,7 @@ class InstallLedgerTest extends TestCase
 
         // Assert that the original contents are overwritten
         $this->assertEquals(
-            file_get_contents(__DIR__ . '/../../config/config.php'),
+            file_get_contents(__DIR__.'/../../config/config.php'),
             file_get_contents(config_path('ledger.php'))
         );
     }

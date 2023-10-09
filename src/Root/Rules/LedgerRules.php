@@ -73,26 +73,27 @@ class LedgerRules implements Hydratable
 
     public function __get(string $name)
     {
-        if (!str_starts_with($name, '_') || !isset($this->appAttributes[$name])) {
+        if (! str_starts_with($name, '_') || ! isset($this->appAttributes[$name])) {
             throw new Exception("Undefined property $name");
         }
+
         return $this->appAttributes[$name];
     }
 
     public function __set($name, $value)
     {
-        if (!str_starts_with($name, '_')) {
+        if (! str_starts_with($name, '_')) {
             throw new Exception("Undefined property $name");
         }
         $this->appAttributes[$name] = $value;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hydrate($config, ?array $options = []): bool
     {
-        if (!isset(self::$hydrator)) {
+        if (! isset(self::$hydrator)) {
             self::$hydrator = Hydrator::make()
                 ->addProperty(
                     Property::make('sections')
@@ -110,7 +111,7 @@ class LedgerRules implements Hydratable
         if (is_string($config)) {
             $config = self::$hydrator::parse($config, $options);
         }
-        if (!is_string($config)) {
+        if (! is_string($config)) {
             foreach ($config as $key => $value) {
                 if (str_starts_with($key, '_')) {
                     $this->$key = $value;
@@ -119,7 +120,7 @@ class LedgerRules implements Hydratable
 
             }
         }
+
         return self::$hydrator->hydrate($this, $config, $options);
     }
-
 }

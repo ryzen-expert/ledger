@@ -39,7 +39,7 @@ class Domain extends Message
     public bool $subJournals;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
@@ -74,9 +74,9 @@ class Domain extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
         $errors = $this->validateCodes($opFlags);
@@ -103,7 +103,7 @@ class Domain extends Message
         if (count($errors)) {
             throw Breaker::withCode(Breaker::BAD_REQUEST, $errors);
         }
+
         return $this;
     }
-
 }

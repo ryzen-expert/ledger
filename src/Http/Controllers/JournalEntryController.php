@@ -36,8 +36,6 @@ class JournalEntryController extends Controller
     /**
      * Add an entry to the journal.
      *
-     * @param Entry $message
-     * @return JournalEntry
      * @throws Breaker
      * @throws Exception
      */
@@ -72,10 +70,6 @@ class JournalEntryController extends Controller
 
     /**
      * Write the journal detail records and update balances.
-     *
-     * @param JournalEntry $journalEntry
-     * @param Entry $message
-     * @return void
      */
     private function addDetails(JournalEntry $journalEntry, Entry $message): void
     {
@@ -119,7 +113,6 @@ class JournalEntryController extends Controller
     /**
      * Delete an entry and reverse balance changes.
      *
-     * @param Entry $message
      * @throws Breaker
      */
     public function delete(Entry $message)
@@ -155,10 +148,6 @@ class JournalEntryController extends Controller
         }
     }
 
-    /**
-     * @param JournalEntry $journalEntry
-     * @return void
-     */
     private function deleteDetails(JournalEntry $journalEntry): void
     {
         $journalDetails = JournalDetail::with(
@@ -184,8 +173,6 @@ class JournalEntryController extends Controller
     /**
      * Get a journal entry by ID.
      *
-     * @param int $id
-     * @return JournalEntry
      * @throws Breaker
      */
     private function fetch(int $id): JournalEntry
@@ -205,13 +192,12 @@ class JournalEntryController extends Controller
     /**
      * Fetch a Journal Entry.
      *
-     * @param Entry $message
-     * @return JournalEntry
      * @throws Breaker
      */
     public function get(Entry $message): JournalEntry
     {
         $message->validate(Message::OP_GET);
+
         return $this->fetch($message->id);
     }
 
@@ -235,8 +221,6 @@ class JournalEntryController extends Controller
     /**
      * Place a lock on a journal entry.
      *
-     * @param Entry $message
-     * @return JournalEntry
      * @throws Breaker
      */
     public function lock(Entry $message): JournalEntry
@@ -268,9 +252,8 @@ class JournalEntryController extends Controller
     /**
      * Process a query request.
      *
-     * @param EntryQuery $message
-     * @param int $opFlags
      * @return Collection Collection contains JournalEntry records.
+     *
      * @throws Breaker
      */
     public function query(EntryQuery $message, int $opFlags): Collection
@@ -288,12 +271,9 @@ class JournalEntryController extends Controller
     /**
      * Perform a Journal Entry operation.
      *
-     * @param Entry $message
-     * @param int|null $opFlags
-     * @return JournalEntry|null
      * @throws Breaker
      */
-    public function run(Entry $message, ?int $opFlags = null): ?JournalEntry
+    public function run(Entry $message, int $opFlags = null): ?JournalEntry
     {
         // TODO: add POST operation.
         $opFlags ??= $message->getOpFlags();
@@ -302,6 +282,7 @@ class JournalEntryController extends Controller
                 return $this->add($message);
             case Message::OP_DELETE:
                 $this->delete($message);
+
                 return null;
             case Message::OP_GET:
                 return $this->get($message);
@@ -317,8 +298,6 @@ class JournalEntryController extends Controller
     /**
      * Update a Journal Entry.
      *
-     * @param Entry $message
-     * @return JournalEntry
      * @throws Breaker
      */
     public function update(Entry $message): JournalEntry
@@ -352,10 +331,6 @@ class JournalEntryController extends Controller
 
     /**
      * Update entry details by undoing the existing details and creating the new ones.
-     *
-     * @param JournalEntry $journalEntry
-     * @param Entry $message
-     * @return void
      */
     protected function updateDetails(JournalEntry $journalEntry, Entry $message): void
     {
@@ -367,8 +342,6 @@ class JournalEntryController extends Controller
     /**
      * Perform an integrity check on the message.
      *
-     * @param Entry $message
-     * @param int $opFlag
      * @throws Breaker
      */
     private function validateEntry(Entry $message, int $opFlag)
@@ -418,12 +391,13 @@ class JournalEntryController extends Controller
                     [
                         'line' => $line,
                         'account' => $detail->account->code ?? 'null',
-                        'uuid' => $detail->account->uuid ?? 'null'
+                        'uuid' => $detail->account->uuid ?? 'null',
                     ]
                 );
+
                 continue;
             }
-            if (!$postToCategory && $ledgerAccount->category) {
+            if (! $postToCategory && $ledgerAccount->category) {
                 $errors[] = __(
                     "Can't post to category account :code",
                     ['code' => $ledgerAccount->code]
@@ -435,15 +409,16 @@ class JournalEntryController extends Controller
                     'The account :code cannot appear more than once in an entry',
                     ['code' => $ledgerAccount->code]
                 );
+
                 continue;
             }
             $unique[$ledgerAccount->ledgerUuid] = true;
 
             // Make sure any reference is valid and that we have the uuid
             if (isset($detail->reference)) {
-                if (!isset($detail->reference->domain)) {
+                if (! isset($detail->reference->domain)) {
                     $detail->reference->domain = $message->domain;
-                } elseif (!$detail->reference->domain->sameAs($message->domain)) {
+                } elseif (! $detail->reference->domain->sameAs($message->domain)) {
                     $errors[] = __(
                         'Reference in Detail line :line has a mismatched domain.',
                         compact('line')
@@ -460,5 +435,4 @@ class JournalEntryController extends Controller
             throw Breaker::withCode(Breaker::RULE_VIOLATION, $errors);
         }
     }
-
 }

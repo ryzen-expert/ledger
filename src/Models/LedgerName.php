@@ -12,12 +12,14 @@ use Illuminate\Database\Eloquent\Model;
  * Multilingual support for account names
  *
  * @method static LedgerName create(array $attributes) Provided by model.
+ *
  * @property Carbon $created_at When the record was created.
  * @property int $id Primary key
  * @property string $language The language code for this name.
  * @property string $name The ledger entity name.
  * @property string $ownerUuid ID of the entity this name applies to.
  * @property Carbon $updated_at When the record was updated.
+ *
  * @mixin Builder
  */
 class LedgerName extends Model
@@ -27,12 +29,14 @@ class LedgerName extends Model
     const CODE_SIZE = 8;
 
     protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = ['language', 'name', 'ownerUuid'];
+
     /**
      * @var array|string[] Attributes that can be copied directly into a message
      */
     protected static array $inMessage = [
-        'language', 'name', 'ownerUuid'
+        'language', 'name', 'ownerUuid',
     ];
 
     public static function createFromMessage(Name $message): self
@@ -43,6 +47,7 @@ class LedgerName extends Model
                 $instance->{$property} = $message->{$property};
             }
         }
+        //        dd($message);
         $instance->save();
         $instance->refresh();
 
@@ -60,14 +65,12 @@ class LedgerName extends Model
             $likeCard = str_replace('*', '%', $wildcard);
             $query = $query->where('language', 'like', $likeCard);
         }
+
         return $query;
     }
 
     /**
      * Get the name of a specific UUID in the first matching language.
-     * @param string $ownerUuid
-     * @param array $languages
-     * @return string
      */
     public static function localize(string $ownerUuid, array $languages): string
     {
@@ -87,6 +90,7 @@ class LedgerName extends Model
                 return $hit->name;
             }
         }
+
         return '';
     }
 
@@ -111,5 +115,4 @@ class LedgerName extends Model
             'updatedAt' => $this->updated_at,
         ];
     }
-
 }

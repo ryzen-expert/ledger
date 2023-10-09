@@ -7,7 +7,7 @@ use Abivia\Ledger\Models\ReportData;
 
 abstract class AbstractReport
 {
-    public abstract function collect(Report $message);
+    abstract public function collect(Report $message);
 
-    public abstract function prepare(ReportData $reportData);
+    abstract public function prepare(ReportData $reportData);
 }

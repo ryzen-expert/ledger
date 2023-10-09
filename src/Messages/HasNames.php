@@ -13,10 +13,6 @@ trait HasNames
 
     /**
      * Load the name and/or names properties.
-     *
-     * @param array $data
-     * @param int $opFlags
-     * @return array
      */
     protected function loadNames(array $data, int $opFlags): array
     {

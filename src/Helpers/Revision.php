@@ -15,10 +15,12 @@ class Revision
      * @var array An index of revisions on fetch, keyed by unique model identifiers.
      */
     private static array $batchFetch = [];
+
     /**
      * @var array An index of batch revisions, keyed by unique model identifiers.
      */
     private static array $batchRevisions = [];
+
     /**
      * @var bool Set when processing a batch
      */
@@ -31,6 +33,7 @@ class Revision
             return self::$batchRevisions[$key][0] === $revision
                 && self::$batchRevisions[$key][1] === $newRevision;
         }
+
         return false;
     }
 
@@ -50,19 +53,19 @@ class Revision
      * server-based last record update timestamp, with a fallback for database
      * managers that don't support server timestamps.
      *
-     * @param Carbon|null $revision The database server maintained timestamp.
-     * @param Carbon $fallback The Laravel maintained timestamp.
+     * @param  Carbon|null  $revision The database server maintained timestamp.
+     * @param  Carbon  $fallback The Laravel maintained timestamp.
      *
-     * @return string
      * @throws Exception
      */
     public static function create(?Carbon $revision, Carbon $fallback): string
     {
-        if (!LedgerAccount::hasRoot() || !isset(LedgerAccount::root()->flex->salt)) {
+        if (! LedgerAccount::hasRoot() || ! isset(LedgerAccount::root()->flex->salt)) {
             return '';
         }
         $use = $revision ?? $fallback;
-        return hash('ripemd256', LedgerAccount::root()->flex->salt . $use->toJSON());
+
+        return hash('ripemd256', LedgerAccount::root()->flex->salt.$use->toJSON());
     }
 
     public static function endBatch()
@@ -89,16 +92,16 @@ class Revision
     /**
      * Save a model's revision hashes through the processing of a batch.
      *
-     * @param string $key A unique identifier for the model.
-     * @param string $revision The revision hash.
+     * @param  string  $key A unique identifier for the model.
+     * @param  string  $revision The revision hash.
      * @return void
      */
     public static function saveBatchRevision(string $key, string $revision)
     {
-        if (!self::$inBatch || $revision === '') {
+        if (! self::$inBatch || $revision === '') {
             return;
         }
-        if (!isset(self::$batchRevisions[$key])) {
+        if (! isset(self::$batchRevisions[$key])) {
             // Save the original revision
             self::$batchRevisions[$key] = [$revision, $revision];
         } else {
@@ -107,10 +110,9 @@ class Revision
         }
     }
 
-    public static function startBatch():void
+    public static function startBatch(): void
     {
         self::clearBatch();
         self::$inBatch = true;
     }
-
 }

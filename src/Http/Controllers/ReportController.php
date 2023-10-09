@@ -31,8 +31,7 @@ class ReportController extends Controller
 
     /**
      * Make reporter class from config or build by namespace
-     * @param string $reportName
-     * @return AbstractReport
+     *
      * @throws Breaker
      */
     protected function makeReporter(string $reportName): AbstractReport
@@ -44,7 +43,7 @@ class ReportController extends Controller
                 __('Report `:name` not registered.', ['name' => $reportName])
             );
         }
-        if (!class_exists($reporter)) {
+        if (! class_exists($reporter)) {
             throw Breaker::withCode(
                 Breaker::CONFIG_ERROR,
                 __('Report `:name` is misconfigured.', ['name' => $reportName])
@@ -57,14 +56,13 @@ class ReportController extends Controller
 
     /**
      * Load the data for this report and generate a response.
-     * @param Report $message
-     * @return Collection
+     *
      * @throws Breaker
      */
     public function generate(Report $message): Collection
     {
         $message->validate(0);
-        if (!isset($message->domain->uuid) || !isset($message->currency)) {
+        if (! isset($message->domain->uuid) || ! isset($message->currency)) {
             /** @var LedgerDomain $ledgerDomain */
             $ledgerDomain = LedgerDomain::findWith($message->domain)->first();
             if ($ledgerDomain === null) {
@@ -74,7 +72,7 @@ class ReportController extends Controller
                 );
             }
             $message->domain->uuid = $ledgerDomain->domainUuid;
-            if (!isset($message->currency)) {
+            if (! isset($message->currency)) {
                 $message->currency = $ledgerDomain->currencyDefault;
             }
         }
@@ -88,8 +86,6 @@ class ReportController extends Controller
 
     /**
      * Look for a cached report, verifying that the cache is current.
-     * @param Report $message
-     * @return ReportData|null
      */
     private function getCached(Report $message): ?ReportData
     {
@@ -125,7 +121,7 @@ class ReportController extends Controller
             // This report is outdated.
             $candidate->delete();
         }
+
         return null;
     }
-
 }

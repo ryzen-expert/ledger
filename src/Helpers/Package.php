@@ -12,14 +12,13 @@ class Package
     /**
      * Get the path to the chart of accounts.
      *
-     * @param string $path Sub-path or file to append to the chart path.
-     * @return string
+     * @param  string  $path Sub-path or file to append to the chart path.
      */
-    static function chartPath(string $path = ''): string
+    public static function chartPath(string $path = ''): string
     {
         return realpath(
-            config('ledger.chartPath', __DIR__ . '/../../resources/ledger/charts')
-            .($path ? DIRECTORY_SEPARATOR . $path : $path)
+            config('ledger.chartPath', __DIR__.'/../../resources/ledger/charts')
+            .($path ? DIRECTORY_SEPARATOR.$path : $path)
         );
 
     }

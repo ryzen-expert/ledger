@@ -2,15 +2,16 @@
 
 namespace Abivia\Ledger\Console;
 
-use Abivia\Ledger\Helpers\Package;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
+
 use function scandir;
 
 class ImportFeatureTests extends Command
 {
     protected $description = 'Import Feature Tests';
+
     protected $hidden = true;
+
     protected $signature = 'ledger:_ift';
 
     protected string $target;
@@ -19,15 +20,13 @@ class ImportFeatureTests extends Command
 
     private function checkDir(string $path)
     {
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             mkdir($path, 0744, true);
         }
     }
 
     /**
      * Artisan command to import feature tests into the app.
-     *
-     * @return void
      */
     public function handle(): void
     {
@@ -37,7 +36,7 @@ class ImportFeatureTests extends Command
         foreach (['Feature', 'Seeders'] as $folder) {
             $this->target = app_path("../tests/$folder");
             $this->testing = strpos($this->target, 'vendor') !== false;
-            $path = realpath(__DIR__ . "/../../tests/$folder");
+            $path = realpath(__DIR__."/../../tests/$folder");
             $this->port($path, '');
         }
     }
@@ -51,25 +50,25 @@ class ImportFeatureTests extends Command
                 continue;
             }
             $parts = pathinfo($file);
-            $filePath = $path . $file;
-            $relativePath = $relativeBase . '/' . $file;
+            $filePath = $path.$file;
+            $relativePath = $relativeBase.'/'.$file;
             if (is_dir($filePath)) {
                 $this->port($filePath, $relativePath);
             } elseif (is_file($filePath)) {
-                $target = $this->target . $relativePath;
+                $target = $this->target.$relativePath;
                 if ($parts['extension'] === 'php') {
                     $code = $this->transform($filePath);
                     if ($this->testing) {
                         $this->info("Transformed $relativePath");
                     } else {
-                        $this->checkDir($this->target . $relativeBase);
+                        $this->checkDir($this->target.$relativeBase);
                         file_put_contents($target, $code);
                     }
                 } elseif ($parts['extension'] === 'sql') {
                     if ($this->testing) {
                         $this->info("Copies $relativePath");
                     } else {
-                        $this->checkDir($this->target . $relativeBase);
+                        $this->checkDir($this->target.$relativeBase);
                         @unlink($target);
                         copy($filePath, $target);
                     }
@@ -86,7 +85,7 @@ class ImportFeatureTests extends Command
             ['Tests\\'],
             $code
         );
+
         return $code;
     }
-
 }

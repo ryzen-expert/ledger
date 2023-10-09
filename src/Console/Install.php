@@ -13,8 +13,6 @@ class Install extends Command
 
     /**
      * Artisan command to publish configuration.
-     *
-     * @return void
      */
     public function handle(): void
     {
@@ -22,7 +20,7 @@ class Install extends Command
 
         $this->info('Publishing configuration...');
 
-        if (!File::exists(config_path('ledger.php'))) {
+        if (! File::exists(config_path('ledger.php'))) {
             $this->publishConfiguration();
             $this->info('Published configuration');
         } elseif ($this->shouldOverwriteConfig()) {
@@ -37,26 +35,22 @@ class Install extends Command
 
     /**
      * Ask the user if we should overwrite the existing file.
-     *
-     * @return bool
      */
     private function shouldOverwriteConfig(): bool
     {
-        return $this->confirm('Config file exists. Overwrite it?',false);
+        return $this->confirm('Config file exists. Overwrite it?', false);
     }
 
     /**
      * Publish the configuration.
      *
-     * @param bool $forcePublish When set, overwrite existing definition with default.
-     *
-     * @return void
+     * @param  bool  $forcePublish When set, overwrite existing definition with default.
      */
     private function publishConfiguration(bool $forcePublish = false): void
     {
         $params = [
             '--provider' => "Abivia\Ledger\LedgerServiceProvider",
-            '--tag' => "config"
+            '--tag' => 'config',
         ];
 
         if ($forcePublish === true) {

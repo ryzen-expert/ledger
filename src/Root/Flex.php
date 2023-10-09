@@ -24,7 +24,7 @@ class Flex implements Hydratable
     public string $salt;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hydrate($config, ?array $options = []): bool
     {
@@ -32,10 +32,10 @@ class Flex implements Hydratable
         if ($config === null || $config === 'null') {
             return true;
         }
-        if (!isset(self::$hydrator)) {
+        if (! isset(self::$hydrator)) {
             self::$hydrator = Hydrator::make(self::class);
         }
+
         return self::$hydrator->hydrate($this, $config, $options);
     }
-
 }

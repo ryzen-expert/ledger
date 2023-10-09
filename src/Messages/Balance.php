@@ -36,8 +36,8 @@ class Balance extends Message
     /**
      * Add this balance amount to the passed amount.
      *
-     * @param string $amount Passed by reference.
-     * @param int $decimals Number of decimals to keep.
+     * @param  string  $amount Passed by reference.
+     * @param  int  $decimals Number of decimals to keep.
      * @return string The updated amount.
      */
     public function addAmountTo(string &$amount, int $decimals): string
@@ -48,11 +48,11 @@ class Balance extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_CREATE): self
     {
-        if (!($opFlags & self::OP_GET | Message::OP_CREATE)) {
+        if (! ($opFlags & self::OP_GET | Message::OP_CREATE)) {
             throw Breaker::withCode(
                 Breaker::RULE_VIOLATION,
                 [__('Only create and get requests are allowed.')]
@@ -66,7 +66,7 @@ class Balance extends Message
                 $balance->account = new EntityRef();
                 $balance->account->code = $data['code'];
             } else {
-                $errors[] = __("Request requires account code.");
+                $errors[] = __('Request requires account code.');
             }
             if (isset($data['amount'])) {
                 $balance->amount = $data['amount'];
@@ -81,7 +81,7 @@ class Balance extends Message
                     $balance->account->uuid = $data['uuid'];
                 }
             } else {
-                $errors[] = __("Request requires either account code or uuid.");
+                $errors[] = __('Request requires either account code or uuid.');
             }
         }
         $balance->copy($data, $opFlags);
@@ -122,25 +122,25 @@ class Balance extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
         $errors = [];
         if ($opFlags & self::OP_CREATE) {
             if (($this->account ?? null) === null || $this->account->code === null) {
-                $errors[] = __("Request requires an account code.");
+                $errors[] = __('Request requires an account code.');
             }
-            if (!isset($this->amount)) {
-                $errors[] = __("Opening balance must have an amount.");
+            if (! isset($this->amount)) {
+                $errors[] = __('Opening balance must have an amount.');
             }
         } elseif ($opFlags & self::OP_GET) {
             if (
-                !isset($this->account)
-                || (!isset($this->account->uuid) && !isset($this->account->code))
+                ! isset($this->account)
+                || (! isset($this->account->uuid) && ! isset($this->account->code))
             ) {
-                $errors[] = __("Request requires an account code or uuid.");
+                $errors[] = __('Request requires an account code or uuid.');
             }
         }
         // Clean up missing values with the defaults
@@ -151,5 +151,4 @@ class Balance extends Message
 
         return $this;
     }
-
 }

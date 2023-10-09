@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Messages;
@@ -7,7 +8,6 @@ use Abivia\Ledger\Exceptions\Breaker;
 use Abivia\Ledger\Helpers\Merge;
 use Abivia\Ledger\Http\Controllers\JournalEntryController;
 use Abivia\Ledger\Models\LedgerAccount;
-use Abivia\Ledger\Messages\Message;
 use Carbon\Carbon;
 
 class Entry extends Message
@@ -104,7 +104,7 @@ class Entry extends Message
     public Carbon $transDate;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
@@ -121,7 +121,7 @@ class Entry extends Message
         }
         if ($opFlags & (self::OP_ADD | self::OP_UPDATE)) {
             if (isset($data['reference'])) {
-                if (!is_array($data['reference'])) {
+                if (! is_array($data['reference'])) {
                     $data['reference'] = ['uuid' => $data['reference']];
                 }
                 $entry->reference = Reference::fromArray($data['reference'], $opFlags);
@@ -146,7 +146,8 @@ class Entry extends Message
     /**
      * @throws Breaker
      */
-    public function run(): array {
+    public function run(): array
+    {
         $controller = new JournalEntryController();
         $journalEntry = $controller->run($this);
         if ($this->opFlags & (Message::OP_DELETE)) {
@@ -159,9 +160,9 @@ class Entry extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
         $errors = [];
@@ -170,17 +171,17 @@ class Entry extends Message
             if (count($this->details) === 0) {
                 $errors[] = __('Entry has no details.');
             }
-            if (!isset($this->description)) {
+            if (! isset($this->description)) {
                 $errors[] = __('Transaction description is required.');
             }
-            if (!isset($this->domain)) {
+            if (! isset($this->domain)) {
                 $this->domain = new EntityRef();
                 $this->domain->code = $rules->domain->default;
             }
-            if (!isset($this->language)) {
+            if (! isset($this->language)) {
                 $this->language = $rules->language->default;
             }
-            if (!isset($this->transDate)) {
+            if (! isset($this->transDate)) {
                 $this->reviewed = $rules->entry->reviewed;
             }
         }
@@ -194,7 +195,7 @@ class Entry extends Message
             }
         }
         if ($opFlags & (self::OP_DELETE | self::OP_GET | self::OP_UPDATE)) {
-            if (!isset($this->id)) {
+            if (! isset($this->id)) {
                 $errors[] = __('Entry ID required.');
             }
         }
@@ -206,7 +207,7 @@ class Entry extends Message
         }
         if ($opFlags & self::OP_LOCK) {
             // Locking operations only care about the lock flag.
-            if (!isset($this->lock)) {
+            if (! isset($this->lock)) {
                 $errors[] = __('Lock operation requires a lock flag.');
             }
         } else {
@@ -218,9 +219,9 @@ class Entry extends Message
                     try {
                         $detail->validate($opFlags);
                         if ($detail->signTest > 0) {
-                            ++$debitCount;
+                            $debitCount++;
                         } else {
-                            ++$creditCount;
+                            $creditCount++;
                         }
                     } catch (Breaker $exception) {
                         Merge::arrays($errors, $exception->getErrors());
@@ -231,10 +232,10 @@ class Entry extends Message
                         'Entry must have at least one debit and credit'
                     );
                 }
-                if (!$this->clearing && $creditCount > 1 && $debitCount > 1) {
+                if (! $this->clearing && $creditCount > 1 && $debitCount > 1) {
                     $errors[] = __(
                         "Entry can't have multiple debits and multiple credits"
-                        . " unless it is a clearing transaction."
+                        .' unless it is a clearing transaction.'
                     );
                 }
             }
@@ -245,5 +246,4 @@ class Entry extends Message
 
         return $this;
     }
-
 }

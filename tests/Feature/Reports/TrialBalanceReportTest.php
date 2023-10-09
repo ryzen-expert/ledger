@@ -34,7 +34,7 @@ class TrialBalanceReportTest extends TestCaseWithMigrations
     {
         // Create a ledger and a known set of transactions.
         $sql = file_get_contents(
-            __DIR__ . '/../../Seeders/random_baseline.sql'
+            __DIR__.'/../../Seeders/random_baseline.sql'
         );
         foreach (explode('-- Table', $sql) as $statement) {
             DB::statement(trim($statement));
@@ -56,6 +56,7 @@ class TrialBalanceReportTest extends TestCaseWithMigrations
         $report = new TrialBalanceReport();
         $reportData = $report->collect($request);
         $this->assertCount(139, $reportData->accounts);
+
         return $reportData;
     }
 
@@ -63,6 +64,7 @@ class TrialBalanceReportTest extends TestCaseWithMigrations
      * Regression test for GitHub issue #9.
      *
      * @return ReportData
+     *
      * @throws \Abivia\Ledger\Exceptions\Breaker
      */
     public function testCollectEmptyJournal()
@@ -72,11 +74,13 @@ class TrialBalanceReportTest extends TestCaseWithMigrations
         $report = new TrialBalanceReport();
         $reportData = $report->collect($request);
         $this->assertCount(1, $reportData->accounts);
+
         return $reportData;
     }
 
     /**
      * @depends testCollect
+     *
      * @return void
      */
     public function testPrepare(ReportData $reportData)
@@ -89,13 +93,13 @@ class TrialBalanceReportTest extends TestCaseWithMigrations
         /** @var ReportAccount $account */
         foreach ($prepared['accounts'] as $account) {
             $line = [$account->total, $account->balance, $account->creditBalance, $account->debitBalance];
-            $line[] = '"' . $account->name . '"';
+            $line[] = '"'.$account->name.'"';
             $line[] = $account->code;
 
-            $lines[] = implode(',', array_reverse($line)) . "\n";
+            $lines[] = implode(',', array_reverse($line))."\n";
         }
         // See if we can/should log this
-        $exportPath = __DIR__ . '/../../../local';
+        $exportPath = __DIR__.'/../../../local';
         if (is_dir($exportPath)) {
             $exportPath = realpath("$exportPath/trial.csv");
             file_put_contents($exportPath, implode($lines));
@@ -163,7 +167,7 @@ class TrialBalanceReportTest extends TestCaseWithMigrations
             'name' => 'trialBalance',
             'currency' => 'CAD',
             'options' => [
-                'decimal' => '.', 'negative' => '(', 'thousands' => ','
+                'decimal' => '.', 'negative' => '(', 'thousands' => ',',
             ],
             'toDate' => '2001-02-28',
         ];
@@ -215,5 +219,4 @@ class TrialBalanceReportTest extends TestCaseWithMigrations
         $actual = $this->isSuccessful($response, 'report');
         $this->assertCount(138, $actual->report->accounts);
     }
-
 }

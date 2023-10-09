@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Traits;
@@ -11,10 +12,9 @@ trait UuidPrimaryKey
     protected static function bootUuidPrimaryKey()
     {
         static::creating(function (Model $model) {
-            if (!$model->{$model->primaryKey}) {
+            if (! $model->{$model->primaryKey}) {
                 $model->{$model->primaryKey} = Str::uuid();
             }
         });
     }
-
 }

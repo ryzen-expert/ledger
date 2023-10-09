@@ -8,7 +8,6 @@ use Abivia\Ledger\Messages\Domain;
 use Abivia\Ledger\Messages\EntityRef;
 use Abivia\Ledger\Traits\CommonResponseProperties;
 use Abivia\Ledger\Traits\HasRevisions;
-use Abivia\Ledger\Traits\UuidPrimaryKey;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,28 +28,33 @@ use Illuminate\Support\HigherOrderCollectionProxy;
  * @property Carbon $revision Revision hash to detect race condition on update.
  * @property bool $subJournals Set if the domain uses sub-journals.
  * @property Carbon $updated_at When the record was updated.
+ *
  * @mixin Builder
  */
 class LedgerDomain extends Model
 {
-    use CommonResponseProperties, HasFactory, HasNames, HasRevisions, UuidPrimaryKey;
+    use CommonResponseProperties, HasFactory, HasNames, HasRevisions;
 
     protected $casts = [
         'revision' => 'datetime',
     ];
+
     protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = [
-        'code', 'currencyDefault', 'extra', 'subJournals'
+        'code', 'currencyDefault', 'extra', 'subJournals',
     ];
-    public $incrementing = false;
-    protected $keyType = 'string';
+
+    //    public $incrementing = false;
+    protected $keyType = 'int';
+
     public $primaryKey = 'domainUuid';
 
     /**
      * The revision Hash is computationally expensive, only calculated when required.
      *
-     * @param $key
      * @return HigherOrderCollectionProxy|mixed|string|null
+     *
      * @throws Exception
      */
     public function __get($key)
@@ -58,6 +62,7 @@ class LedgerDomain extends Model
         if ($key === 'revisionHash') {
             return $this->getRevisionHash();
         }
+
         return parent::__get($key);
     }
 
@@ -84,10 +89,9 @@ class LedgerDomain extends Model
     }
 
     /**
-     * @param EntityRef $entityRef
-     * @return Builder
      * @noinspection PhpIncompatibleReturnTypeInspection
      * @noinspection PhpDynamicAsStaticMethodCallInspection
+     *
      * @throws Breaker
      */
     public static function findWith(EntityRef $entityRef): Builder
@@ -108,7 +112,9 @@ class LedgerDomain extends Model
 
     /**
      * Create a response array.
+     *
      * @return string[]
+     *
      * @throws Exception
      */
     public function toResponse(): array
@@ -119,5 +125,4 @@ class LedgerDomain extends Model
 
         return $this->commonResponses($response);
     }
-
 }

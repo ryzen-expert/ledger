@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $journalEntryId The JournalEntry ID that this detail belongs to.
  * @property string $journalReferenceUuid Optional reference to an associated entity.
  * @property string $ledgerUuid The ledger account this applies to.
+ *
  * @mixin Builder
  * @mixin \Illuminate\Database\Query\Builder
  */
@@ -31,7 +32,6 @@ class JournalDetail extends Model
 
     /**
      * Get the Account associated with this Detail.
-     * @return BelongsTo
      */
     public function account(): BelongsTo
     {
@@ -42,7 +42,6 @@ class JournalDetail extends Model
 
     /**
      * Get the balances for the account connected to this detail.
-     * @return HasMany
      */
     public function balances(): HasMany
     {
@@ -53,7 +52,6 @@ class JournalDetail extends Model
 
     /**
      * Get the Journal entry that contains this detail.
-     * @return BelongsTo
      */
     public function entry(): BelongsTo
     {
@@ -75,5 +73,4 @@ class JournalDetail extends Model
 
         return $response;
     }
-
 }

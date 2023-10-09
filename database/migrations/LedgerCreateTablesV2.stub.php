@@ -7,28 +7,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-
 class LedgerCreateTablesV2 extends Migration
 {
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('journal_details');
-        Schema::dropIfExists('journal_entries');
-        Schema::dropIfExists('journal_references');
-        Schema::dropIfExists('ledger_accounts');
-        Schema::dropIfExists('ledger_balances');
-        Schema::dropIfExists('ledger_currencies');
-        Schema::dropIfExists('ledger_domains');
-        Schema::dropIfExists('ledger_names');
-        Schema::dropIfExists('ledger_reports');
-        Schema::dropIfExists('sub_journals');
-    }
-
     /**
      * Run the migrations.
      *
@@ -36,6 +16,7 @@ class LedgerCreateTablesV2 extends Migration
      */
     public function up()
     {
+        $this->down();
         // Line item in a journal entry.
         Schema::create('journal_details', function (Blueprint $table) {
             // Primary key
@@ -45,13 +26,15 @@ class LedgerCreateTablesV2 extends Migration
             $table->bigInteger('journalEntryId')->index();
 
             // Ledger account identifier
-            $table->uuid('ledgerUuid')->index();
-
+            //            $table->uuid('ledgerUuid')->index();
+            $table->foreignId('ledgerUuid');
             // The [split] transaction amount
             $table->string('amount', LedgerCurrency::AMOUNT_SIZE);
 
             // Reference to an external entity.
-            $table->uuid('journalReferenceUuid')->nullable();
+            $table->foreignId('journalReferenceUuid')->nullable();
+
+            //            $table->uuid('journalReferenceUuid')->nullable();
         });
 
         Schema::create('journal_entries', function (Blueprint $table) {
@@ -59,8 +42,11 @@ class LedgerCreateTablesV2 extends Migration
             $table->bigIncrements('journalEntryId');
 
             $table->dateTime('transDate');
-            $table->foreignUuid('domainUuid');
-            $table->uuid('subJournalUuid')->nullable();
+            //            $table->foreignUuid('domainUuid');
+            $table->foreignId('domainUuid');
+            $table->foreignId('subJournalUuid')->nullable();
+
+            //            $table->uuid('subJournalUuid')->nullable();
             $table->string('currency', LedgerCurrency::CODE_SIZE);
             $table->tinyInteger('opening');
             $table->tinyInteger('clearing')->default(false);
@@ -74,7 +60,8 @@ class LedgerCreateTablesV2 extends Migration
             $table->string('language', 8);
             $table->longText('extra')->nullable();
             // Reference to an external entity.
-            $table->uuid('journalReferenceUuid')->nullable();
+            //            $table->uuid('journalReferenceUuid')->nullable();
+            $table->foreignId('journalReferenceUuid')->nullable();
             $table->string('createdBy')->nullable();
             $table->string('updatedBy')->nullable();
             // The update timestamp (server-side)
@@ -85,8 +72,11 @@ class LedgerCreateTablesV2 extends Migration
 
         // Connection to entities outside the GL
         Schema::create('journal_references', function (Blueprint $table) {
-            $table->uuid('journalReferenceUuid')->primary();
-            $table->foreignUuid('domainUuid');
+
+            //            $table->uuid('journalReferenceUuid')->primary();
+            $table->bigIncrements('journalReferenceUuid');
+            //            $table->foreignUuid('domainUuid');
+            $table->foreignId('domainUuid');
             $table->string('code');
             $table->longText('extra')->nullable();
             // The update timestamp (server-side)
@@ -100,14 +90,16 @@ class LedgerCreateTablesV2 extends Migration
         // Account definitions (chart of accounts)
         Schema::create('ledger_accounts', function (Blueprint $table) {
             // Invariant account identifier
-            $table->uuid('ledgerUuid')->primary();
+            //            $table->uuid('ledgerUuid')->primary();
+            $table->bigIncrements('ledgerUuid');
             // User accessible account identifier
             $table->string('code', LedgerAccount::CODE_SIZE)->unique();
             // The account code for reporting / regulatory purposes.
             $table->string('taxCode', LedgerAccount::CODE_SIZE)
                 ->nullable()
                 ->index();
-            $table->uuid('parentUuid')->nullable()->index();
+            $table->bigInteger('parentUuid')->nullable()->index();
+            //            $table->uuid('parentUuid')->nullable()->index();
             // Debit/credit flags: only the root is neither, otherwise one must be set.
             $table->boolean('debit');
             $table->boolean('credit');
@@ -126,8 +118,11 @@ class LedgerCreateTablesV2 extends Migration
         Schema::create('ledger_balances', function (Blueprint $table) {
             // Primary key, just use default since access is composite
             $table->bigIncrements('id');
-            $table->foreignUuid('ledgerUuid');
-            $table->foreignUuid('domainUuid');
+            $table->foreignId('ledgerUuid');
+            $table->foreignId('domainUuid');
+
+            //            $table->foreignUuid('ledgerUuid');
+            //            $table->foreignUuid('domainUuid');
             $table->string('currency', LedgerCurrency::CODE_SIZE);
             $table->string('balance', LedgerCurrency::AMOUNT_SIZE);
             $table->timestamps(6);
@@ -146,7 +141,8 @@ class LedgerCreateTablesV2 extends Migration
 
         // Ledger domains
         Schema::create('ledger_domains', function (Blueprint $table) {
-            $table->uuid('domainUuid')->primary();
+            //            $table->uuid('domainUuid')->primary();
+            $table->bigIncrements('domainUuid');
             $table->string('code', LedgerAccount::CODE_SIZE)->unique();
             $table->longText('extra')->nullable();
             $table->json('flex')->nullable();
@@ -161,13 +157,15 @@ class LedgerCreateTablesV2 extends Migration
         Schema::create('ledger_names', function (Blueprint $table) {
             // Primary key, just use default since access is composite
             $table->bigIncrements('id');
+            $table->bigInteger('ownerUuid');
 
-            $table->uuid('ownerUuid');
+            //            $table->bigInteger('ownerUuid');
+            //            $table->uuid('ownerUuid');
             $table->string('language', LedgerName::CODE_SIZE);
             $table->string('name');
             $table->timestamps(6);
 
-            $table->unique(['ownerUuid', 'language']);
+            //            $table->unique(['ownerUuid', 'language']);
         });
 
         // Cached financial reports
@@ -185,7 +183,8 @@ class LedgerCreateTablesV2 extends Migration
         });
 
         Schema::create('sub_journals', function (Blueprint $table) {
-            $table->uuid('subJournalUuid')->primary();
+            $table->bigIncrements('subJournalUuid');
+            //            $table->uuid('subJournalUuid')->primary();
             $table->string('code', LedgerAccount::CODE_SIZE);
             $table->longText('extra')->nullable();
             $table->dateTime('revision', 6)
@@ -195,4 +194,22 @@ class LedgerCreateTablesV2 extends Migration
 
     }
 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('journal_details');
+        Schema::dropIfExists('journal_entries');
+        Schema::dropIfExists('journal_references');
+        Schema::dropIfExists('ledger_accounts');
+        Schema::dropIfExists('ledger_balances');
+        Schema::dropIfExists('ledger_currencies');
+        Schema::dropIfExists('ledger_domains');
+        Schema::dropIfExists('ledger_names');
+        Schema::dropIfExists('ledger_reports');
+        Schema::dropIfExists('sub_journals');
+    }
 }

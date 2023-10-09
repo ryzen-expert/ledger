@@ -12,16 +12,15 @@ class LedgerBalanceApiController extends ApiController
     /**
      * Convert the operation request into a bitmask.
      *
-     * @param string $operation
-     * @return int
      * @throws Breaker
      */
-    public static function getOpFlags(string $operation): int {
+    public static function getOpFlags(string $operation): int
+    {
         return Message::toOpFlags(
             $operation,
             [
                 'add' => Message::F_API,
-                'disallow' => (Message::OP_ADD | Message::OP_DELETE | Message::OP_UPDATE)
+                'disallow' => (Message::OP_ADD | Message::OP_DELETE | Message::OP_UPDATE),
             ]
         );
     }
@@ -29,9 +28,6 @@ class LedgerBalanceApiController extends ApiController
     /**
      * Perform a currency operation.
      *
-     * @param Request $request
-     * @param string $operation
-     * @return array
      * @throws Breaker
      */
     protected function runCore(Request $request, string $operation): array
@@ -41,5 +37,4 @@ class LedgerBalanceApiController extends ApiController
 
         return $message->run();
     }
-
 }

@@ -8,7 +8,6 @@ use Abivia\Ledger\Messages\EntityRef;
 use Abivia\Ledger\Messages\SubJournal as JournalMessage;
 use Abivia\Ledger\Traits\CommonResponseProperties;
 use Abivia\Ledger\Traits\HasRevisions;
-use Abivia\Ledger\Traits\UuidPrimaryKey;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,6 +20,7 @@ use Illuminate\Support\HigherOrderCollectionProxy;
  * Domains assigned within the ledger.
  *
  * @method static SubJournal create(array $attributes) Provided by model.
+ *
  * @property string $code Unique identifier for the sub-journal.
  * @property Carbon $created_at When the record was created.
  * @property string $extra Application defined information.
@@ -28,26 +28,32 @@ use Illuminate\Support\HigherOrderCollectionProxy;
  * @property Carbon $revision Revision timestamp to detect race condition on update.
  * @property string $subJournalUuid Identifier for this journal.
  * @property Carbon $updated_at When the record was updated.
+ *
  * @mixin Builder
  */
 class SubJournal extends Model
 {
-    use CommonResponseProperties, HasFactory, HasRevisions, UuidPrimaryKey;
+    use CommonResponseProperties, HasFactory, HasRevisions;
 
     protected $casts = [
         'revision' => 'datetime',
     ];
+
     protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = ['code', 'extra'];
+
     public $incrementing = false;
-    protected $keyType = 'string';
+
+    protected $keyType = 'int';
+
     public $primaryKey = 'subJournalUuid';
 
     /**
      * The revision Hash is computationally expensive, only calculated when required.
      *
-     * @param $key
      * @return HigherOrderCollectionProxy|mixed|string|null
+     *
      * @throws Exception
      */
     public function __get($key)
@@ -55,6 +61,7 @@ class SubJournal extends Model
         if ($key === 'revisionHash') {
             return $this->getRevisionHash();
         }
+
         return parent::__get($key);
     }
 
@@ -80,9 +87,8 @@ class SubJournal extends Model
     }
 
     /**
-     * @param EntityRef $entityRef
-     * @return Builder
      * @throws Breaker
+     *
      * @noinspection PhpIncompatibleReturnTypeInspection
      * @noinspection PhpDynamicAsStaticMethodCallInspection
      */
@@ -114,5 +120,4 @@ class SubJournal extends Model
 
         return $this->commonResponses($response);
     }
-
 }

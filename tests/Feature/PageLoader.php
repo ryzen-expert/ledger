@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Tests\Feature;
@@ -22,7 +23,7 @@ trait PageLoader
             // Check the response against our schema
             $this->validateResponse($actual, $responseType);
             $resources = $actual->$responseElement;
-            ++$pages;
+            $pages++;
             $total += count($resources);
             if (count($resources) !== $requestData['limit']) {
                 break;
@@ -32,5 +33,4 @@ trait PageLoader
 
         return [$pages, $total];
     }
-
 }

@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php
+
+/** @noinspection PhpUnhandledExceptionInspection */
 
 /** @noinspection PhpParamsInspection */
 
@@ -6,21 +8,15 @@ namespace Abivia\Ledger\Tests\Feature;
 
 use Abivia\Ledger\Exceptions\Breaker;
 use Abivia\Ledger\Http\Controllers\JournalEntryController;
-use Abivia\Ledger\Models\JournalEntry;
-use Abivia\Ledger\Models\LedgerAccount;
-use Abivia\Ledger\Messages\Detail;
 use Abivia\Ledger\Messages\EntityRef;
-use Abivia\Ledger\Messages\Entry;
 use Abivia\Ledger\Messages\EntryQuery;
 use Abivia\Ledger\Messages\Message;
+use Abivia\Ledger\Models\JournalEntry;
+use Abivia\Ledger\Models\LedgerAccount;
 use Abivia\Ledger\Tests\TestCaseWithMigrations;
 use Abivia\Ledger\Tests\ValidatesJson;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Abivia\Ledger\Tests\TestCase;
-use Illuminate\Support\Facades\DB;
-use function array_shift;
 
 /**
  * Test Ledger API calls that don't involve journal transactions.
@@ -74,7 +70,7 @@ class JournalEntryQueryTest extends TestCaseWithMigrations
             // Check the response against our schema
             $this->validateResponse($actual, 'entryquery-response');
             $entries = $actual->entries;
-            ++$pages;
+            $pages++;
             $totalEntries += count($entries);
             if (count($entries) !== 25) {
                 break;
@@ -238,5 +234,4 @@ class JournalEntryQueryTest extends TestCaseWithMigrations
         // Expect the remaining records
         $this->assertCount(106, $entries);
     }
-
 }

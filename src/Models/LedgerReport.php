@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * Support for cached reports.
  *
  * @method static LedgerReport create(array $attributes) Provided by model.
+ *
  * @property string $currency The report's currency.
  * @property string $domainUuid the ledger domain for this report.
  * @property ?Carbon $fromDate The period start this report was generated for.
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name The report name
  * @property string $reportData
  * @property Carbon $toDate The period end this report was generated for.
+ *
  * @mixin Builder
  */
 class LedgerReport extends Model
@@ -30,10 +32,12 @@ class LedgerReport extends Model
         'fromDate' => 'datetime',
         'toDate' => 'datetime',
     ];
+
     protected $dateFormat = 'Y-m-d';
+
     protected $fillable = [
         'currency', 'domainUuid', 'fromDate', 'journalEntryId',
-        'name', 'reportData', 'toDate'
+        'name', 'reportData', 'toDate',
     ];
 
     /**
@@ -61,5 +65,4 @@ class LedgerReport extends Model
             'name' => $this->name,
         ];
     }
-
 }

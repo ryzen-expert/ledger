@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Abivia\Ledger\Tests\Unit\Models\Messages\Ledger;
@@ -6,7 +7,6 @@ namespace Abivia\Ledger\Tests\Unit\Models\Messages\Ledger;
 use Abivia\Ledger\Messages\EntityRef;
 use Abivia\Ledger\Messages\Message;
 use Abivia\Ledger\Tests\TestCase;
-
 
 class AccountRefTest extends TestCase
 {
@@ -32,5 +32,4 @@ class AccountRefTest extends TestCase
         $this->assertEquals('1010', $parentRef->code);
         $this->assertEquals('some-fake-uuid', $parentRef->uuid);
     }
-
 }

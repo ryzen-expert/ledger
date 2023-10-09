@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Abivia\Ledger\Tests\Unit\Models\Messages\Ledger;
@@ -7,7 +8,6 @@ use Abivia\Ledger\Exceptions\Breaker;
 use Abivia\Ledger\Messages\Domain;
 use Abivia\Ledger\Messages\Message;
 use Abivia\Ledger\Tests\TestCase;
-
 
 class DomainTest extends TestCase
 {
@@ -82,5 +82,4 @@ class DomainTest extends TestCase
         $this->assertCount(2, $domain->names);
         $this->assertEquals('CAD', $domain->currencyDefault);
     }
-
 }

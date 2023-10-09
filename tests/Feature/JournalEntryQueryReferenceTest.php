@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php
+
+/** @noinspection PhpUnhandledExceptionInspection */
 
 /** @noinspection PhpParamsInspection */
 
@@ -6,8 +8,8 @@ namespace Abivia\Ledger\Tests\Feature;
 
 use Abivia\Ledger\Http\Controllers\JournalEntryController;
 use Abivia\Ledger\Messages\EntryQuery;
-use Abivia\Ledger\Messages\Reference;
 use Abivia\Ledger\Messages\Message;
+use Abivia\Ledger\Messages\Reference;
 use Abivia\Ledger\Models\LedgerAccount;
 use Abivia\Ledger\Tests\TestCaseWithMigrations;
 use Abivia\Ledger\Tests\ValidatesJson;
@@ -26,6 +28,7 @@ class JournalEntryQueryReferenceTest extends TestCaseWithMigrations
     use ValidatesJson;
 
     private array $referenceUses = [];
+
     private array $references = [];
 
     public function setUp(): void
@@ -76,5 +79,4 @@ class JournalEntryQueryReferenceTest extends TestCaseWithMigrations
             $this->assertCount($count, $entries);
         }
     }
-
 }

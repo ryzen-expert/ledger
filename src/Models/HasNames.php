@@ -3,14 +3,12 @@
 namespace Abivia\Ledger\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 /**
  * Trait for Models with related LedgerNames.
  */
 trait HasNames
 {
-
     public function names(): HasMany
     {
         return $this->hasMany(LedgerName::class, 'ownerUuid', $this->primaryKey);
@@ -29,11 +27,10 @@ trait HasNames
                 break;
             }
         }
-        if (!isset($name)) {
+        if (! isset($name)) {
             $name = $names->first()->name;
         }
 
         return $name;
     }
-
 }

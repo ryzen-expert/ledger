@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection SpellCheckingInspection */
 /** @noinspection PhpDynamicAsStaticMethodCallInspection */
 /** @noinspection PhpParamsInspection */
@@ -28,18 +29,18 @@ class BatchTest extends TestCaseWithMigrations
         'names' => [
             [
                 'name' => 'Engineering',
-                'language' => 'en'
+                'language' => 'en',
             ],
             [
                 'name' => 'Nerds',
-                'language' => 'en-JOCK'
+                'language' => 'en-JOCK',
             ],
             [
                 'name' => 'la machination',
-                'language' => 'fr'
+                'language' => 'fr',
             ],
         ],
-        'currency' => 'CAD'
+        'currency' => 'CAD',
     ];
 
     public function setUp(): void
@@ -343,7 +344,7 @@ class BatchTest extends TestCaseWithMigrations
         // First we need a ledger and a batch limit
         $this->createLedger();
         LedgerAccount::setRules(
-            (object)['batch' => (object)['limit' => 2]]
+            (object) ['batch' => (object) ['limit' => 2]]
         );
 
         // Create a batch with a fetch and three revisions
@@ -359,21 +360,21 @@ class BatchTest extends TestCaseWithMigrations
                     'method' => 'domain/update',
                     'payload' => [
                         'code' => 'CORP',
-                        'toCode' => 'MAIN'
+                        'toCode' => 'MAIN',
                     ],
                 ],
                 [
                     'method' => 'domain/update',
                     'payload' => [
                         'code' => 'MAIN',
-                        'toCode' => 'NEXT'
+                        'toCode' => 'NEXT',
                     ],
                 ],
                 [
                     'method' => 'domain/update',
                     'payload' => [
                         'code' => 'NEXT',
-                        'toCode' => 'LAST'
+                        'toCode' => 'LAST',
                     ],
                 ],
             ],
@@ -413,7 +414,7 @@ class BatchTest extends TestCaseWithMigrations
         // First we need a ledger and a batch limit
         $this->createLedger();
         LedgerAccount::setRules(
-            (object)['batch' => (object)['allowReports' => false]]
+            (object) ['batch' => (object) ['allowReports' => false]]
         );
 
         // Create a batch with a report request
@@ -460,14 +461,14 @@ class BatchTest extends TestCaseWithMigrations
                     'method' => 'domain/update',
                     'payload' => [
                         'code' => 'CORP',
-                        'toCode' => 'MAIN'
+                        'toCode' => 'MAIN',
                     ],
                 ],
                 [
                     'method' => 'domain/update',
                     'payload' => [
                         'code' => 'MAIN',
-                        'toCode' => 'NEXT'
+                        'toCode' => 'NEXT',
                     ],
                 ],
                 [
@@ -475,7 +476,7 @@ class BatchTest extends TestCaseWithMigrations
                     'payload' => [
                         'revision' => '&',
                         'code' => 'NEXT',
-                        'toCode' => 'LAST'
+                        'toCode' => 'LAST',
                     ],
                 ],
             ],
@@ -515,14 +516,14 @@ class BatchTest extends TestCaseWithMigrations
                     'method' => 'domain/update',
                     'payload' => [
                         'code' => 'CORP',
-                        'toCode' => 'MAIN'
+                        'toCode' => 'MAIN',
                     ],
                 ],
                 [
                     'method' => 'domain/update',
                     'payload' => [
                         'code' => 'MAIN',
-                        'toCode' => 'NEXT'
+                        'toCode' => 'NEXT',
                     ],
                 ],
             ],
@@ -562,7 +563,7 @@ class BatchTest extends TestCaseWithMigrations
                     'payload' => [
                         'revision' => $actual->domain->revision,
                         'code' => 'CORP',
-                        'toCode' => 'MAIN'
+                        'toCode' => 'MAIN',
                     ],
                 ],
                 [
@@ -570,7 +571,7 @@ class BatchTest extends TestCaseWithMigrations
                     'payload' => [
                         'revision' => $actual->domain->revision,
                         'code' => 'MAIN',
-                        'toCode' => 'NEXT'
+                        'toCode' => 'NEXT',
                     ],
                 ],
                 [
@@ -578,7 +579,7 @@ class BatchTest extends TestCaseWithMigrations
                     'payload' => [
                         'revision' => $actual->domain->revision,
                         'code' => 'NEXT',
-                        'toCode' => 'LAST'
+                        'toCode' => 'LAST',
                     ],
                 ],
             ],
@@ -598,5 +599,4 @@ class BatchTest extends TestCaseWithMigrations
         );
         $actual = $this->isSuccessful($response, 'domain');
     }
-
 }

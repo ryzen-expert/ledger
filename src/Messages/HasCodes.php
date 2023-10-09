@@ -17,15 +17,13 @@ trait HasCodes
     /**
      * Check that the code and toCode properties are good.
      *
-     * @param int $opFlags Message operations flag for this request.
-     * @param array $options regEx overrides the default regEx, uppercase transforms
+     * @param  int  $opFlags Message operations flag for this request.
+     * @param  array  $options regEx overrides the default regEx, uppercase transforms
      * code and toCode to uppercase (default true).
-     * @return array
      */
     protected function validateCodes(
         int $opFlags, array $options = []
-    ): array
-    {
+    ): array {
         $options['uppercase'] ??= true;
         if (isset($options['regEx']) && $options['regEx'] !== '') {
             $regExMessage = 'the :prop property must match the format :regex';
@@ -61,5 +59,4 @@ trait HasCodes
 
         return $errors;
     }
-
 }

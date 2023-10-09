@@ -1,17 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Http\Controllers;
 
 use Abivia\Ledger\Exceptions\Breaker;
+use Abivia\Ledger\Messages\Currency;
 use Abivia\Ledger\Messages\CurrencyQuery;
+use Abivia\Ledger\Messages\Message;
 use Abivia\Ledger\Models\JournalEntry;
 use Abivia\Ledger\Models\LedgerAccount;
 use Abivia\Ledger\Models\LedgerBalance;
 use Abivia\Ledger\Models\LedgerCurrency;
 use Abivia\Ledger\Models\LedgerDomain;
-use Abivia\Ledger\Messages\Currency;
-use Abivia\Ledger\Messages\Message;
 use Abivia\Ledger\Traits\Audited;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,8 +28,6 @@ class LedgerCurrencyController extends Controller
     /**
      * Add a currency to the ledger.
      *
-     * @param Currency $message
-     * @return LedgerCurrency
      * @throws Breaker
      * @throws Exception
      */
@@ -45,9 +44,9 @@ class LedgerCurrencyController extends Controller
                 Breaker::RULE_VIOLATION,
                 [
                     __(
-                        "Currency :code already exists.",
+                        'Currency :code already exists.',
                         ['code' => $message->code]
-                    )
+                    ),
                 ]
             );
         }
@@ -76,8 +75,8 @@ class LedgerCurrencyController extends Controller
     /**
      * Delete a currency. The currency must be unused.
      *
-     * @param Currency $message
      * @return null
+     *
      * @throws Breaker
      */
     public function delete(Currency $message)
@@ -132,8 +131,6 @@ class LedgerCurrencyController extends Controller
     /**
      * Fetch a currency based on currency code.
      *
-     * @param string $currencyCode
-     * @return LedgerCurrency
      * @throws Breaker
      */
     private function fetch(string $currencyCode): LedgerCurrency
@@ -153,22 +150,18 @@ class LedgerCurrencyController extends Controller
     /**
      * Get a currency.
      *
-     * @param Currency $message
-     * @return LedgerCurrency
      * @throws Breaker
      */
     public function get(Currency $message): LedgerCurrency
     {
         $message->validate(Message::OP_GET);
+
         return $this->fetch($message->code);
     }
 
     /**
      * Return currencies matching a Query.
      *
-     * @param CurrencyQuery $message
-     * @param int $opFlags
-     * @return Collection
      * @throws Breaker
      */
     public function query(CurrencyQuery $message, int $opFlags): Collection
@@ -188,12 +181,9 @@ class LedgerCurrencyController extends Controller
     /**
      * Perform a currency operation.
      *
-     * @param Currency $message
-     * @param int|null $opFlags
-     * @return LedgerCurrency|null
      * @throws Breaker
      */
-    public function run(Currency $message, ?int $opFlags = null): ?LedgerCurrency
+    public function run(Currency $message, int $opFlags = null): ?LedgerCurrency
     {
         $opFlags ??= $message->getOpFlags();
         switch ($opFlags & Message::ALL_OPS) {
@@ -213,8 +203,6 @@ class LedgerCurrencyController extends Controller
     /**
      * Update a currency.
      *
-     * @param Currency $message
-     * @return LedgerCurrency
      * @throws Breaker
      */
     public function update(Currency $message): LedgerCurrency
@@ -273,5 +261,4 @@ class LedgerCurrencyController extends Controller
 
         return $ledgerCurrency;
     }
-
 }

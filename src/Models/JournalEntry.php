@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Models;
@@ -42,6 +43,7 @@ use Illuminate\Support\HigherOrderCollectionProxy;
  * @property Carbon $transDate The date/time of the transaction.
  * @property Carbon $updated_at Last record update timestamp.
  * @property string $updatedBy Record update entity.
+ *
  * @mixin Builder
  */
 class JournalEntry extends Model
@@ -61,19 +63,22 @@ class JournalEntry extends Model
         'revision' => 'datetime',
         'transDate' => 'datetime',
     ];
+
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
     /**
      * @var string The date format for response messages.
      */
-    static protected $dateFormatJson = 'Y-m-d\TH:i:s.u\Z';
+    protected static $dateFormatJson = 'Y-m-d\TH:i:s.u\Z';
 
     protected $fillable = [
-        'arguments', 'clearing','createdBy', 'currency', 'description', 'domainUuid',
+        'arguments', 'clearing', 'createdBy', 'currency', 'description', 'domainUuid',
         'extra', 'journalReferenceUuid', 'language', 'locked', 'opening', 'reviewed',
-        'transDate', 'updatedBy'
+        'transDate', 'updatedBy',
     ];
+
     protected $keyType = 'int';
+
     protected $primaryKey = 'journalEntryId';
 
     /**
@@ -86,8 +91,8 @@ class JournalEntry extends Model
     /**
      * The revision Hash is computationally expensive, only calculated when required.
      *
-     * @param $key
      * @return HigherOrderCollectionProxy|mixed|string|null
+     *
      * @throws Exception
      */
     public function __get($key)
@@ -95,6 +100,7 @@ class JournalEntry extends Model
         if ($key === 'revisionHash') {
             return $this->getRevisionHash();
         }
+
         return parent::__get($key);
     }
 
@@ -122,8 +128,6 @@ class JournalEntry extends Model
 
     /**
      * Relationship to fetch the related JournalDetail records.
-     *
-     * @return HasMany
      */
     public function details(): HasMany
     {
@@ -132,7 +136,7 @@ class JournalEntry extends Model
 
     /**
      * Store details from an Entry message into this JournalEntry.
-     * @param Entry $message
+     *
      * @return $this
      */
     public function fillFromMessage(Entry $message): self
@@ -157,7 +161,6 @@ class JournalEntry extends Model
 
     /**
      * Relationship to fetch any related JournalReferences.
-     * @return HasManyThrough
      */
     public function references(): HasManyThrough
     {
@@ -214,5 +217,4 @@ class JournalEntry extends Model
 
         return $this->commonResponses($response, $except);
     }
-
 }

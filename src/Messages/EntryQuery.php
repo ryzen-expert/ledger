@@ -11,8 +11,8 @@ use Abivia\Ledger\Models\LedgerDomain;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
-class EntryQuery extends Message {
-
+class EntryQuery extends Message
+{
     /**
      * @var int For pagination, ID of first record after this position
      */
@@ -88,7 +88,7 @@ class EntryQuery extends Message {
     public ?bool $reviewed;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
@@ -123,7 +123,6 @@ class EntryQuery extends Message {
     /**
      * Generate a query to retrieve the requested entries.
      *
-     * @return Builder
      * @throws Breaker
      */
     public function query(): Builder
@@ -137,7 +136,7 @@ class EntryQuery extends Message {
             );
         }
         $this->domain->uuid = $ledgerDomain->domainUuid;
-        if (!isset($this->currency)) {
+        if (! isset($this->currency)) {
             $this->currency = $ledgerDomain->currencyDefault;
         }
 
@@ -158,15 +157,13 @@ class EntryQuery extends Message {
     /**
      * Add the amount criteria to the query.
      *
-     * @param Builder $query
-     * @return void
      * @throws Breaker
      */
     private function queryAmount(Builder $query): void
     {
         $ledgerCurrency = LedgerCurrency::findOrBreaker($this->currency);
         $query->where('currency', $this->currency);
-        if (!isset($this->amountMax) && !isset($this->amount)) {
+        if (! isset($this->amountMax) && ! isset($this->amount)) {
             return;
         }
         // Normalize and validate the numbers
@@ -189,7 +186,7 @@ class EntryQuery extends Message {
                 $this->amount = $this->amountMax;
                 $this->amountMax = $swap;
             }
-            $cast = 'decimal(' . LedgerCurrency::AMOUNT_SIZE . ",$decimals)";
+            $cast = 'decimal('.LedgerCurrency::AMOUNT_SIZE.",$decimals)";
             $query->whereHas(
                 'details',
                 function (Builder $query) use ($cast) {
@@ -206,9 +203,6 @@ class EntryQuery extends Message {
 
     /**
      * Add the date criteria to the query.
-     *
-     * @param Builder $query
-     * @return void
      */
     private function queryDate(Builder $query): void
     {
@@ -228,9 +222,6 @@ class EntryQuery extends Message {
 
     /**
      * Add the domain criteria to the query.
-     *
-     * @param Builder $query
-     * @return void
      */
     private function queryDescription(Builder $query): void
     {
@@ -242,9 +233,6 @@ class EntryQuery extends Message {
 
     /**
      * Add the domain criteria to the query.
-     *
-     * @param Builder $query
-     * @return void
      */
     private function queryDomain(Builder $query): void
     {
@@ -255,8 +243,6 @@ class EntryQuery extends Message {
     /**
      * Add the pagination criteria to the query.
      *
-     * @param Builder $query
-     * @return void
      * @throws Breaker
      */
     private function queryPagination(Builder $query): void
@@ -265,8 +251,8 @@ class EntryQuery extends Message {
         if (isset($this->after)) {
             $afterDate = $this->afterDate->format(LedgerAccount::systemDateFormat());
             $query->where('transDate', '>', $afterDate)
-                ->orWhere(function ($query) use ($afterDate){
-                    $query->where('journalEntryId','>', $this->after)
+                ->orWhere(function ($query) use ($afterDate) {
+                    $query->where('journalEntryId', '>', $this->after)
                         ->where('transDate', '=', $afterDate);
                 });
         }
@@ -277,9 +263,6 @@ class EntryQuery extends Message {
 
     /**
      * Add the external reference criteria to the query.
-     *
-     * @param Builder $query
-     * @return void
      */
     private function queryReference(Builder $query): void
     {
@@ -296,7 +279,8 @@ class EntryQuery extends Message {
     /**
      * @throws Breaker
      */
-    public function run(): array {
+    public function run(): array
+    {
         $controller = new JournalEntryController();
         $entries = [];
         /** @var JournalEntry $entry */
@@ -308,9 +292,9 @@ class EntryQuery extends Message {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
         // Limit results on API calls
@@ -331,7 +315,7 @@ class EntryQuery extends Message {
             );
         }
 
-        if (!isset($this->domain)) {
+        if (! isset($this->domain)) {
             $this->domain = new EntityRef();
             $this->domain->code = LedgerAccount::rules()->domain->default;
         }
@@ -339,6 +323,7 @@ class EntryQuery extends Message {
         if (isset($this->reference)) {
             $this->reference->validate($opFlags);
         }
+
         return $this;
     }
 }

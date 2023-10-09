@@ -22,6 +22,7 @@ use Illuminate\Support\HigherOrderCollectionProxy;
  * @property int $decimals The number of decimals to carry.
  * @property Carbon $revision Revision timestamp to detect race condition on update.
  * @property Carbon $updated_at When the record was updated.
+ *
  * @mixin Builder
  * @mixin \Illuminate\Database\Query\Builder
  */
@@ -30,6 +31,7 @@ class LedgerCurrency extends Model
     use CommonResponseProperties, HasFactory, HasRevisions;
 
     const AMOUNT_SIZE = 32;
+
     const CODE_SIZE = 16;
 
     /**
@@ -41,8 +43,11 @@ class LedgerCurrency extends Model
     ];
 
     protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = ['code', 'decimals'];
+
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     public $primaryKey = 'code';
@@ -50,8 +55,8 @@ class LedgerCurrency extends Model
     /**
      * The revision Hash is computationally expensive, only calculated when required.
      *
-     * @param $key
      * @return HigherOrderCollectionProxy|mixed|string|null
+     *
      * @throws Exception
      */
     public function __get($key)
@@ -59,6 +64,7 @@ class LedgerCurrency extends Model
         if ($key === 'revisionHash') {
             return $this->getRevisionHash();
         }
+
         return parent::__get($key);
     }
 
@@ -85,15 +91,15 @@ class LedgerCurrency extends Model
 
     /**
      * Look for a currency. If not found throw a Breaker.
-     * @param string $currency Currency code.
-     * @param int|null $errorCode Breaker code (default to bad request).
-     * @return LedgerCurrency
+     *
+     * @param  string  $currency Currency code.
+     * @param  int|null  $errorCode Breaker code (default to bad request).
+     *
      * @throws Breaker
      */
     public static function findOrBreaker(
         string $currency, int $errorCode = Breaker::BAD_REQUEST
-    ): LedgerCurrency
-    {
+    ): LedgerCurrency {
         /** @noinspection PhpDynamicAsStaticMethodCallInspection */
         $ledgerCurrency = LedgerCurrency::find($currency);
         if ($ledgerCurrency === null) {
@@ -109,18 +115,15 @@ class LedgerCurrency extends Model
     /**
      * Convert to a response array.
      *
-     * @param array $options
-     * @return array
      * @throws Exception
      */
     public function toResponse(array $options = []): array
     {
         $response = [
             'code' => $this->code,
-            'decimals' =>$this->decimals,
+            'decimals' => $this->decimals,
         ];
 
         return $this->commonResponses($response, ['extra', 'names']);
     }
-
 }

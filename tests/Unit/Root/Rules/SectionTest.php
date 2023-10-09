@@ -12,7 +12,7 @@ class SectionTest extends TestCase
     public function testHydration()
     {
         $obj = new \Abivia\Ledger\Root\Rules\Section();
-        $json = <<<JSON
+        $json = <<<'JSON'
 {
     "codes": "1100",
     "credit": true,
@@ -34,7 +34,7 @@ JSON;
     public function testHydrationArray()
     {
         $obj = new \Abivia\Ledger\Root\Rules\Section();
-        $json = <<<JSON
+        $json = <<<'JSON'
 {
     "codes": ["1100", "1200", "1300"],
     "credit": true,
@@ -58,15 +58,15 @@ JSON;
 
     /**
      * @depends testHydration
+     *
      * @return void
      */
     public function testEncode()
     {
         $json = json_encode(self::$section);
         $expect = '{"codes":["1100"],"credit":true,'
-            . '"ledgerUuids":[],'
-            . '"names":[{"language":"en","name":"This is a section name"}]}';
+            .'"ledgerUuids":[],'
+            .'"names":[{"language":"en","name":"This is a section name"}]}';
         $this->assertEquals($expect, $json);
     }
-
 }

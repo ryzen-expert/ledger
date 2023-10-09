@@ -3,7 +3,6 @@
 namespace Abivia\Ledger\Models;
 
 use Abivia\Ledger\Messages\Report;
-use Carbon\Carbon;
 
 class ReportData extends NoDatabase
 {
@@ -26,5 +25,4 @@ class ReportData extends NoDatabase
      * @var Report The Report message used to generate this report.
      */
     public Report $request;
-
 }

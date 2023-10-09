@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Http\Controllers\Api;
@@ -14,9 +15,6 @@ class LedgerDomainApiController extends ApiController
     /**
      * Perform a domain operation.
      *
-     * @param Request $request
-     * @param string $operation
-     * @return array
      * @throws Breaker
      */
     protected function runCore(Request $request, string $operation): array
@@ -30,5 +28,4 @@ class LedgerDomainApiController extends ApiController
 
         return $message->run();
     }
-
 }

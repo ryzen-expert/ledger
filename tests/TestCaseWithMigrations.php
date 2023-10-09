@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Abivia\Ledger\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabaseState;
@@ -15,7 +14,7 @@ abstract class TestCaseWithMigrations extends TestCase
 
     protected function doMigrations()
     {
-        $base = __DIR__ . '/../database/migrations/';
+        $base = __DIR__.'/../database/migrations/';
         $migrations = [
             ['LedgerCreateTablesV2', true],
             // ['LedgerAddAccountTaxCode', false],
@@ -31,5 +30,4 @@ abstract class TestCaseWithMigrations extends TestCase
         }
         RefreshDatabaseState::$migrated = true;
     }
-
 }

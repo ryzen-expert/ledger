@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpPropertyOnlyWrittenInspection */
 
 namespace Abivia\Ledger\Root\Rules;
@@ -8,7 +9,7 @@ use Abivia\Hydration\Hydrator;
 use Abivia\Hydration\Property;
 use Abivia\Ledger\Exceptions\Breaker;
 use Abivia\Ledger\Models\LedgerAccount;
-use SebastianBergmann\CodeCoverage\BranchAndPathCoverageNotSupportedException;
+
 use function __;
 
 class Section implements Hydratable
@@ -37,6 +38,7 @@ class Section implements Hydratable
      * @var string placeholder for simple name (no language) definitions.
      */
     private string $name;
+
     /**
      * @var Name[] Names of this section.
      */
@@ -45,9 +47,9 @@ class Section implements Hydratable
     /**
      * Construct a section from array data.
      *
-     * @param $data
-     * @param array|null $options Passed to validate().
+     * @param  array|null  $options Passed to validate().
      * @return static
+     *
      * @throws Breaker
      */
     public static function fromArray($data, ?array $options = []): self
@@ -77,11 +79,11 @@ class Section implements Hydratable
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hydrate($config, ?array $options = []): bool
     {
-        if (!isset(self::$hydrator)) {
+        if (! isset(self::$hydrator)) {
             self::$hydrator = Hydrator::make()
                 ->addProperties(['name'])
                 ->addProperty(Property::make('codes')->key())
@@ -102,8 +104,9 @@ class Section implements Hydratable
     /**
      * Ensure the data is valid.
      *
-     * @param array|null $options checkAccount [default true] will validate account codes
+     * @param  array|null  $options checkAccount [default true] will validate account codes
      * @return void
+     *
      * @throws Breaker
      */
     public function validate(?array $options = [])

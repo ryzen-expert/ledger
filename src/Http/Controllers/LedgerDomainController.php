@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Http\Controllers;
@@ -28,8 +29,6 @@ class LedgerDomainController extends Controller
     /**
      * Add a domain to the ledger.
      *
-     * @param Domain $message
-     * @return LedgerDomain
      * @throws Breaker
      * @throws Exception
      */
@@ -44,9 +43,9 @@ class LedgerDomainController extends Controller
                 Breaker::RULE_VIOLATION,
                 [
                     __(
-                        "Domain :code already exists.",
+                        'Domain :code already exists.',
                         ['code' => $message->code]
-                    )
+                    ),
                 ]
             );
         }
@@ -74,8 +73,8 @@ class LedgerDomainController extends Controller
     /**
      * Delete a domain. The domain must be unused.
      *
-     * @param Domain $message
      * @return null
+     *
      * @throws Breaker
      * @throws Exception
      */
@@ -135,8 +134,6 @@ class LedgerDomainController extends Controller
     }
 
     /**
-     * @param string $domainCode
-     * @return LedgerDomain
      * @throws Breaker
      */
     private function fetch(string $domainCode): LedgerDomain
@@ -156,22 +153,18 @@ class LedgerDomainController extends Controller
     /**
      * Fetch a domain.
      *
-     * @param Domain $message
-     * @return LedgerDomain
      * @throws Breaker
      */
     public function get(Domain $message): LedgerDomain
     {
         $message->validate(Message::OP_GET);
+
         return $this->fetch($message->code);
     }
 
     /**
      * Return domains matching a Query.
      *
-     * @param DomainQuery $message
-     * @param int $opFlags
-     * @return Collection
      * @throws Breaker
      */
     public function query(DomainQuery $message, int $opFlags): Collection
@@ -180,8 +173,8 @@ class LedgerDomainController extends Controller
         if (count($message->names)) {
             // This is somewhat perverse, but not as perverse as what Eloquent does.
             $dbPrefix = DB::getTablePrefix();
-            $journals = $dbPrefix . (new LedgerDomain())->getTable();
-            $names = $dbPrefix . (new LedgerName())->getTable();
+            $journals = $dbPrefix.(new LedgerDomain())->getTable();
+            $names = $dbPrefix.(new LedgerName())->getTable();
             // Get a list of all the Sub-Journal codes matching our criteria
             $codeQuery = DB::table($journals)
                 ->join($names, "$journals.domainUuid", '=', "$names.ownerUuid")
@@ -193,6 +186,7 @@ class LedgerDomainController extends Controller
             }
             $codeQuery = $codeQuery->where(function ($query) use ($message) {
                 $query = $message->selectNames($query);
+
                 return $message->selectCodes($query);
             });
             $foo = $codeQuery->toSql();
@@ -216,12 +210,9 @@ class LedgerDomainController extends Controller
     /**
      * Perform a domain operation.
      *
-     * @param Domain $message
-     * @param int|null $opFlags
-     * @return LedgerDomain|null
      * @throws Breaker
      */
-    public function run(Domain $message, ?int $opFlags = null): ?LedgerDomain
+    public function run(Domain $message, int $opFlags = null): ?LedgerDomain
     {
         $opFlags ??= $message->getOpFlags();
         switch ($opFlags & Message::ALL_OPS) {
@@ -241,8 +232,6 @@ class LedgerDomainController extends Controller
     /**
      * Update a domain.
      *
-     * @param Domain $message
-     * @return LedgerDomain
      * @throws Breaker
      */
     public function update(Domain $message): LedgerDomain
@@ -290,9 +279,6 @@ class LedgerDomainController extends Controller
     /**
      * Update the names associated with this domain.
      *
-     * @param LedgerDomain $ledgerDomain
-     * @param Domain $message
-     * @return void
      * @throws Breaker
      */
     protected function updateNames(LedgerDomain $ledgerDomain, Domain $message): void
@@ -308,8 +294,8 @@ class LedgerDomainController extends Controller
                 throw Breaker::withCode(
                     Breaker::RULE_VIOLATION,
                     __(
-                        "A domain with the same name already exists for account"
-                        . " :code in language :language",
+                        'A domain with the same name already exists for account'
+                        .' :code in language :language',
                         ['code' => $ledgerDomain->code, 'language' => $name->language]
                     )
                 );
@@ -326,5 +312,4 @@ class LedgerDomainController extends Controller
             }
         }
     }
-
 }

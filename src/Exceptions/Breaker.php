@@ -11,14 +11,23 @@ use Throwable;
 class Breaker extends Exception
 {
     public const BAD_REQUEST = 1;
+
     public const BAD_ACCOUNT = 2;
+
     public const RULE_VIOLATION = 3;
+
     public const NOT_IMPLEMENTED = 4;
+
     public const BAD_REVISION = 5;
+
     public const INVALID_DATA = 6;
+
     public const INTEGRITY_ERROR = 7;
+
     public const CONFIG_ERROR = 8;
+
     public const SYSTEM_ERROR = 9;
+
     public const BATCH_FAILED = 10;
 
     protected array $errors;
@@ -40,7 +49,6 @@ class Breaker extends Exception
     /**
      * Add a new message to the error list.
      *
-     * @param string $error
      * @return void
      */
     public function addError(string $error)
@@ -51,7 +59,7 @@ class Breaker extends Exception
     /**
      * Add several messages to the error list.
      *
-     * @param string[] $errors
+     * @param  string[]  $errors
      * @return void
      */
     public function mergeErrors(array $errors = [])
@@ -62,9 +70,8 @@ class Breaker extends Exception
     /**
      * Get the error list, optionally with the exception message.
      *
-     * @param bool $withMessage If true, the exception main message is added to the start
+     * @param  bool  $withMessage If true, the exception main message is added to the start
      * of the list.
-     * @return array
      */
     public function getErrors(bool $withMessage = false): array
     {
@@ -72,13 +79,14 @@ class Breaker extends Exception
         if ($withMessage) {
             array_unshift($result, $this->message);
         }
+
         return $result;
     }
 
     /**
      * Replace the error list with a new list.
      *
-     * @param array<string>|string $errors
+     * @param  array<string>|string  $errors
      * @return void
      */
     public function setErrors(mixed $errors)
@@ -93,10 +101,9 @@ class Breaker extends Exception
     /**
      * Generate a new instance using a predefined code.
      *
-     * @param int $code The underlying error condition
-     * @param array<string>|string $errors One or a list of supplemental error texts.
-     * @param Throwable|null $previous Any related exception
-     *
+     * @param  int  $code The underlying error condition
+     * @param  array<string>|string  $errors One or a list of supplemental error texts.
+     * @param  Throwable|null  $previous Any related exception
      * @return static
      */
     public static function withCode(int $code, mixed $errors = [], Throwable $previous = null): self
@@ -104,7 +111,7 @@ class Breaker extends Exception
         $message = __(self::$messages[$code] ?? self::$messages[0]);
         $exception = new static($message, $code, $previous);
         $exception->setErrors($errors);
+
         return $exception;
     }
-
 }

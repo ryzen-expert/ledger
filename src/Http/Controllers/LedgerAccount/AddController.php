@@ -1,15 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Http\Controllers\LedgerAccount;
 
 use Abivia\Ledger\Exceptions\Breaker;
 use Abivia\Ledger\Http\Controllers\LedgerAccountController;
-use Abivia\Ledger\Models\LedgerAccount;
-use Abivia\Ledger\Models\LedgerName;
 use Abivia\Ledger\Messages\Account;
 use Abivia\Ledger\Messages\EntityRef;
 use Abivia\Ledger\Messages\Message;
+use Abivia\Ledger\Models\LedgerAccount;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -18,12 +18,12 @@ use Illuminate\Support\Facades\DB;
  */
 class AddController extends LedgerAccountController
 {
-
     /**
      * Add an account to the ledger.
      *
-     * @param Account $message Details of the add request.
+     * @param  Account  $message Details of the add request.
      * @return LedgerAccount The new account.
+     *
      * @throws Breaker
      */
     public function add(Account $message): LedgerAccount
@@ -38,7 +38,7 @@ class AddController extends LedgerAccountController
             if (LedgerAccount::where('code', $message->code)->first() !== null) {
                 throw Breaker::withCode(
                     Breaker::RULE_VIOLATION,
-                    [__("Account :code already exists.", ['code' => $message->code])]);
+                    [__('Account :code already exists.', ['code' => $message->code])]);
             }
 
             DB::beginTransaction();
@@ -63,15 +63,13 @@ class AddController extends LedgerAccountController
     /**
      * Check that the request satisfies all the business rules.
      *
-     * @param Account $message
-     * @return void
      * @throws Breaker
      * @throws Exception
      */
     private function validateContext(Account $message): void
     {
         // No parent implies the ledger root
-        if (!isset($message->parent)) {
+        if (! isset($message->parent)) {
             $message->parent = new EntityRef();
             $ledgerParent = LedgerAccount::root();
             $parents = [$ledgerParent];
@@ -81,7 +79,7 @@ class AddController extends LedgerAccountController
             $ledgerParent = LedgerAccount::findWith($message->parent)->first();
             if ($ledgerParent === null) {
                 throw Breaker::withCode(
-                    Breaker::BAD_ACCOUNT, [__("Specified parent not found.")]
+                    Breaker::BAD_ACCOUNT, [__('Specified parent not found.')]
                 );
             }
             $parents = LedgerAccount::parentPath($message->parent, new EntityRef($message->code));
@@ -89,13 +87,13 @@ class AddController extends LedgerAccountController
         $message->parent->uuid = $ledgerParent->ledgerUuid;
 
         // Validate and inherit flags
-        if (($message->category ?? false) && !$ledgerParent->category) {
+        if (($message->category ?? false) && ! $ledgerParent->category) {
             throw Breaker::withCode(
                 Breaker::RULE_VIOLATION,
                 [__("Can't create a category under a parent that is not a category.")]
             );
         }
-        if (!(($message->credit ?? false) || ($message->debit ?? false))) {
+        if (! (($message->credit ?? false) || ($message->debit ?? false))) {
             $found = false;
             foreach ($parents as $ancestor) {
                 if (($ancestor->credit || $ancestor->debit)) {
@@ -105,13 +103,12 @@ class AddController extends LedgerAccountController
                     break;
                 }
             }
-            if (!$found && !($message->category ?? false)) {
+            if (! $found && ! ($message->category ?? false)) {
                 throw Breaker::withCode(
                     Breaker::RULE_VIOLATION,
-                    [__("Unable to inherit debit/credit status from parents.")]
+                    [__('Unable to inherit debit/credit status from parents.')]
                 );
             }
         }
     }
-
 }

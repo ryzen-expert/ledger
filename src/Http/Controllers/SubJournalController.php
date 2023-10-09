@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Http\Controllers;
@@ -26,8 +27,6 @@ class SubJournalController extends Controller
     /**
      * Add a sub-journal to the ledger.
      *
-     * @param SubJournal $message
-     * @return SubJournalModel
      * @throws Breaker
      * @throws Exception
      */
@@ -40,7 +39,7 @@ class SubJournalController extends Controller
         if (SubJournalModel::where('code', $message->code)->first() !== null) {
             throw Breaker::withCode(
                 Breaker::RULE_VIOLATION,
-                [__("SubJournal :code already exists.", ['code' => $message->code])]
+                [__('SubJournal :code already exists.', ['code' => $message->code])]
             );
         }
 
@@ -69,8 +68,8 @@ class SubJournalController extends Controller
     /**
      * Delete a sub-journal. The sub-journal must be unused.
      *
-     * @param SubJournal $message
      * @return null
+     *
      * @throws Breaker
      * @throws Exception
      */
@@ -116,8 +115,6 @@ class SubJournalController extends Controller
     /**
      * Fetch a sub-journal by code.
      *
-     * @param string $subJournalCode
-     * @return SubJournalModel
      * @throws Breaker
      */
     private function fetch(string $subJournalCode): SubJournalModel
@@ -137,22 +134,18 @@ class SubJournalController extends Controller
     /**
      * Fetch a sub-journal.
      *
-     * @param SubJournal $message
-     * @return SubJournalModel
      * @throws Breaker
      */
     public function get(SubJournal $message): SubJournalModel
     {
         $message->validate(Message::OP_GET);
+
         return $this->fetch($message->code);
     }
 
     /**
      * Return domains matching a Query.
      *
-     * @param SubJournalQuery $message
-     * @param int $opFlags
-     * @return Collection
      * @throws Breaker
      */
     public function query(SubJournalQuery $message, int $opFlags): Collection
@@ -161,8 +154,8 @@ class SubJournalController extends Controller
         if (count($message->names)) {
             // This is somewhat perverse, but not as perverse as what Eloquent does.
             $dbPrefix = DB::getTablePrefix();
-            $journals = $dbPrefix . (new SubJournalModel())->getTable();
-            $names = $dbPrefix . (new LedgerName())->getTable();
+            $journals = $dbPrefix.(new SubJournalModel())->getTable();
+            $names = $dbPrefix.(new LedgerName())->getTable();
             // Get a list of all the Sub-Journal codes matching our criteria
             $codeQuery = DB::table($journals)
                 ->join($names, "$journals.subJournalUuid", '=', "$names.ownerUuid")
@@ -174,6 +167,7 @@ class SubJournalController extends Controller
             }
             $codeQuery = $codeQuery->where(function ($query) use ($message) {
                 $query = $message->selectNames($query);
+
                 return $message->selectCodes($query);
             });
             $foo = $codeQuery->toSql();
@@ -197,12 +191,9 @@ class SubJournalController extends Controller
     /**
      * Perform a domain operation.
      *
-     * @param SubJournal $message
-     * @param int|null $opFlags
-     * @return SubJournalModel|null
      * @throws Breaker
      */
-    public function run(SubJournal $message, ?int $opFlags = null): ?SubJournalModel
+    public function run(SubJournal $message, int $opFlags = null): ?SubJournalModel
     {
         $opFlags ??= $message->getOpFlags();
         switch ($opFlags & Message::ALL_OPS) {
@@ -224,8 +215,6 @@ class SubJournalController extends Controller
     /**
      * Update a sub-journal.
      *
-     * @param SubJournal $message
-     * @return SubJournalModel
      * @throws Breaker
      */
     public function update(SubJournal $message): SubJournalModel
@@ -266,9 +255,6 @@ class SubJournalController extends Controller
     /**
      * Update the names associated with this sub-journal.
      *
-     * @param SubJournalModel $SubJournalModel
-     * @param SubJournal $message
-     * @return void
      * @throws Breaker
      */
     protected function updateNames(SubJournalModel $SubJournalModel, SubJournal $message): void
@@ -279,7 +265,7 @@ class SubJournalController extends Controller
         // Ensure there is at least one name remaining
         if (
             LedgerName::where('ownerUuid', $SubJournalModel->subJournalUuid)
-            ->count() === 0
+                ->count() === 0
         ) {
             throw Breaker::withCode(
                 Breaker::BAD_REQUEST,
@@ -287,5 +273,4 @@ class SubJournalController extends Controller
             );
         }
     }
-
 }

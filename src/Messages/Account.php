@@ -43,6 +43,7 @@ class Account extends Message
      * @var bool If set `true` then this account will be reported in the debit column.
      */
     public bool $debit;
+
     /**
      * @var string An arbitrary string for use by the application.
      */
@@ -69,7 +70,7 @@ class Account extends Message
     public string $uuid;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
@@ -98,10 +99,10 @@ class Account extends Message
 
     public function inheritFlagsFrom(LedgerAccount $parent)
     {
-        if (!isset($this->debit)) {
+        if (! isset($this->debit)) {
             $this->debit = $parent->debit;
         }
-        if (!isset($this->credit)) {
+        if (! isset($this->credit)) {
             $this->credit = $parent->credit;
         }
     }
@@ -120,9 +121,9 @@ class Account extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
         $codeFormat = LedgerAccount::rules($opFlags & self::OP_CREATE)
@@ -130,17 +131,17 @@ class Account extends Message
         $errors = $this->validateCodes($opFlags, ['regEx' => $codeFormat]);
         if ($opFlags & self::OP_ADD) {
             if (isset($this->uuid)) {
-                $errors[] = __("UUID not valid on account create.");
+                $errors[] = __('UUID not valid on account create.');
             }
             if (($this->credit ?? false) == ($this->debit ?? false)) {
                 $errors[] = __(
-                    "account :code must be either debit or credit",
+                    'account :code must be either debit or credit',
                     ['code' => $this->code]
                 );
             }
         } else {
-            if (!isset($this->uuid) && !isset($this->code)) {
-                $errors[] = __("Request requires either code or uuid.");
+            if (! isset($this->uuid) && ! isset($this->code)) {
+                $errors[] = __('Request requires either code or uuid.');
             }
         }
         if ($opFlags & self::OP_UPDATE) {
@@ -172,7 +173,7 @@ class Account extends Message
             $opFlags & self::OP_ADD
             && count($this->names ?? []) === 0
         ) {
-            $errors[] = __("Account create must have at least one name element.");
+            $errors[] = __('Account create must have at least one name element.');
         }
         if (count($errors) !== 0) {
             throw Breaker::withCode(Breaker::BAD_REQUEST, $errors);
@@ -180,5 +181,4 @@ class Account extends Message
 
         return $this;
     }
-
 }

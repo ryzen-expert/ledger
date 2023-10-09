@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpParamsInspection */
 
 namespace Abivia\Ledger\Tests\Feature;
@@ -28,11 +29,10 @@ class SubJournalTest extends TestCaseWithMigrations
         'names' => [
             [
                 'name' => 'Sales Journal',
-                'language' => 'en'
-            ]
-        ]
+                'language' => 'en',
+            ],
+        ],
     ];
-
 
     /**
      * @throws Breaker
@@ -40,9 +40,9 @@ class SubJournalTest extends TestCaseWithMigrations
     private function createSubJournals()
     {
         $controller = new SubJournalController();
-        for ($id = 0; $id < 30; ++$id) {
+        for ($id = 0; $id < 30; $id++) {
             $data = [
-                'code' => 'SJ' . str_pad((string) $id, 2, '0', STR_PAD_LEFT),
+                'code' => 'SJ'.str_pad((string) $id, 2, '0', STR_PAD_LEFT),
                 'name' => "SubJournal $id",
             ];
             $controller->add(SubJournal::fromArray($data));
@@ -89,9 +89,11 @@ class SubJournalTest extends TestCaseWithMigrations
         $response = $this->json(
             'post', 'api/ledger/journal/add', $this->baseRequest
         );
+        $response->dump();
         $actual = $this->isSuccessful($response);
         // Check the response against our schema
         $this->validateResponse($actual, 'journal-response');
+        //        dd($actual ,$actual->journal);
         $this->hasRevisionElements($actual->journal);
         $this->hasAttributes(['code', 'names'], $actual->journal);
         $this->assertEquals('SJ', $actual->journal->code);
@@ -204,7 +206,7 @@ class SubJournalTest extends TestCaseWithMigrations
         ];
         [$pages, $totalAccounts] = $this->getPagedSubJournals($requestData);
         $actualAccounts = SubJournalModel::count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -225,11 +227,11 @@ class SubJournalTest extends TestCaseWithMigrations
             'limit' => 10,
             'names' => [
                 [
-                    'name' => 'SubJournal 5'
+                    'name' => 'SubJournal 5',
                 ],
                 [
                     'name' => 'SubJournal 6',
-                    'language' => 'en'
+                    'language' => 'en',
                 ],
                 [
                     'name' => '%nal 1%',
@@ -246,7 +248,7 @@ class SubJournalTest extends TestCaseWithMigrations
 
         // Add 2 for the two single domain codes.
         $actualAccounts = 12;
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($actualAccounts, $totalAccounts);
         $this->assertEquals($expectedPages, $pages);
     }
@@ -274,7 +276,7 @@ class SubJournalTest extends TestCaseWithMigrations
         // Add 2 for the two single domain codes.
         $actualAccounts = 2 + SubJournalModel::whereBetween('code', ['SJ10', 'SJ19'])
             ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -299,7 +301,7 @@ class SubJournalTest extends TestCaseWithMigrations
         [$pages, $totalAccounts] = $this->getPagedSubJournals($requestData);
         $actualAccounts = SubJournalModel::whereBetween('code', ['SJ10', 'SJ19'])
             ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -322,7 +324,7 @@ class SubJournalTest extends TestCaseWithMigrations
         ];
         [$pages, $totalAccounts] = $this->getPagedSubJournals($requestData);
         $actualAccounts = 10;
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
 
@@ -331,7 +333,7 @@ class SubJournalTest extends TestCaseWithMigrations
         $requestData['codes'][] = ['!', 'SJ15'];
         [$pages, $totalAccounts] = $this->getPagedSubJournals($requestData);
         $actualAccounts = 9;
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -355,7 +357,7 @@ class SubJournalTest extends TestCaseWithMigrations
         [$pages, $totalAccounts] = $this->getPagedSubJournals($requestData);
         $actualAccounts = SubJournalModel::where('code', '<=', 'SJ19')
             ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -379,7 +381,7 @@ class SubJournalTest extends TestCaseWithMigrations
         [$pages, $totalAccounts] = $this->getPagedSubJournals($requestData);
         $actualAccounts = SubJournalModel::where('code', '>=', 'SJ60')
             ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -404,8 +406,8 @@ class SubJournalTest extends TestCaseWithMigrations
 
         // Add 2 for the two single domain codes.
         $actualAccounts = SubJournalModel::where('code', 'like', '%9%')
-                ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+            ->count();
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -443,7 +445,7 @@ class SubJournalTest extends TestCaseWithMigrations
         $requestData = [
             'revision' => $actual->journal->revision,
             'code' => 'SJ',
-            'toCode' => 'EJ'
+            'toCode' => 'EJ',
         ];
         $response = $this->json(
             'post', 'api/ledger/journal/update', $requestData
@@ -459,5 +461,4 @@ class SubJournalTest extends TestCaseWithMigrations
         $this->isFailure($response);
 
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Messages;
@@ -26,14 +27,16 @@ class Reference extends Message
      * @var mixed
      */
     public $extra;
+
     public string $journalReferenceUuid;
+
     /**
      * @var string Revision signature. Required for update.
      */
     public string $revision;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
@@ -54,6 +57,7 @@ class Reference extends Message
 
     /**
      * Verify that the reference is valid, filling in the UUID if missing.
+     *
      * @throws Breaker
      * @throws Exception
      */
@@ -66,13 +70,13 @@ class Reference extends Message
                 Breaker::BAD_REQUEST,
                 [
                     __(
-                    'Reference :code does not exist.',
-                    ['code' => $this->code ?? '[undefined]']
-                    )
+                        'Reference :code does not exist.',
+                        ['code' => $this->code ?? '[undefined]']
+                    ),
                 ]
             );
         }
-        if (!isset($this->journalReferenceUuid)) {
+        if (! isset($this->journalReferenceUuid)) {
             $this->journalReferenceUuid = $journalReference->journalReferenceUuid;
         }
 
@@ -103,9 +107,9 @@ class Reference extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
         $errors = $this->validateCodes($opFlags, ['regEx' => '/.*/', 'uppercase' => false]);
@@ -113,7 +117,7 @@ class Reference extends Message
         if ($rules === null) {
             $errors[] = __('Ledger has not been initialized.');
         } else {
-            if (!isset($this->domain)) {
+            if (! isset($this->domain)) {
                 $this->domain = new EntityRef();
                 $this->domain->code = $rules->domain->default;
             }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Http\Controllers;
@@ -10,7 +11,6 @@ use Abivia\Ledger\Models\LedgerAccount;
 use Abivia\Ledger\Models\LedgerBalance;
 use Abivia\Ledger\Models\LedgerDomain;
 
-
 /**
  * Handle Balance requests.
  */
@@ -19,8 +19,8 @@ class LedgerBalanceController extends Controller
     /**
      * Get a balance. Returns null if the account is valid but no balance has been created.
      *
-     * @param Balance $message
      * @return ?LedgerBalance
+     *
      * @throws Breaker
      */
     public function get(Balance $message): ?LedgerBalance
@@ -56,12 +56,9 @@ class LedgerBalanceController extends Controller
     /**
      * Perform a currency operation.
      *
-     * @param Balance $message
-     * @param int|null $opFlags
-     * @return LedgerBalance|null
      * @throws Breaker
      */
-    public function run(Balance $message, ?int $opFlags = null): ?LedgerBalance
+    public function run(Balance $message, int $opFlags = null): ?LedgerBalance
     {
         $opFlags ??= $message->getOpFlags();
         switch ($opFlags & Message::ALL_OPS) {
@@ -72,5 +69,4 @@ class LedgerBalanceController extends Controller
                 throw Breaker::withCode(Breaker::BAD_REQUEST, 'Unknown or invalid operation.');
         }
     }
-
 }

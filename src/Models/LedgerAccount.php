@@ -42,6 +42,7 @@ use stdClass;
  * @property string $revisionHash Salted hash of $revision.
  * @property string $taxCode An account code for tax purposes.
  * @property Carbon $updated_at When the record was updated.
+ *
  * @mixin Builder
  * @mixin \Illuminate\Database\Query\Builder
  */
@@ -51,9 +52,10 @@ class LedgerAccount extends Model
     use HasFactory;
     use HasNames;
     use HasRevisions;
-    use UuidPrimaryKey;
+    //    use UuidPrimaryKey;
 
     const CODE_SIZE = 32;
+
     /**
      * @var array Model default attributes.
      */
@@ -87,26 +89,30 @@ class LedgerAccount extends Model
      * @var string Override timestamps to get microseconds.
      */
     protected $dateFormat = 'Y-m-d H:i:s.u';
+
     protected $fillable = [
-        'category', 'code', 'credit', 'debit', 'extra', 'parentUuid', 'taxCode'
+        'category', 'code', 'credit', 'debit', 'extra', 'parentUuid', 'taxCode',
     ];
+
     /**
      * @var array<string> Attributes that can be copied directly into a message
      */
     protected static array $inMessage = [
-        'category', 'closed', 'code', 'credit', 'debit', 'extra', 'taxCode'
+        'category', 'closed', 'code', 'credit', 'debit', 'extra', 'taxCode',
     ];
+
     /**
      * @var bool Override incrementing primary key.
      */
-    public $incrementing = false;
+    //    public $incrementing = false;
     /**
      * @var string Specifies the primary key type.
      */
-    protected $keyType = 'string';
+    //    protected $keyType = 'string';
     /**
      * @var string Specifies the primary key name.
      */
+    //    protected $primaryKey = 'ledgerUuid';
     protected $primaryKey = 'ledgerUuid';
 
     private static ?LedgerAccount $root = null;
@@ -115,8 +121,8 @@ class LedgerAccount extends Model
      * Getting the parent code requires fetching the parent; The revision Hash is
      * computationally expensive, only calculated when required.
      *
-     * @param $key
      * @return HigherOrderCollectionProxy|mixed|string|null
+     *
      * @throws Exception
      */
     public function __get($key)
@@ -125,14 +131,17 @@ class LedgerAccount extends Model
             if ($this->code === '') {
                 $this->revisionHashCached = '';
             }
+
             return $this->getRevisionHash();
         } elseif ($key === 'parentCode') {
             if ($this->parentUuid === null) {
                 return null;
             }
             $parent = LedgerAccount::find($this->parentUuid);
+
             return $parent->code ?? null;
         }
+
         return parent::__get($key);
     }
 
@@ -180,9 +189,8 @@ class LedgerAccount extends Model
     }
 
     /**
-     * @param EntityRef $entityRef
-     * @return Builder
      * @throws Exception
+     *
      * @noinspection PhpIncompatibleReturnTypeInspection
      * @noinspection PhpDynamicAsStaticMethodCallInspection
      */
@@ -210,6 +218,7 @@ class LedgerAccount extends Model
     {
         $flex = new Flex();
         $flex->hydrate($value);
+
         return $flex;
     }
 
@@ -263,12 +272,13 @@ class LedgerAccount extends Model
         if ($ref->code !== $this->code) {
             $match = false;
         }
+
         return $match;
     }
 
     /**
      * Throw a missing root error.
-     * @return void
+     *
      * @throws Breaker
      */
     public static function notInitializedError(): void
@@ -282,9 +292,9 @@ class LedgerAccount extends Model
      * Get the path to the root for an account, optionally checking for an external
      * circular reference.
      *
-     * @param EntityRef $start
-     * @param ?EntityRef $lookFor
+     * @param  ?EntityRef  $lookFor
      * @return array<LedgerAccount> Account parents from $start up to the root.
+     *
      * @throws Breaker If a circular reference is found.
      * @throws Exception
      */
@@ -302,11 +312,11 @@ class LedgerAccount extends Model
                 if ($current === null) {
                     throw Breaker::withCode(
                         Breaker::BAD_ACCOUNT,
-                        [__("Parent :parent not found."), ['parent' => $next]]
+                        [__('Parent :parent not found.'), ['parent' => $next]]
                     );
                 } else {
                     throw new Exception(__(
-                        "Parent :parent does not exist but is used in :code",
+                        'Parent :parent does not exist but is used in :code',
                         ['parent' => $next, 'code' => $current]
                     ));
                 }
@@ -315,14 +325,14 @@ class LedgerAccount extends Model
                 throw Breaker::withCode(
                     Breaker::RULE_VIOLATION,
                     [__(
-                        "Adding :start to :ref would cause a circular reference.",
+                        'Adding :start to :ref would cause a circular reference.',
                         ['start' => $start, 'ref' => $lookFor]
                     )]
                 );
             }
             if (isset($parentsByUuid[$ledgerAccount->ledgerUuid])) {
                 throw new Exception(__(
-                    "Account :account is part of a closed parent reference loop.",
+                    'Account :account is part of a closed parent reference loop.',
                     ['account' => $current]
                 ));
             }
@@ -341,6 +351,7 @@ class LedgerAccount extends Model
 
     /**
      * Merge data into the rule set.
+     *
      * @return LedgerRules The current rule set.
      */
     public static function resetRules(): LedgerRules
@@ -349,6 +360,7 @@ class LedgerAccount extends Model
         self::loadRoot();
         if (self::$root === null) {
             self::$bootRules = new LedgerRules();
+
             return self::$bootRules;
         }
 
@@ -375,10 +387,10 @@ class LedgerAccount extends Model
     /**
      * Get the current rule set. During ledger creation, this is a set of bootstrap rules.
      *
-     * @param bool $bootable True if a base rule set should be returned if no root exists.
-     * @param bool $required True if a root rule set must exist (throws Breaker instead of
+     * @param  bool  $bootable True if a base rule set should be returned if no root exists.
+     * @param  bool  $required True if a root rule set must exist (throws Breaker instead of
      * returning null).
-     * @return LedgerRules|null
+     *
      * @throws Breaker
      */
     public static function rules(bool $bootable = false, bool $required = true): ?LedgerRules
@@ -386,13 +398,15 @@ class LedgerAccount extends Model
         if (self::$root === null) {
             self::loadRoot();
             if (self::$root === null) {
-                if (!$bootable) {
+                if (! $bootable) {
                     if ($required) {
                         self::notInitializedError();
                     }
+
                     return null;
                 }
                 self::$bootRules ??= new LedgerRules();
+
                 return self::$bootRules;
             }
         }
@@ -400,12 +414,12 @@ class LedgerAccount extends Model
         if ($rules === null) {
             self::notInitializedError();
         }
+
         return $rules;
     }
 
     /**
      * Save and return the root settings, if they exist.
-     * @return LedgerAccount|null
      */
     public static function saveRoot(): ?LedgerAccount
     {
@@ -418,6 +432,7 @@ class LedgerAccount extends Model
 
     /**
      * @phpcsSuppress ForbiddenSetterSniff
+     *
      * @noinspection PhpUnused
      */
     public function setFlexAttribute($value): void
@@ -431,18 +446,17 @@ class LedgerAccount extends Model
 
     /**
      * Merge data into the rule set.
-     * @param stdClass $data
-     * @return LedgerRules
      */
     public static function setRules(stdClass $data): LedgerRules
     {
         if (self::$root === null) {
             self::loadRoot();
             if (self::$root === null) {
-                if (!isset(self::$bootRules)) {
+                if (! isset(self::$bootRules)) {
                     self::$bootRules = new LedgerRules();
                 }
                 Merge::objects(self::$bootRules, $data);
+
                 return self::$bootRules;
             }
         }
@@ -457,6 +471,7 @@ class LedgerAccount extends Model
     public static function systemDateFormat(): string
     {
         $dummy = new self();
+
         return $dummy->getDateFormat();
     }
 
@@ -483,8 +498,9 @@ class LedgerAccount extends Model
 
     /**
      * Convert to an array suitable for returning as a response.
-     * @param array $options
+     *
      * @return array<mixed> Properties to be sent in the response.
+     *
      * @throws Exception
      */
     public function toResponse(array $options = []): array
@@ -509,16 +525,17 @@ class LedgerAccount extends Model
 
     /**
      * Add or create a where clause for accounts matching an EntityRef.
-     * @param string $operator The SQL operator to ise.
-     * @param EntityRef $entityRef The entity to apply the operator to.
-     * @param Builder|DbBuilder|null $query An existing query.
+     *
+     * @param  string  $operator The SQL operator to ise.
+     * @param  EntityRef  $entityRef The entity to apply the operator to.
+     * @param  Builder|DbBuilder|null  $query An existing query.
      * @return Builder The query builder.
+     *
      * @throws Exception
      */
     public static function whereEntity(
         string $operator, EntityRef $entityRef, Builder|DbBuilder $query = null
-    ): Builder
-    {
+    ): Builder {
         if ($query === null) {
             $query = self::query();
         }
@@ -546,5 +563,4 @@ class LedgerAccount extends Model
 
         return $finder;
     }
-
 }

@@ -23,14 +23,14 @@ class Account implements Hydratable
     public bool $postToCategory = false;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hydrate($config, ?array $options = []): bool
     {
-        if (!isset(self::$hydrator)) {
+        if (! isset(self::$hydrator)) {
             self::$hydrator = Hydrator::make(self::class);
         }
+
         return self::$hydrator->hydrate($this, $config, $options);
     }
-
 }

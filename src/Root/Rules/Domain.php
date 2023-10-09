@@ -18,14 +18,14 @@ class Domain implements Hydratable
     private static Hydrator $hydrator;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function hydrate($config, ?array $options = []): bool
     {
-        if (!isset(self::$hydrator)) {
+        if (! isset(self::$hydrator)) {
             self::$hydrator = Hydrator::make(self::class);
         }
+
         return self::$hydrator->hydrate($this, $config, $options);
     }
-
 }

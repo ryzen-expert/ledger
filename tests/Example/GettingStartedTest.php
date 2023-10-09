@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpParamsInspection */
+<?php
+
+/** @noinspection PhpParamsInspection */
 
 namespace Abivia\Ledger\Tests\Example;
 
@@ -14,11 +16,11 @@ use Abivia\Ledger\Messages\Entry;
 use Abivia\Ledger\Messages\Name;
 use Abivia\Ledger\Messages\Report;
 use Abivia\Ledger\Models\ReportAccount;
-use Abivia\Ledger\Tests\TestCase;
 use Abivia\Ledger\Tests\TestCaseWithMigrations;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use function str_pad;
 use function strlen;
 
@@ -33,6 +35,7 @@ class GettingStartedTest extends TestCaseWithMigrations
      * Create the ledger and record the initial investment as the opening transaction.
      *
      * @return void
+     *
      * @throws Breaker
      */
     private function stepCreateLedger()
@@ -62,12 +65,12 @@ class GettingStartedTest extends TestCaseWithMigrations
         $create->balances[] = Balance::fromArray([
             'code' => '110',
             'amount' => '-500',
-            'currency' => 'USD'
+            'currency' => 'USD',
         ]);
         $create->balances[] = Balance::fromArray([
             'code' => '310',
             'amount' => '500',
-            'currency' => 'USD'
+            'currency' => 'USD',
         ]);
 
         // The business is founded January 1st, 2022
@@ -98,10 +101,10 @@ class GettingStartedTest extends TestCaseWithMigrations
         }
         $maxName++;
         foreach ($results['accounts'] as $result) {
-            echo $result->code . ' '
-                . str_pad($result->name, $maxName, ' ', STR_PAD_RIGHT);
+            echo $result->code.' '
+                .str_pad($result->name, $maxName, ' ', STR_PAD_RIGHT);
             if (substr($result->balance, 0, 1) === '-') {
-                echo str_pad('(' . substr($result->balance, 1) . ')', 9, ' ', STR_PAD_LEFT);
+                echo str_pad('('.substr($result->balance, 1).')', 9, ' ', STR_PAD_LEFT);
             } else {
                 echo str_pad($result->balance, 8, ' ', STR_PAD_LEFT);
             }
@@ -175,7 +178,6 @@ class GettingStartedTest extends TestCaseWithMigrations
     /**
      * Run the "getting started" example.
      *
-     * @return void
      * @throws Exception
      */
     public function testGettingStarted(): void
@@ -185,13 +187,12 @@ class GettingStartedTest extends TestCaseWithMigrations
             $this->stepTransactions();
             $this->stepReport();
         } catch (Breaker $e) {
-            echo implode("\n", $e->getErrors(true)) . "\n";
+            echo implode("\n", $e->getErrors(true))."\n";
             $trace = $e->getTrace();
             $from = $trace[0];
-            echo $from['file'] . ' line ' . $from['line'];
+            echo $from['file'].' line '.$from['line'];
         }
 
         $this->assertTrue(true);
     }
-
 }

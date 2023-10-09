@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpParamsInspection */
+<?php
+
+/** @noinspection PhpParamsInspection */
 
 namespace Abivia\Ledger\Tests\Feature;
 
@@ -35,8 +37,8 @@ class JournalEntryTest extends TestCaseWithMigrations
                 [
                     'name' => "Account $code with parent $parentCode",
                     'language' => 'en',
-                ]
-            ]
+                ],
+            ],
         ];
         $response = $this->json(
             'post', 'api/ledger/account/add', $requestData
@@ -66,17 +68,17 @@ class JournalEntryTest extends TestCaseWithMigrations
             'details' => [
                 [
                     'code' => '4110',
-                    'amount' => '-520.71'
+                    'amount' => '-520.71',
                 ],
                 [
                     'code' => '1120',
-                    'amount' => '500.60'
+                    'amount' => '500.60',
                 ],
                 [
                     'code' => '2250',
-                    'amount' => '20.11'
+                    'amount' => '20.11',
                 ],
-            ]
+            ],
         ];
         $response = $this->json(
             'post', 'api/ledger/entry/add', $requestData
@@ -96,21 +98,21 @@ class JournalEntryTest extends TestCaseWithMigrations
             'details' => [
                 [
                     'code' => '1720',
-                    'debit' => '22.45'
+                    'debit' => '22.45',
                 ],
                 [
                     'code' => '1730',
-                    'credit' => '22.45'
+                    'credit' => '22.45',
                 ],
                 [
                     'code' => '1740',
-                    'debit' => '170.33'
+                    'debit' => '170.33',
                 ],
                 [
                     'code' => '1750',
-                    'credit' => '170.33'
+                    'credit' => '170.33',
                 ],
-            ]
+            ],
         ];
     }
 
@@ -124,13 +126,13 @@ class JournalEntryTest extends TestCaseWithMigrations
             'details' => [
                 [
                     'code' => '1310',
-                    'debit' => $amount
+                    'debit' => $amount,
                 ],
                 [
                     'code' => '4110',
-                    'credit' => $amount
+                    'credit' => $amount,
                 ],
-            ]
+            ],
         ];
     }
 
@@ -170,9 +172,9 @@ class JournalEntryTest extends TestCaseWithMigrations
             $ledgerAccount = LedgerAccount::find($detail->ledgerUuid);
             $this->assertNotNull($ledgerAccount);
             $ledgerBalance = LedgerBalance::where([
-                    ['ledgerUuid', '=', $detail->ledgerUuid],
-                    ['domainUuid', '=', $ledgerDomain->domainUuid],
-                    ['currency', '=', $journalEntry->currency]]
+                ['ledgerUuid', '=', $detail->ledgerUuid],
+                ['domainUuid', '=', $ledgerDomain->domainUuid],
+                ['currency', '=', $journalEntry->currency]]
             )->first();
             $this->assertNotNull($ledgerBalance);
             if ($ledgerAccount->code === '1310') {
@@ -234,9 +236,9 @@ class JournalEntryTest extends TestCaseWithMigrations
             $ledgerAccount = LedgerAccount::find($detail->ledgerUuid);
             $this->assertNotNull($ledgerAccount);
             $ledgerBalance = LedgerBalance::where([
-                    ['ledgerUuid', '=', $detail->ledgerUuid],
-                    ['domainUuid', '=', $ledgerDomain->domainUuid],
-                    ['currency', '=', $journalEntry->currency]]
+                ['ledgerUuid', '=', $detail->ledgerUuid],
+                ['domainUuid', '=', $ledgerDomain->domainUuid],
+                ['currency', '=', $journalEntry->currency]]
             )->first();
             $this->assertNotNull($ledgerBalance);
             $this->assertEquals(
@@ -279,13 +281,13 @@ class JournalEntryTest extends TestCaseWithMigrations
             'details' => [
                 [
                     'code' => '1310',
-                    'debit' => '520.71'
+                    'debit' => '520.71',
                 ],
                 [
                     'code' => '4110',
-                    'credit' => '520.71'
+                    'credit' => '520.71',
                 ],
-            ]
+            ],
         ];
         $response = $this->json(
             'post', 'api/ledger/entry/add', $requestData
@@ -401,7 +403,7 @@ class JournalEntryTest extends TestCaseWithMigrations
                     'code' => '2250',
                     'amount' => '20.00',
                 ],
-            ]
+            ],
         ];
         $response = $this->json(
             'post', 'api/ledger/entry/add', $requestData
@@ -430,15 +432,14 @@ class JournalEntryTest extends TestCaseWithMigrations
             'names' => [
                 [
                     'name' => 'Sales Journal',
-                    'language' => 'en'
-                ]
-            ]
+                    'language' => 'en',
+                ],
+            ],
         ];
         $response = $this->json(
             'post', 'api/ledger/journal/add', $subJournalRequest
         );
         $this->isSuccessful($response, 'journal');
-
 
         [$requestData, $response] = $this->addSalesTransaction();
         $actual = $this->isSuccessful($response);
@@ -465,9 +466,9 @@ class JournalEntryTest extends TestCaseWithMigrations
             $ledgerAccount = LedgerAccount::find($detail->ledgerUuid);
             $this->assertNotNull($ledgerAccount);
             $ledgerBalance = LedgerBalance::where([
-                    ['ledgerUuid', '=', $detail->ledgerUuid],
-                    ['domainUuid', '=', $ledgerDomain->domainUuid],
-                    ['currency', '=', $journalEntry->currency]]
+                ['ledgerUuid', '=', $detail->ledgerUuid],
+                ['domainUuid', '=', $ledgerDomain->domainUuid],
+                ['currency', '=', $journalEntry->currency]]
             )->first();
             $this->assertNotNull($ledgerBalance);
             if ($ledgerAccount->code === '1310') {
@@ -501,13 +502,13 @@ class JournalEntryTest extends TestCaseWithMigrations
             'details' => [
                 [
                     'code' => '1310',
-                    'debit' => '520.71'
+                    'debit' => '520.71',
                 ],
                 [
                     'code' => '4110',
-                    'credit' => '50.24'
+                    'credit' => '50.24',
                 ],
-            ]
+            ],
         ];
         $response = $this->json(
             'post', 'api/ledger/entry/add', $requestData
@@ -518,7 +519,6 @@ class JournalEntryTest extends TestCaseWithMigrations
     /**
      * Create a valid ledger
      *
-     * @return void
      * @throws \Exception
      */
     public function testCreate(): void
@@ -569,9 +569,9 @@ class JournalEntryTest extends TestCaseWithMigrations
             $ledgerAccount = LedgerAccount::find($detail->ledgerUuid);
             $this->assertNotNull($ledgerAccount);
             $ledgerBalance = LedgerBalance::where([
-                    ['ledgerUuid', '=', $detail->ledgerUuid],
-                    ['domainUuid', '=', $ledgerDomain->domainUuid],
-                    ['currency', '=', $journalEntry->currency]]
+                ['ledgerUuid', '=', $detail->ledgerUuid],
+                ['domainUuid', '=', $ledgerDomain->domainUuid],
+                ['currency', '=', $journalEntry->currency]]
             )->first();
             $this->assertNotNull($ledgerBalance);
             $this->assertEquals('0.00', $ledgerBalance->balance);
@@ -643,7 +643,7 @@ class JournalEntryTest extends TestCaseWithMigrations
 
         // Get the created data by ID
         $fetchData = [
-            'id' => $addActual->entry->id
+            'id' => $addActual->entry->id,
         ];
         $response = $this->json(
             'post', 'api/ledger/entry/get', $fetchData
@@ -691,7 +691,7 @@ class JournalEntryTest extends TestCaseWithMigrations
 
         // Expect that a get request still works
         $fetchData = [
-            'id' => $addActual->entry->id
+            'id' => $addActual->entry->id,
         ];
         $response = $this->json(
             'post', 'api/ledger/entry/get', $fetchData
@@ -709,7 +709,7 @@ class JournalEntryTest extends TestCaseWithMigrations
 
         // Get the created data by ID
         $fetchData = [
-            'id' => $addActual->entry->id
+            'id' => $addActual->entry->id,
         ];
         $response = $this->json(
             'post', 'api/ledger/entry/get', $fetchData
@@ -822,5 +822,4 @@ class JournalEntryTest extends TestCaseWithMigrations
         // Check the response against our schema
         $this->validateResponse($actual, 'entry-response');
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Abivia\Ledger\Tests\Unit\Models\Messages\Ledger;
@@ -53,5 +54,4 @@ class CurrencyTest extends TestCase
         $this->expectException(Breaker::class);
         Currency::fromArray($bad, Message::OP_ADD | Message::F_VALIDATE);
     }
-
 }

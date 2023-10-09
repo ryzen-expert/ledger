@@ -13,7 +13,7 @@ class NoDatabase
     /**
      * Selectively copy information from a data array.
      *
-     * @param array|object $data
+     * @param  array|object  $data
      * @return $this
      */
     public function copy($data): self
@@ -36,5 +36,4 @@ class NoDatabase
 
         return $this;
     }
-
 }

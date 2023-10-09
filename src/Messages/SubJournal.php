@@ -5,7 +5,6 @@ namespace Abivia\Ledger\Messages;
 use Abivia\Ledger\Exceptions\Breaker;
 use Abivia\Ledger\Helpers\Merge;
 use Abivia\Ledger\Http\Controllers\SubJournalController;
-use Abivia\Ledger\Messages\Message;
 
 class SubJournal extends Message
 {
@@ -18,15 +17,12 @@ class SubJournal extends Message
         //'uuid',
     ];
 
-    /**
-     * @var string
-     */
     public string $extra;
 
     public string $revision;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
@@ -54,9 +50,9 @@ class SubJournal extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
         $errors = $this->validateCodes($opFlags);
@@ -76,6 +72,7 @@ class SubJournal extends Message
         if (count($errors) !== 0) {
             throw Breaker::withCode(Breaker::BAD_REQUEST, $errors);
         }
+
         return $this;
     }
 }

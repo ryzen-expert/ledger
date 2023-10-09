@@ -6,7 +6,6 @@ use Abivia\Ledger\Http\Controllers\LedgerAccountController;
 
 class AccountQuery extends Paginated
 {
-
     /**
      * @var EntityRef For pagination, a reference to the last account in the previous page.
      */
@@ -24,7 +23,7 @@ class AccountQuery extends Paginated
     public EntityRef $domain;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
@@ -50,5 +49,4 @@ class AccountQuery extends Paginated
 
         return $response;
     }
-
 }

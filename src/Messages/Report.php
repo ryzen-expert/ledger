@@ -11,20 +11,26 @@ use Carbon\Carbon;
 class Report extends Message
 {
     protected static array $copyable = [
-        'currency', 'name'
+        'currency', 'name',
     ];
+
     public string $currency;
+
     /**
      * @var EntityRef Ledger domain. If not provided the default is used.
      */
     public EntityRef $domain;
+
     public Carbon $fromDate;
+
     public string $name;
+
     public array $options = [];
+
     public Carbon $toDate;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
@@ -49,21 +55,20 @@ class Report extends Message
 
     /**
      * Get the class for a report, or null if no class exists.
-     * @param string $reportName
-     * @return string|null
      */
     public static function getClass(string $reportName): ?string
     {
         $mapping = config('ledger.reports');
 
-        if (!$mapping) {
+        if (! $mapping) {
             // No custom mapping provided, use a standard class name
-            $reporter = 'Abivia\\Ledger\\Reports\\' . ucfirst($reportName) . 'Report';
+            $reporter = 'Abivia\\Ledger\\Reports\\'.ucfirst($reportName).'Report';
         } elseif (isset($mapping[$reportName])) {
             $reporter = $mapping[$reportName];
         } else {
             $reporter = null;
         }
+
         return $reporter;
     }
 
@@ -81,44 +86,44 @@ class Report extends Message
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
-        if (!isset($this->name)) {
+        if (! isset($this->name)) {
             throw Breaker::withCode(
                 Breaker::BAD_REQUEST,
                 __('Report request name not found.')
             );
         }
-        if (!static::getClass($this->name) === null) {
+        if (! static::getClass($this->name) === null) {
             throw Breaker::withCode(
                 Breaker::BAD_REQUEST,
                 __('Report :name not registered.', ['name' => $this->name])
             );
         }
         $rules = LedgerAccount::rules();
-        if (!isset($this->domain)) {
+        if (! isset($this->domain)) {
             $this->domain = new EntityRef();
             $this->domain->code = $rules->domain->default;
         }
         $this->domain->validate(0);
-        if (!isset($this->toDate)) {
+        if (! isset($this->toDate)) {
             throw Breaker::withCode(
                 Breaker::BAD_REQUEST,
                 __('Report to date (toDate) is required.')
             );
         }
         if (isset($this->options['language'])) {
-            if (!is_array($this->options['language'])) {
+            if (! is_array($this->options['language'])) {
                 $this->options['language'] = [$this->options['language']];
             }
         } else {
             $this->options['language'] = [];
         }
         $fallback = $rules->language->default;
-        if (!in_array($fallback, $this->options['language'])) {
+        if (! in_array($fallback, $this->options['language'])) {
             $this->options['language'][] = $fallback;
         }
 

@@ -2,9 +2,8 @@
 
 namespace Abivia\Ledger\Tests\Unit;
 
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use Abivia\Ledger\Tests\TestCase;
+use Illuminate\Support\Facades\Artisan;
 
 class ImportFeatureTestsTest extends TestCase
 {
@@ -14,5 +13,4 @@ class ImportFeatureTestsTest extends TestCase
 
         $this->assertTrue(true);
     }
-
 }

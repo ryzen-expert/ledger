@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection SpellCheckingInspection */
 /** @noinspection PhpDynamicAsStaticMethodCallInspection */
 /** @noinspection PhpParamsInspection */
@@ -33,18 +34,18 @@ class LedgerDomainTest extends TestCaseWithMigrations
         'names' => [
             [
                 'name' => 'Engineering',
-                'language' => 'en'
+                'language' => 'en',
             ],
             [
                 'name' => 'Nerds',
-                'language' => 'en-JOCK'
+                'language' => 'en-JOCK',
             ],
             [
                 'name' => 'la machination',
-                'language' => 'fr'
+                'language' => 'fr',
             ],
         ],
-        'currency' => 'CAD'
+        'currency' => 'CAD',
     ];
 
     /**
@@ -53,9 +54,9 @@ class LedgerDomainTest extends TestCaseWithMigrations
     private function createDomains()
     {
         $controller = new LedgerDomainController();
-        for ($id = 0; $id < 30; ++$id) {
+        for ($id = 0; $id < 30; $id++) {
             $data = [
-                'code' => 'D' . str_pad((string) $id, 2, '0', STR_PAD_LEFT),
+                'code' => 'D'.str_pad((string) $id, 2, '0', STR_PAD_LEFT),
                 'currency' => 'CAD',
                 'name' => "Domain $id",
             ];
@@ -127,20 +128,20 @@ class LedgerDomainTest extends TestCaseWithMigrations
             'names' => [
                 [
                     'name' => 'This is ok',
-                    'language' => 'en'
+                    'language' => 'en',
                 ],
                 [
                     // This is an error
                     'name' => 'Nerds',
-                    'language' => 'en-JOCK'
+                    'language' => 'en-JOCK',
                 ],
                 [
                     // Also an error
                     'name' => 'la machination',
-                    'language' => 'fr'
+                    'language' => 'fr',
                 ],
             ],
-            'currency' => 'CAD'
+            'currency' => 'CAD',
         ];
         $response = $this->json(
             'post', 'api/ledger/domain/add', $badRequest
@@ -249,7 +250,7 @@ class LedgerDomainTest extends TestCaseWithMigrations
         ];
         [$pages, $totalAccounts] = $this->getPagedDomains($requestData);
         $actualAccounts = LedgerDomain::count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -270,11 +271,11 @@ class LedgerDomainTest extends TestCaseWithMigrations
             'limit' => 10,
             'names' => [
                 [
-                    'name' => 'Domain 5'
+                    'name' => 'Domain 5',
                 ],
                 [
                     'name' => 'Domain 6',
-                    'language' => 'en'
+                    'language' => 'en',
                 ],
                 [
                     'name' => '%ain 1%',
@@ -291,7 +292,7 @@ class LedgerDomainTest extends TestCaseWithMigrations
 
         // Add 2 for the two single domain codes.
         $actualAccounts = 12;
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($actualAccounts, $totalAccounts);
         $this->assertEquals($expectedPages, $pages);
     }
@@ -316,7 +317,7 @@ class LedgerDomainTest extends TestCaseWithMigrations
         [$pages, $totalAccounts] = $this->getPagedDomains($requestData);
         $actualAccounts = LedgerDomain::whereBetween('code', ['D10', 'D19'])
             ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -340,7 +341,7 @@ class LedgerDomainTest extends TestCaseWithMigrations
         [$pages, $totalAccounts] = $this->getPagedDomains($requestData);
         $actualAccounts = LedgerDomain::where('code', '<=', 'D19')
             ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
@@ -364,13 +365,14 @@ class LedgerDomainTest extends TestCaseWithMigrations
         [$pages, $totalAccounts] = $this->getPagedDomains($requestData);
         $actualAccounts = LedgerDomain::where('code', '>=', 'D60')
             ->count();
-        $expectedPages = (int)ceil(($actualAccounts + 1) / $requestData['limit']);
+        $expectedPages = (int) ceil(($actualAccounts + 1) / $requestData['limit']);
         $this->assertEquals($expectedPages, $pages);
         $this->assertEquals($actualAccounts, $totalAccounts);
     }
 
     /**
      * TODO: create a separate suite for updates where transactions present.
+     *
      * @throws Breaker
      */
     public function testUpdate()
@@ -402,7 +404,7 @@ class LedgerDomainTest extends TestCaseWithMigrations
         $requestData = [
             'revision' => $actual->domain->revision,
             'code' => 'Corp',
-            'toCode' => 'Main' // Expect conversion to uppercase
+            'toCode' => 'Main', // Expect conversion to uppercase
         ];
         $response = $this->json(
             'post', 'api/ledger/domain/update', $requestData
@@ -438,14 +440,14 @@ class LedgerDomainTest extends TestCaseWithMigrations
             'names' => [
                 [
                     'name' => 'This is ok',
-                    'language' => 'en'
+                    'language' => 'en',
                 ],
                 [
                     'name' => 'Misbehaving Nerds',
-                    'language' => 'en-JOCK'
+                    'language' => 'en-JOCK',
                 ],
             ],
-            'currency' => 'CAD'
+            'currency' => 'CAD',
         ];
         $response = $this->json(
             'post', 'api/ledger/domain/add', $badRequest
@@ -459,7 +461,7 @@ class LedgerDomainTest extends TestCaseWithMigrations
             'names' => [
                 [
                     'name' => 'Nerds',
-                    'language' => 'en-JOCK'
+                    'language' => 'en-JOCK',
                 ],
             ],
         ];
@@ -490,7 +492,7 @@ class LedgerDomainTest extends TestCaseWithMigrations
             'code' => 'Corp',
             'names' => [
                 [
-                    'language' => 'en-JOCK'
+                    'language' => 'en-JOCK',
                 ],
             ],
         ];
@@ -525,7 +527,7 @@ class LedgerDomainTest extends TestCaseWithMigrations
             'code' => 'Corp',
             'names' => [
                 [
-                    'language' => 'en-CA'
+                    'language' => 'en-CA',
                 ],
             ],
         ];
@@ -564,7 +566,7 @@ class LedgerDomainTest extends TestCaseWithMigrations
             'names' => [
                 [
                     'name' => 'ingénierie',
-                    'language' => 'fr'
+                    'language' => 'fr',
                 ],
             ],
         ];
@@ -578,5 +580,4 @@ class LedgerDomainTest extends TestCaseWithMigrations
         $this->assertEquals('ingénierie', $name->name);
 
     }
-
 }

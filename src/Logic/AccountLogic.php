@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Logic;
@@ -12,8 +13,11 @@ use Illuminate\Support\Facades\DB;
 class AccountLogic
 {
     private string $accountTable;
+
     private string $balanceTable;
+
     private string $nameTable;
+
     /**
      * @var string[]
      */
@@ -32,10 +36,10 @@ class AccountLogic
         $this->relatedAccounts = $ledgerAccount->getSubAccountList();
         $subCats = DB::table($this->accountTable)
             ->join($this->balanceTable,
-                $this->accountTable . '.ledgerUuid', '=',
-                $this->balanceTable . '.ledgerUuid'
+                $this->accountTable.'.ledgerUuid', '=',
+                $this->balanceTable.'.ledgerUuid'
             )
-            ->whereIn($this->accountTable . '.ledgerUuid', $this->relatedAccounts)
+            ->whereIn($this->accountTable.'.ledgerUuid', $this->relatedAccounts)
             ->count();
 
         return $subCats === 0;
@@ -46,7 +50,7 @@ class AccountLogic
      */
     public function delete(LedgerAccount $ledgerAccount): bool
     {
-        if (!$this->canBeDeleted($ledgerAccount)) {
+        if (! $this->canBeDeleted($ledgerAccount)) {
             return false;
         }
         try {
@@ -71,5 +75,4 @@ class AccountLogic
 
         return true;
     }
-
 }

@@ -2,20 +2,19 @@
 
 namespace Abivia\Ledger\Tests\Unit;
 
-
 use Abivia\Ledger\Helpers\Version;
 use PHPUnit\Framework\TestCase;
-
 
 class VersionTest extends TestCase
 {
     /**
      * Make sure the API version matches the changelog
+     *
      * @return void
      */
     public function testVersion()
     {
-        $fh = fopen(__DIR__ . '/../../CHANGELOG.md', 'r');
+        $fh = fopen(__DIR__.'/../../CHANGELOG.md', 'r');
         while (1) {
             $line = fgets($fh);
             if ($line === false) {

@@ -4,6 +4,7 @@ namespace Abivia\Ledger\Console;
 
 use Abivia\Ledger\Helpers\Package;
 use Illuminate\Console\Command;
+
 use function is_file;
 use function scandir;
 
@@ -15,8 +16,6 @@ class Templates extends Command
 
     /**
      * Artisan command to list available chart of account templates
-     *
-     * @return void
      */
     public function handle(): void
     {
@@ -28,10 +27,9 @@ class Templates extends Command
         $path .= '/';
         foreach ($files as $file) {
             $parts = pathinfo($file);
-            if (is_file($path . $file) && $parts['extension'] === 'json') {
-                $this->info('    ' . $parts['filename']);
+            if (is_file($path.$file) && $parts['extension'] === 'json') {
+                $this->info('    '.$parts['filename']);
             }
         }
     }
-
 }

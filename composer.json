@@ -1,5 +1,5 @@
 {
-    "name": "abivia/ledger",
+    "name": "rayzen/ledger",
     "type": "library",
     "description": "General Ledger and Journal Accounting Package for Laravel with JSON API",
     "keywords": [

@@ -4,7 +4,6 @@ namespace Abivia\Ledger\Tests\Unit\Root;
 
 use Abivia\Ledger\Root\Flex;
 use Abivia\Ledger\Tests\TestCase;
-use Illuminate\Support\Facades\App;
 
 class FlexTest extends TestCase
 {

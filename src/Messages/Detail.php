@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Messages;
@@ -7,7 +8,6 @@ use Abivia\Ledger\Exceptions\Breaker;
 use Abivia\Ledger\Helpers\Merge;
 use Abivia\Ledger\Models\LedgerAccount;
 use ErrorException;
-use Exception;
 use ValueError;
 
 /**
@@ -61,11 +61,9 @@ class Detail extends Message
 
     /**
      * Detail constructor.
-     *
-     * @param EntityRef|null $account
-     * @param string|null $amount
      */
-    public function __construct(?EntityRef $account = null, ?string $amount = null) {
+    public function __construct(EntityRef $account = null, string $amount = null)
+    {
         if ($account !== null) {
             $this->account = $account;
         }
@@ -76,7 +74,7 @@ class Detail extends Message
 
     /**
      * Property get.
-     * @param $name
+     *
      * @return int|null
      */
     public function __get($name)
@@ -84,6 +82,7 @@ class Detail extends Message
         if ($name === 'signTest') {
             return $this->signTest;
         }
+
         return null;
     }
 
@@ -100,11 +99,12 @@ class Detail extends Message
                 $this->account->uuid = $this->ledgerAccount->ledgerUuid;
             }
         }
+
         return $this->ledgerAccount;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
@@ -119,7 +119,7 @@ class Detail extends Message
             $detail->account->code = $data['uuid'];
         }
         if (isset($data['reference'])) {
-            if (!is_array($data['reference'])) {
+            if (! is_array($data['reference'])) {
                 $data['reference'] = ['uuid' => $data['reference']];
             }
             $detail->reference = Reference::fromArray($data['reference'], $opFlags);
@@ -127,17 +127,18 @@ class Detail extends Message
         if ($opFlags & self::F_VALIDATE) {
             $detail->validate($opFlags);
         }
+
         return $detail;
     }
 
     /**
      * Make the amount have the requested number of decimal places.
      *
-     * @param ?int $decimals
-     * @return string
+     * @param  ?int  $decimals
+     *
      * @throws Breaker
      */
-    public function normalizeAmount(?int $decimals = null): string
+    public function normalizeAmount(int $decimals = null): string
     {
         try {
             $multiplier = '1';
@@ -198,7 +199,7 @@ class Detail extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function validate(?int $opFlags): self
     {
@@ -226,6 +227,7 @@ class Detail extends Message
         if (count($errors)) {
             throw Breaker::withCode(Breaker::BAD_REQUEST, $errors);
         }
+
         return $this;
     }
 }

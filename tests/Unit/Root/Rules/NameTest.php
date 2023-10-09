@@ -21,6 +21,7 @@ class NameTest extends TestCase
 
     /**
      * @depends testHydration
+     *
      * @return void
      */
     public function testEncode()
@@ -29,5 +30,4 @@ class NameTest extends TestCase
         $expect = '{"language":"en","name":"This is a name"}';
         $this->assertEquals($expect, $json);
     }
-
 }

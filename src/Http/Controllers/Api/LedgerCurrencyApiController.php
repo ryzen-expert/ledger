@@ -13,9 +13,6 @@ class LedgerCurrencyApiController extends ApiController
     /**
      * Perform a currency operation.
      *
-     * @param Request $request
-     * @param string $operation
-     * @return array
      * @throws Breaker
      */
     protected function runCore(Request $request, string $operation): array
@@ -29,5 +26,4 @@ class LedgerCurrencyApiController extends ApiController
 
         return $message->run();
     }
-
 }

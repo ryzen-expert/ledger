@@ -9,7 +9,7 @@ class LedgerRootTest extends TestCase
 {
     public static LedgerRules $ledger;
 
-    public string $subject = <<<JSON
+    public string $subject = <<<'JSON'
 {
     "account": {
         "postToCategory": true
@@ -46,12 +46,13 @@ JSON;
 
     /**
      * @depends testHydration
+     *
      * @return void
      */
     public function testEncode()
     {
         $json = json_encode(self::$ledger);
-        $expect = <<<JSON
+        $expect = <<<'JSON'
 {
     "account": {
         "postToCategory": true
@@ -96,8 +97,7 @@ JSON;
     ]
 }
 JSON;
-;
+
         $this->assertJsonStringEqualsJsonString($expect, $json);
     }
-
 }

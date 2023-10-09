@@ -58,10 +58,10 @@ class MergeTest extends TestCase
         $obj = new stdClass();
         $obj->a = ['one' => 1, 'two' => 2];
         $source = new stdClass();
-        $source->a = ['two' => 2.1, 'three' =>3];
+        $source->a = ['two' => 2.1, 'three' => 3];
         Merge::objects($obj, $source);
         $expect = new stdClass();
-        $expect->a = ['one' => 1, 'two' => 2.1, 'three' =>3];
+        $expect->a = ['one' => 1, 'two' => 2.1, 'three' => 3];
         $this->assertEquals($expect, $obj);
     }
 
@@ -86,5 +86,4 @@ class MergeTest extends TestCase
         }');
         $this->assertEquals($expect, $obj);
     }
-
 }

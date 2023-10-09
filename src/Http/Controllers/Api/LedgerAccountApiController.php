@@ -3,7 +3,6 @@
 namespace Abivia\Ledger\Http\Controllers\Api;
 
 use Abivia\Ledger\Exceptions\Breaker;
-
 use Abivia\Ledger\Messages\Account;
 use Abivia\Ledger\Messages\AccountQuery;
 use Abivia\Ledger\Messages\Message;
@@ -14,9 +13,6 @@ class LedgerAccountApiController extends ApiController
     /**
      * Perform an account operation.
      *
-     * @param Request $request
-     * @param string $operation
-     * @return array
      * @throws Breaker
      */
     protected function runCore(Request $request, string $operation): array
@@ -30,5 +26,4 @@ class LedgerAccountApiController extends ApiController
 
         return $message->run();
     }
-
 }

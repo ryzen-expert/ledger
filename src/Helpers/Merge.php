@@ -1,9 +1,8 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Abivia\Ledger\Helpers;
-
-use stdClass;
 
 /**
  * Utility class for merging arrays ans sdtClass objects.
@@ -13,8 +12,6 @@ class Merge
     /**
      * Merge source array into target array.
      *
-     * @param array $target
-     * @param array $source
      * @return void
      */
     public static function arrays(array &$target, array $source)
@@ -25,8 +22,6 @@ class Merge
     /**
      * Merge source array into an object.
      *
-     * @param object $target
-     * @param array $source
      * @return void
      */
     public static function arrayToObject(object $target, array $source)
@@ -57,8 +52,6 @@ class Merge
     /**
      * Merge source object into target object.
      *
-     * @param object $target
-     * @param object $source
      * @return void
      */
     public static function objects(object $target, object $source)
@@ -83,5 +76,4 @@ class Merge
             }
         }
     }
-
 }

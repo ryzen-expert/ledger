@@ -28,7 +28,7 @@ class Currency extends Message
      */
     public string $revision;
 
-    public function __construct(?string $code = null, ?int $decimals = null)
+    public function __construct(string $code = null, int $decimals = null)
     {
         if ($code !== null) {
             $this->code = $code;
@@ -39,18 +39,18 @@ class Currency extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public static function fromArray(array $data, int $opFlags = self::OP_ADD) : self
+    public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
         $result = new static();
         $result->copy($data, $opFlags);
         if (
-            !($opFlags & self::OP_DELETE)
+            ! ($opFlags & self::OP_DELETE)
             && isset($data['decimals'])
         ) {
             if (is_numeric($data['decimals'])) {
-                $result->decimals = (int)$data['decimals'];
+                $result->decimals = (int) $data['decimals'];
             } else {
                 throw Breaker::withCode(
                     Breaker::BAD_REQUEST,
@@ -79,14 +79,14 @@ class Currency extends Message
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function validate(?int $opFlags = null): self
+    public function validate(int $opFlags = null): self
     {
         $opFlags ??= $this->getOpFlags();
         $errors = $this->validateCodes($opFlags);
-        if (!($opFlags & (self::OP_DELETE | self::OP_GET))) {
-            if (!isset($this->decimals)) {
+        if (! ($opFlags & (self::OP_DELETE | self::OP_GET))) {
+            if (! isset($this->decimals)) {
                 $errors[] = __('a numeric decimals property is required');
             }
         }
