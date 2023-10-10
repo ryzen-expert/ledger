@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder as DbBuilder;
 use Illuminate\Support\HigherOrderCollectionProxy;
+use SolutionForest\FilamentTree\Concern\ModelTree;
+use Spatie\Translatable\HasTranslations;
 use stdClass;
 
 /**
@@ -52,9 +54,14 @@ class LedgerAccount extends Model
     use HasFactory;
     use HasNames;
     use HasRevisions;
+    use ModelTree;
     //    use UuidPrimaryKey;
 
     const CODE_SIZE = 32;
+
+    use HasTranslations;
+
+    public $translatable = ['lang_names'];
 
     /**
      * @var array Model default attributes.
@@ -79,6 +86,7 @@ class LedgerAccount extends Model
      */
     protected $casts = [
         'category' => 'boolean',
+        'lang_names' => 'array',
         'closed' => 'boolean',
         'credit' => 'boolean',
         'debit' => 'boolean',
@@ -91,14 +99,14 @@ class LedgerAccount extends Model
     protected $dateFormat = 'Y-m-d H:i:s.u';
 
     protected $fillable = [
-        'category', 'code', 'credit', 'debit', 'extra', 'parentUuid', 'taxCode',
+        'category', 'code', 'credit', 'debit', 'extra', 'parentUuid', 'taxCode', 'lang_names',
     ];
 
     /**
      * @var array<string> Attributes that can be copied directly into a message
      */
     protected static array $inMessage = [
-        'category', 'closed', 'code', 'credit', 'debit', 'extra', 'taxCode',
+        'category', 'closed', 'code', 'credit', 'debit', 'extra', 'taxCode', 'lang_names',
     ];
 
     /**
@@ -108,7 +116,8 @@ class LedgerAccount extends Model
     /**
      * @var string Specifies the primary key type.
      */
-    //    protected $keyType = 'string';
+    protected $keyType = 'int';
+
     /**
      * @var string Specifies the primary key name.
      */
@@ -125,6 +134,31 @@ class LedgerAccount extends Model
      *
      * @throws Exception
      */
+    public function determineOrderColumnName(): string
+    {
+        return 'code';
+    }
+
+    public function determineParentColumnName(): string
+    {
+        return 'parentUuid';
+    }
+
+    public function determineTitleColumnName(): string
+    {
+        return 'lang_names';
+    }
+
+    public static function defaultParentKey()
+    {
+        return -1;
+    }
+
+    public static function defaultChildrenKeyName(): string
+    {
+        return 'children';
+    }
+
     public function __get($key)
     {
         if ($key === 'revisionHash') {
@@ -168,15 +202,27 @@ class LedgerAccount extends Model
 
     public static function createFromMessage(Account $message): self
     {
+
+        // dd($message, $message->names);
         $instance = new static();
         foreach ($instance->fillable as $property) {
             if (isset($message->{$property})) {
                 $instance->{$property} = $message->{$property};
             }
         }
+
+        $result = [];
+        foreach ($message->names as $key => $value) {
+            $result[$key ?: 'en'] = $value->name;
+
+        }
+        $instance->lang_names = $result;
+        // dd($result, $message, $message->names, $value->name);
+
         if (isset($message->parent)) {
             $instance->parentUuid = $message->parent->uuid;
         }
+        // dd($instance);
         $instance->save();
         $instance->refresh();
 
@@ -283,6 +329,7 @@ class LedgerAccount extends Model
      */
     public static function notInitializedError(): void
     {
+        dd(self::class, Breaker::RULE_VIOLATION);
         throw Breaker::withCode(
             Breaker::RULE_VIOLATION, __('Ledger has not been initialized.')
         );

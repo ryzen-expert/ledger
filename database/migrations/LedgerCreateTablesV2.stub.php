@@ -94,6 +94,8 @@ class LedgerCreateTablesV2 extends Migration
             $table->bigIncrements('ledgerUuid');
             // User accessible account identifier
             $table->string('code', LedgerAccount::CODE_SIZE)->unique();
+            $table->json('lang_names')->nullable();
+
             // The account code for reporting / regulatory purposes.
             $table->string('taxCode', LedgerAccount::CODE_SIZE)
                 ->nullable()
