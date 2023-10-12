@@ -28,7 +28,7 @@ class Reference extends Message
      */
     public $extra;
 
-    public string $journalReferenceUuid;
+    public string|int $journalReferenceUuid;
 
     /**
      * @var string Revision signature. Required for update.
@@ -40,6 +40,7 @@ class Reference extends Message
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
+        //        dd($data);
         $reference = new static();
         $reference->copy($data, $opFlags);
         if (isset($data['domain'])) {
@@ -51,8 +52,35 @@ class Reference extends Message
         if ($opFlags & self::F_VALIDATE) {
             $reference->validate($opFlags);
         }
+        //        dd($reference);
 
         return $reference;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate(int $opFlags = null): self
+    {
+        $opFlags ??= $this->getOpFlags();
+        $errors = $this->validateCodes($opFlags, ['regEx' => '/.*/', 'uppercase' => false]);
+        $rules = LedgerAccount::rules();
+
+        if ($rules === null) {
+            $errors[] = __('Ledger has not been initialized.');
+        } else {
+            if (! isset($this->domain)) {
+                $this->domain = new EntityRef();
+                $this->domain->code = $rules->domain->default;
+            }
+            $this->domain->validate(0);
+        }
+        //        dd($errors);
+        if (count($errors) !== 0) {
+            throw Breaker::withCode(Breaker::BAD_REQUEST, $errors);
+        }
+
+        return $this;
     }
 
     /**
@@ -65,6 +93,7 @@ class Reference extends Message
     {
         /** @var JournalReference $journalReference */
         $journalReference = JournalReference::findWith($this)->first();
+        //        dd($journalReference, $this);
         if ($journalReference === null) {
             throw Breaker::withCode(
                 Breaker::BAD_REQUEST,
@@ -77,6 +106,7 @@ class Reference extends Message
             );
         }
         if (! isset($this->journalReferenceUuid)) {
+            //            dd($this, $journalReference->journalReferenceUuid);
             $this->journalReferenceUuid = $journalReference->journalReferenceUuid;
         }
 
@@ -104,29 +134,5 @@ class Reference extends Message
         }
 
         return $response;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validate(int $opFlags = null): self
-    {
-        $opFlags ??= $this->getOpFlags();
-        $errors = $this->validateCodes($opFlags, ['regEx' => '/.*/', 'uppercase' => false]);
-        $rules = LedgerAccount::rules();
-        if ($rules === null) {
-            $errors[] = __('Ledger has not been initialized.');
-        } else {
-            if (! isset($this->domain)) {
-                $this->domain = new EntityRef();
-                $this->domain->code = $rules->domain->default;
-            }
-            $this->domain->validate(0);
-        }
-        if (count($errors) !== 0) {
-            throw Breaker::withCode(Breaker::BAD_REQUEST, $errors);
-        }
-
-        return $this;
     }
 }

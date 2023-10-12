@@ -3,7 +3,6 @@
 namespace Abivia\Ledger\Models;
 
 use Abivia\Ledger\Exceptions\Breaker;
-use Abivia\Ledger\Helpers\Revision;
 use Abivia\Ledger\Messages\Reference;
 use Abivia\Ledger\Traits\CommonResponseProperties;
 use Abivia\Ledger\Traits\HasRevisions;
@@ -39,11 +38,62 @@ class JournalReference extends Model
 
     protected $fillable = ['code', 'domainUuid', 'extra'];
 
-    public $incrementing = false;
+    //    public $incrementing = false;
 
     protected $keyType = 'int';
 
     protected $primaryKey = 'journalReferenceUuid';
+
+    /**
+     * @throws Breaker
+     */
+    public static function createFromMessage(Reference $message): self
+    {
+
+        $instance = new static();
+        foreach ($instance->fillable as $property) {
+            if (isset($message->{$property})) {
+                $instance->{$property} = $message->{$property};
+            }
+        }
+
+        $instance->domainUuid = $message->domain->uuid
+            ?? LedgerDomain::findWith($message->domain)->first()->domainUuid;
+
+        $instance->save();
+        //        dd($instance, $message);
+        $instance->refresh();
+
+        return $instance;
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @noinspection PhpIncompatibleReturnTypeInspection
+     * @noinspection PhpDynamicAsStaticMethodCallInspection
+     */
+    public static function findWith(Reference $reference): Builder
+    {
+        $finder = self::where('domainUuid', $reference->domain->uuid);
+        //        dd($reference, $reference->code, $finder->where('code', $reference->code)->first());
+        if (isset($reference->journalReferenceUuid)) {
+            $finder = $finder->where('journalReferenceUuid', $reference->journalReferenceUuid);
+        } elseif (isset($reference->code)) {
+            $finder = $finder->where('code', $reference->code);
+        } else {
+            throw new Exception('Reference must have either code or uuid entries');
+        }
+
+        return $finder;
+    }
+
+    protected static function booted()
+    {
+        static::saved(function ($model) {
+            $model->clearRevisionCache();
+        });
+    }
 
     /**
      * The revision Hash is computationally expensive, only calculated when required.
@@ -59,52 +109,6 @@ class JournalReference extends Model
         }
 
         return parent::__get($key);
-    }
-
-    protected static function booted()
-    {
-        static::saved(function ($model) {
-            $model->clearRevisionCache();
-        });
-    }
-
-    /**
-     * @throws Breaker
-     */
-    public static function createFromMessage(Reference $message): self
-    {
-        $instance = new static();
-        foreach ($instance->fillable as $property) {
-            if (isset($message->{$property})) {
-                $instance->{$property} = $message->{$property};
-            }
-        }
-        $instance->domainUuid = $message->domain->uuid
-            ?? LedgerDomain::findWith($message->domain)->first()->domainUuid;
-        $instance->save();
-        $instance->refresh();
-
-        return $instance;
-    }
-
-    /**
-     * @throws Exception
-     *
-     * @noinspection PhpIncompatibleReturnTypeInspection
-     * @noinspection PhpDynamicAsStaticMethodCallInspection
-     */
-    public static function findWith(Reference $reference): Builder
-    {
-        $finder = self::where('domainUuid', $reference->domain->uuid);
-        if (isset($reference->journalReferenceUuid)) {
-            $finder = $finder->where('journalReferenceUuid', $reference->journalReferenceUuid);
-        } elseif (isset($reference->code)) {
-            $finder = $finder->where('code', $reference->code);
-        } else {
-            throw new Exception('Reference must have either code or uuid entries');
-        }
-
-        return $finder;
     }
 
     /**

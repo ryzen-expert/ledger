@@ -56,11 +56,6 @@ abstract class Message
      */
     protected static bool $inBatch = false;
 
-    /**
-     * @var int The operation associated with this message.
-     */
-    protected int $opFlags = 0;
-
     private static array $opMap = [
         'add' => self::OP_ADD,
         'batch' => self::OP_BATCH,
@@ -74,32 +69,25 @@ abstract class Message
     ];
 
     /**
-     * Selectively copy information from a data array.
-     *
-     * @return $this
+     * @var int The operation associated with this message.
      */
-    public function copy(array $data, int $opFlags): self
-    {
-        $this->opFlags = $opFlags;
-        foreach (static::$copyable as $info) {
-            if (is_array($info)) {
-                [$property, $mask] = $info;
-                if (is_array($property)) {
-                    [$property, $fromProperty] = $property;
-                } else {
-                    $fromProperty = $property;
-                }
-            } else {
-                $property = $info;
-                $fromProperty = $info;
-                $mask = Message::ALL_OPS;
-            }
-            if (($opFlags & $mask) && isset($data[$fromProperty])) {
-                $this->{$property} = $data[$fromProperty];
-            }
-        }
+    protected int $opFlags = 0;
 
-        return $this;
+    /**
+     * Create a message from the request payload, bypassing some middleware.
+     *
+     * @return static
+     *
+     * @throws Breaker
+     */
+    public static function fromRequest(Request $request, int $opFlags = 0): self
+    {
+
+        $content = json_decode(
+            $request->getContent(), true, 512, JSON_BIGINT_AS_STRING
+        );
+
+        return static::fromArray($content, $opFlags);
     }
 
     /**
@@ -112,43 +100,6 @@ abstract class Message
      * @throws Breaker On error, e.g. required data is missing or on validation.
      */
     abstract public static function fromArray(array $data, int $opFlags = 0): self;
-
-    /**
-     * Create a message from the request payload, bypassing some middleware.
-     *
-     * @return static
-     *
-     * @throws Breaker
-     */
-    public static function fromRequest(Request $request, int $opFlags = 0): self
-    {
-        $content = json_decode(
-            $request->getContent(), true, 512, JSON_BIGINT_AS_STRING
-        );
-
-        return static::fromArray($content, $opFlags);
-    }
-
-    public function getOpFlags(): int
-    {
-        return $this->opFlags;
-    }
-
-    /**
-     * Make sure a revision code is present
-     *
-     * @return void
-     */
-    protected function requireRevision(array &$errors)
-    {
-        if (! isset($this->revision)) {
-            if (Revision::isInBatch()) {
-                $this->revision = '&';
-            } else {
-                $errors[] = __('This request must supply a revision.');
-            }
-        }
-    }
 
     /**
      * Convert a method name to an operation bitmask.
@@ -182,6 +133,40 @@ abstract class Message
     }
 
     /**
+     * Selectively copy information from a data array.
+     *
+     * @return $this
+     */
+    public function copy(array $data, int $opFlags): self
+    {
+        $this->opFlags = $opFlags;
+        foreach (static::$copyable as $info) {
+            if (is_array($info)) {
+                [$property, $mask] = $info;
+                if (is_array($property)) {
+                    [$property, $fromProperty] = $property;
+                } else {
+                    $fromProperty = $property;
+                }
+            } else {
+                $property = $info;
+                $fromProperty = $info;
+                $mask = Message::ALL_OPS;
+            }
+            if (($opFlags & $mask) && isset($data[$fromProperty])) {
+                $this->{$property} = $data[$fromProperty];
+            }
+        }
+
+        return $this;
+    }
+
+    public function getOpFlags(): int
+    {
+        return $this->opFlags;
+    }
+
+    /**
      * Check the message for validity.
      *
      * @param  int|null  $opFlags Operation bitmask.
@@ -189,4 +174,20 @@ abstract class Message
      * @throws Breaker When data is not valid.
      */
     abstract public function validate(?int $opFlags): self;
+
+    /**
+     * Make sure a revision code is present
+     *
+     * @return void
+     */
+    protected function requireRevision(array &$errors)
+    {
+        if (! isset($this->revision)) {
+            if (Revision::isInBatch()) {
+                $this->revision = '&';
+            } else {
+                $errors[] = __('This request must supply a revision.');
+            }
+        }
+    }
 }

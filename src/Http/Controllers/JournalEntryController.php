@@ -34,6 +34,83 @@ class JournalEntryController extends Controller
     private ?LedgerDomain $ledgerDomain;
 
     /**
+     * Process a query request.
+     *
+     * @return Collection Collection contains JournalEntry records.
+     *
+     * @throws Breaker
+     */
+    public function query(EntryQuery $message, int $opFlags): Collection
+    {
+        $message->validate($opFlags);
+        $query = $message->query();
+        $query->orderBy('transDate')
+            ->orderBy('journalEntryId');
+
+        //$foo = $query->toSql();
+
+        return $query->get();
+    }
+
+    /**
+     * Fetch a Journal Entry.
+     *
+     * @throws Breaker
+     */
+    public function get(Entry $message): JournalEntry
+    {
+        $message->validate(Message::OP_GET);
+
+        return $this->fetch($message->id);
+    }
+
+    /**
+     * Get a journal entry by ID.
+     *
+     * @throws Breaker
+     */
+    private function fetch(int $id): JournalEntry
+    {
+        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
+        $journalEntry = JournalEntry::find($id);
+        if ($journalEntry === null) {
+            throw Breaker::withCode(
+                Breaker::RULE_VIOLATION,
+                [__('Journal entry :id does not exist', ['id' => $id])]
+            );
+        }
+
+        return $journalEntry;
+    }
+
+    /**
+     * Perform a Journal Entry operation.
+     *
+     * @throws Breaker
+     */
+    public function run(Entry $message, int $opFlags = null): ?JournalEntry
+    {
+        // TODO: add POST operation.
+        $opFlags ??= $message->getOpFlags();
+        switch ($opFlags & Message::ALL_OPS) {
+            case Message::OP_ADD:
+                return $this->add($message);
+            case Message::OP_DELETE:
+                $this->delete($message);
+
+                return null;
+            case Message::OP_GET:
+                return $this->get($message);
+            case Message::OP_LOCK:
+                return $this->lock($message);
+            case Message::OP_UPDATE:
+                return $this->update($message);
+            default:
+                throw Breaker::withCode(Breaker::BAD_REQUEST, 'Unknown or invalid operation.');
+        }
+    }
+
+    /**
      * Add an entry to the journal.
      *
      * @throws Breaker
@@ -41,10 +118,11 @@ class JournalEntryController extends Controller
      */
     public function add(Entry $message): JournalEntry
     {
+
         $inTransaction = false;
         // Ensure that the entry is in balance and the contents are valid.
         $this->validateEntry($message, Message::OP_ADD);
-
+        //        dd($message);
         try {
             DB::beginTransaction();
             $inTransaction = true;
@@ -66,6 +144,121 @@ class JournalEntryController extends Controller
         }
 
         return $journalEntry;
+    }
+
+    /**
+     * Perform an integrity check on the message.
+     *
+     * @throws Breaker
+     */
+    private function validateEntry(Entry $message, int $opFlag)
+    {
+        //        dd($message, $opFlag, $message->validate($opFlag));
+        // First the basics
+        $message->validate($opFlag);
+        $errors = [];
+
+        // Get the domain
+        $message->domain ??= new EntityRef(LedgerAccount::rules()->domain->default);
+        $this->ledgerDomain = LedgerDomain::findWith($message->domain)->first();
+        if ($this->ledgerDomain === null) {
+            $errors[] = __('Domain :domain not found.', ['domain' => $message->domain]);
+        } else {
+            $message->domain->uuid = $this->ledgerDomain->domainUuid;
+
+            // Get the currency, use the domain default if none provided
+            $message->currency ??= $this->ledgerDomain->currencyDefault;
+            $this->getCurrency($message->currency);
+        }
+
+        // If a journal is supplied, verify the code
+        if (isset($message->journal)) {
+            $subJournal = SubJournal::findWith($message->journal)->first();
+            if ($subJournal === null) {
+                $errors[] = __('Journal :code not found.', ['code' => $message->journal->code]);
+            }
+            $message->journal->uuid = $subJournal->subJournalUuid;
+        }
+
+        if ($this->ledgerDomain === null && count($errors) !== 0) {
+            // Without the currency there is no point in going further.
+            throw Breaker::withCode(Breaker::RULE_VIOLATION, $errors);
+        }
+
+        // Normalize the amounts and check for balance
+        $postToCategory = LedgerAccount::rules()->account->postToCategory;
+        $balance = '0';
+        $unique = [];
+        $precision = $this->ledgerCurrency->decimals;
+        foreach ($message->details as $line => $detail) {
+            // Make sure the account is valid and that we have the uuid
+            $ledgerAccount = $detail->findAccount();
+            if ($ledgerAccount === null) {
+                $errors[] = __(
+                    'Detail line :line has an invalid account :account/:uuid.',
+                    [
+                        'line' => $line,
+                        'account' => $detail->account->code ?? 'null',
+                        'uuid' => $detail->account->uuid ?? 'null',
+                    ]
+                );
+
+                continue;
+            }
+            if (! $postToCategory && $ledgerAccount->category) {
+                $errors[] = __(
+                    "Can't post to category account :code",
+                    ['code' => $ledgerAccount->code]
+                );
+            }
+            // Check that each account only appears once.
+            if (isset($unique[$ledgerAccount->ledgerUuid])) {
+                $errors[] = __(
+                    'The account :code cannot appear more than once in an entry',
+                    ['code' => $ledgerAccount->code]
+                );
+
+                continue;
+            }
+            $unique[$ledgerAccount->ledgerUuid] = true;
+
+            // Make sure any reference is valid and that we have the uuid
+            if (isset($detail->reference)) {
+                if (! isset($detail->reference->domain)) {
+                    $detail->reference->domain = $message->domain;
+                } elseif (! $detail->reference->domain->sameAs($message->domain)) {
+                    $errors[] = __(
+                        'Reference in Detail line :line has a mismatched domain.',
+                        compact('line')
+                    );
+                }
+                $detail->reference->lookup();
+            }
+            $balance = bcadd($balance, $detail->normalizeAmount($precision), $precision);
+        }
+        if (bccomp($balance, '0') !== 0) {
+            $errors[] = __('Entry amounts are out of balance by :balance.', compact('balance'));
+        }
+        if (count($errors) !== 0) {
+            throw Breaker::withCode(Breaker::RULE_VIOLATION, $errors);
+        }
+    }
+
+    /**
+     * Get currency details.
+     *
+     * @throws Breaker
+     */
+    private function getCurrency($currency)
+    {
+        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
+        $this->ledgerCurrency = LedgerCurrency::find($currency);
+        if ($this->ledgerCurrency === null) {
+            throw Breaker::withCode(
+                Breaker::INVALID_DATA,
+                [__('Currency :code not found.', ['code' => $currency])]
+            );
+        }
     }
 
     /**
@@ -171,54 +364,6 @@ class JournalEntryController extends Controller
     }
 
     /**
-     * Get a journal entry by ID.
-     *
-     * @throws Breaker
-     */
-    private function fetch(int $id): JournalEntry
-    {
-        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
-        $journalEntry = JournalEntry::find($id);
-        if ($journalEntry === null) {
-            throw Breaker::withCode(
-                Breaker::RULE_VIOLATION,
-                [__('Journal entry :id does not exist', ['id' => $id])]
-            );
-        }
-
-        return $journalEntry;
-    }
-
-    /**
-     * Fetch a Journal Entry.
-     *
-     * @throws Breaker
-     */
-    public function get(Entry $message): JournalEntry
-    {
-        $message->validate(Message::OP_GET);
-
-        return $this->fetch($message->id);
-    }
-
-    /**
-     * Get currency details.
-     *
-     * @throws Breaker
-     */
-    private function getCurrency($currency)
-    {
-        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
-        $this->ledgerCurrency = LedgerCurrency::find($currency);
-        if ($this->ledgerCurrency === null) {
-            throw Breaker::withCode(
-                Breaker::INVALID_DATA,
-                [__('Currency :code not found.', ['code' => $currency])]
-            );
-        }
-    }
-
-    /**
      * Place a lock on a journal entry.
      *
      * @throws Breaker
@@ -247,52 +392,6 @@ class JournalEntryController extends Controller
         }
 
         return $journalEntry;
-    }
-
-    /**
-     * Process a query request.
-     *
-     * @return Collection Collection contains JournalEntry records.
-     *
-     * @throws Breaker
-     */
-    public function query(EntryQuery $message, int $opFlags): Collection
-    {
-        $message->validate($opFlags);
-        $query = $message->query();
-        $query->orderBy('transDate')
-            ->orderBy('journalEntryId');
-
-        //$foo = $query->toSql();
-
-        return $query->get();
-    }
-
-    /**
-     * Perform a Journal Entry operation.
-     *
-     * @throws Breaker
-     */
-    public function run(Entry $message, int $opFlags = null): ?JournalEntry
-    {
-        // TODO: add POST operation.
-        $opFlags ??= $message->getOpFlags();
-        switch ($opFlags & Message::ALL_OPS) {
-            case Message::OP_ADD:
-                return $this->add($message);
-            case Message::OP_DELETE:
-                $this->delete($message);
-
-                return null;
-            case Message::OP_GET:
-                return $this->get($message);
-            case Message::OP_LOCK:
-                return $this->lock($message);
-            case Message::OP_UPDATE:
-                return $this->update($message);
-            default:
-                throw Breaker::withCode(Breaker::BAD_REQUEST, 'Unknown or invalid operation.');
-        }
     }
 
     /**
@@ -337,102 +436,5 @@ class JournalEntryController extends Controller
         // Remove existing details, undoing balance changes
         $this->deleteDetails($journalEntry);
         $this->addDetails($journalEntry, $message);
-    }
-
-    /**
-     * Perform an integrity check on the message.
-     *
-     * @throws Breaker
-     */
-    private function validateEntry(Entry $message, int $opFlag)
-    {
-        // First the basics
-        $message->validate($opFlag);
-        $errors = [];
-
-        // Get the domain
-        $message->domain ??= new EntityRef(LedgerAccount::rules()->domain->default);
-        $this->ledgerDomain = LedgerDomain::findWith($message->domain)->first();
-        if ($this->ledgerDomain === null) {
-            $errors[] = __('Domain :domain not found.', ['domain' => $message->domain]);
-        } else {
-            $message->domain->uuid = $this->ledgerDomain->domainUuid;
-
-            // Get the currency, use the domain default if none provided
-            $message->currency ??= $this->ledgerDomain->currencyDefault;
-            $this->getCurrency($message->currency);
-        }
-
-        // If a journal is supplied, verify the code
-        if (isset($message->journal)) {
-            $subJournal = SubJournal::findWith($message->journal)->first();
-            if ($subJournal === null) {
-                $errors[] = __('Journal :code not found.', ['code' => $message->journal->code]);
-            }
-            $message->journal->uuid = $subJournal->subJournalUuid;
-        }
-
-        if ($this->ledgerDomain === null && count($errors) !== 0) {
-            // Without the currency there is no point in going further.
-            throw Breaker::withCode(Breaker::RULE_VIOLATION, $errors);
-        }
-
-        // Normalize the amounts and check for balance
-        $postToCategory = LedgerAccount::rules()->account->postToCategory;
-        $balance = '0';
-        $unique = [];
-        $precision = $this->ledgerCurrency->decimals;
-        foreach ($message->details as $line => $detail) {
-            // Make sure the account is valid and that we have the uuid
-            $ledgerAccount = $detail->findAccount();
-            if ($ledgerAccount === null) {
-                $errors[] = __(
-                    'Detail line :line has an invalid account :account/:uuid.',
-                    [
-                        'line' => $line,
-                        'account' => $detail->account->code ?? 'null',
-                        'uuid' => $detail->account->uuid ?? 'null',
-                    ]
-                );
-
-                continue;
-            }
-            if (! $postToCategory && $ledgerAccount->category) {
-                $errors[] = __(
-                    "Can't post to category account :code",
-                    ['code' => $ledgerAccount->code]
-                );
-            }
-            // Check that each account only appears once.
-            if (isset($unique[$ledgerAccount->ledgerUuid])) {
-                $errors[] = __(
-                    'The account :code cannot appear more than once in an entry',
-                    ['code' => $ledgerAccount->code]
-                );
-
-                continue;
-            }
-            $unique[$ledgerAccount->ledgerUuid] = true;
-
-            // Make sure any reference is valid and that we have the uuid
-            if (isset($detail->reference)) {
-                if (! isset($detail->reference->domain)) {
-                    $detail->reference->domain = $message->domain;
-                } elseif (! $detail->reference->domain->sameAs($message->domain)) {
-                    $errors[] = __(
-                        'Reference in Detail line :line has a mismatched domain.',
-                        compact('line')
-                    );
-                }
-                $detail->reference->lookup();
-            }
-            $balance = bcadd($balance, $detail->normalizeAmount($precision), $precision);
-        }
-        if (bccomp($balance, '0') !== 0) {
-            $errors[] = __('Entry amounts are out of balance by :balance.', compact('balance'));
-        }
-        if (count($errors) !== 0) {
-            throw Breaker::withCode(Breaker::RULE_VIOLATION, $errors);
-        }
     }
 }

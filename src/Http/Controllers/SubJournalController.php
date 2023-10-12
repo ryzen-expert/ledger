@@ -6,7 +6,6 @@ namespace Abivia\Ledger\Http\Controllers;
 
 use Abivia\Ledger\Exceptions\Breaker;
 use Abivia\Ledger\Messages\Message;
-use Abivia\Ledger\Messages\Name;
 use Abivia\Ledger\Messages\SubJournal;
 use Abivia\Ledger\Messages\SubJournalQuery;
 use Abivia\Ledger\Models\JournalEntry;
@@ -25,6 +24,106 @@ class SubJournalController extends Controller
     use Audited;
 
     /**
+     * Return domains matching a Query.
+     *
+     * @throws Breaker
+     */
+    public function query(SubJournalQuery $message, int $opFlags): Collection
+    {
+        $message->validate($opFlags);
+        if (count($message->names)) {
+            // This is somewhat perverse, but not as perverse as what Eloquent does.
+            $dbPrefix = DB::getTablePrefix();
+            $journals = $dbPrefix.(new SubJournalModel())->getTable();
+            $names = $dbPrefix.(new LedgerName())->getTable();
+            // Get a list of all the Sub-Journal codes matching our criteria
+            $codeQuery = DB::table($journals)
+                ->join($names, "$journals.subJournalUuid", '=', "$names.ownerUuid")
+                ->select('code')
+                ->orderBy('code')
+                ->limit($message->limit);
+            if (isset($message->after)) {
+                $codeQuery = $codeQuery->where('code', '>', $message->after);
+            }
+            $codeQuery = $codeQuery->where(function ($query) use ($message) {
+                $query = $message->selectNames($query);
+
+                return $message->selectCodes($query);
+            });
+            $foo = $codeQuery->toSql();
+            $codeList = $codeQuery->get();
+            $query = SubJournalModel::with('names')
+                ->whereIn('code', $codeList->pluck('code'))
+                ->orderBy('code');
+        } else {
+            $query = SubJournalModel::with('names')
+                ->orderBy('code');
+            $query = $message->selectCodes($query);
+        }
+        $query->limit($message->limit);
+        if (isset($message->after)) {
+            $query = $query->where('code', '>', $message->after);
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * Fetch a sub-journal.
+     *
+     * @throws Breaker
+     */
+    public function get(SubJournal $message): SubJournalModel
+    {
+        $message->validate(Message::OP_GET);
+
+        return $this->fetch($message->code);
+    }
+
+    /**
+     * Fetch a sub-journal by code.
+     *
+     * @throws Breaker
+     */
+    private function fetch(string $subJournalCode): SubJournalModel
+    {
+        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
+        $SubJournalModel = SubJournalModel::where('code', $subJournalCode)->first();
+        if ($SubJournalModel === null) {
+            throw Breaker::withCode(
+                Breaker::RULE_VIOLATION,
+                [__('Journal :code does not exist', ['code' => $subJournalCode])]
+            );
+        }
+
+        return $SubJournalModel;
+    }
+
+    /**
+     * Perform a domain operation.
+     *
+     * @throws Breaker
+     */
+    public function run(SubJournal $message, int $opFlags = null): ?SubJournalModel
+    {
+        $opFlags ??= $message->getOpFlags();
+        switch ($opFlags & Message::ALL_OPS) {
+            case Message::OP_ADD:
+                return $this->add($message);
+            case Message::OP_DELETE:
+                return $this->delete($message);
+            case Message::OP_GET:
+                return $this->get($message);
+            case Message::OP_UPDATE:
+                return $this->update($message);
+            default:
+                throw Breaker::withCode(
+                    Breaker::BAD_REQUEST, 'Unknown or invalid operation.'
+                );
+        }
+    }
+
+    /**
      * Add a sub-journal to the ledger.
      *
      * @throws Breaker
@@ -34,6 +133,8 @@ class SubJournalController extends Controller
     {
         $inTransaction = false;
         $message->validate(Message::OP_ADD);
+        //        dd(SubJournalModel::where('code', $message->code)->first(), $message);
+
         // check for duplicates
         /** @noinspection PhpDynamicAsStaticMethodCallInspection */
         if (SubJournalModel::where('code', $message->code)->first() !== null) {
@@ -42,20 +143,24 @@ class SubJournalController extends Controller
                 [__('SubJournal :code already exists.', ['code' => $message->code])]
             );
         }
-
+        //        dd($message);
         try {
             DB::beginTransaction();
             $inTransaction = true;
             $SubJournalModel = SubJournalModel::createFromMessage($message);
+            //            dd($SubJournalModel);
             // Create the name records
             foreach ($message->names as $name) {
                 $name->ownerUuid = $SubJournalModel->subJournalUuid;
+                //                dd($name->ownerUuid);
                 LedgerName::createFromMessage($name);
             }
             DB::commit();
             $inTransaction = false;
             $this->auditLog($message);
+
         } catch (Exception $exception) {
+
             if ($inTransaction) {
                 DB::rollBack();
             }
@@ -110,106 +215,6 @@ class SubJournalController extends Controller
         }
 
         return null;
-    }
-
-    /**
-     * Fetch a sub-journal by code.
-     *
-     * @throws Breaker
-     */
-    private function fetch(string $subJournalCode): SubJournalModel
-    {
-        /** @noinspection PhpDynamicAsStaticMethodCallInspection */
-        $SubJournalModel = SubJournalModel::where('code', $subJournalCode)->first();
-        if ($SubJournalModel === null) {
-            throw Breaker::withCode(
-                Breaker::RULE_VIOLATION,
-                [__('Journal :code does not exist', ['code' => $subJournalCode])]
-            );
-        }
-
-        return $SubJournalModel;
-    }
-
-    /**
-     * Fetch a sub-journal.
-     *
-     * @throws Breaker
-     */
-    public function get(SubJournal $message): SubJournalModel
-    {
-        $message->validate(Message::OP_GET);
-
-        return $this->fetch($message->code);
-    }
-
-    /**
-     * Return domains matching a Query.
-     *
-     * @throws Breaker
-     */
-    public function query(SubJournalQuery $message, int $opFlags): Collection
-    {
-        $message->validate($opFlags);
-        if (count($message->names)) {
-            // This is somewhat perverse, but not as perverse as what Eloquent does.
-            $dbPrefix = DB::getTablePrefix();
-            $journals = $dbPrefix.(new SubJournalModel())->getTable();
-            $names = $dbPrefix.(new LedgerName())->getTable();
-            // Get a list of all the Sub-Journal codes matching our criteria
-            $codeQuery = DB::table($journals)
-                ->join($names, "$journals.subJournalUuid", '=', "$names.ownerUuid")
-                ->select('code')
-                ->orderBy('code')
-                ->limit($message->limit);
-            if (isset($message->after)) {
-                $codeQuery = $codeQuery->where('code', '>', $message->after);
-            }
-            $codeQuery = $codeQuery->where(function ($query) use ($message) {
-                $query = $message->selectNames($query);
-
-                return $message->selectCodes($query);
-            });
-            $foo = $codeQuery->toSql();
-            $codeList = $codeQuery->get();
-            $query = SubJournalModel::with('names')
-                ->whereIn('code', $codeList->pluck('code'))
-                ->orderBy('code');
-        } else {
-            $query = SubJournalModel::with('names')
-                ->orderBy('code');
-            $query = $message->selectCodes($query);
-        }
-        $query->limit($message->limit);
-        if (isset($message->after)) {
-            $query = $query->where('code', '>', $message->after);
-        }
-
-        return $query->get();
-    }
-
-    /**
-     * Perform a domain operation.
-     *
-     * @throws Breaker
-     */
-    public function run(SubJournal $message, int $opFlags = null): ?SubJournalModel
-    {
-        $opFlags ??= $message->getOpFlags();
-        switch ($opFlags & Message::ALL_OPS) {
-            case Message::OP_ADD:
-                return $this->add($message);
-            case Message::OP_DELETE:
-                return $this->delete($message);
-            case Message::OP_GET:
-                return $this->get($message);
-            case Message::OP_UPDATE:
-                return $this->update($message);
-            default:
-                throw Breaker::withCode(
-                    Breaker::BAD_REQUEST, 'Unknown or invalid operation.'
-                );
-        }
     }
 
     /**

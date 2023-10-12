@@ -1,0 +1,361 @@
+{
+    "accounts": [
+        {
+            "names": [
+                {
+                    "name": "Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول",
+                    "language": "ar"
+                }
+            ],
+            "code": "1",
+            "category": true,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول",
+                    "language": "ar"
+                },
+            ],
+            "code": "11",
+            "category": true,
+            "debit": true,
+            "parent": {
+                "code": "1"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Non-Current Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول غير المتداولة",
+                    "language": "ar"
+                },
+            ],
+            "code": "111",
+            "category": true,
+            "debit": true,
+            "parent": {
+                "code": "11"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Fixed Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول الثابتة",
+                    "language": "ar"
+                },
+            ],
+            "code": "1111",
+            "category": true,
+            "debit": true,
+            "parent": {
+                "code": "111"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Land and Buildings",
+                    "language": "en"
+                },
+                {
+                    "name": "الأراضي والمباني",
+                    "language": "ar"
+                },
+            ],
+            "code": "111101",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Machinery and Equipment",
+                    "language": "en"
+                },
+                {
+                    "name": "الآلات والمعدات",
+                    "language": "ar"
+                },
+            ],
+            "code": "111102",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Vehicles and Transportation",
+                    "language": "en"
+                },
+                {
+                    "name": "السيارات ووسائل النقل",
+                    "language": "ar"
+                },
+            ],
+            "code": "111103",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Furniture and Office Equipment",
+                    "language": "en"
+                },
+                {
+                    "name": "الأثاث والتجهيزات المكتبية",
+                    "language": "ar"
+                },
+            ],
+            "code": "111104",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Electrical Appliances",
+                    "language": "en"
+                },
+                {
+                    "name": "الأجهزة الكهربائية",
+                    "language": "ar"
+                },
+            ],
+            "code": "111105",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Software and Systems",
+                    "language": "en"
+                },
+                {
+                    "name": "البرامج والأنظمة",
+                    "language": "ar"
+                },
+            ],
+            "code": "111106",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Other Tools and Equipment",
+                    "language": "en"
+                },
+                {
+                    "name": "العدد والأدوات الأخرى",
+                    "language": "ar"
+                },
+            ],
+            "code": "111107",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Other Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول الأخرى",
+                    "language": "ar"
+                },
+            ],
+            "code": "112",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول المتداولة",
+                    "language": "ar"
+                },
+            ],
+            "code": "1121",
+            "category": true,
+            "debit": true,
+            "parent": {
+                "code": "112"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Cash in Boxes and Banks",
+                    "language": "en"
+                },
+                {
+                    "name": "النقدية في الصناديق والبنوك",
+                    "language": "ar"
+                },
+            ],
+            "code": "112101",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Cash in Boxes",
+                    "language": "en"
+                },
+                {
+                    "name": "النقدية في الصناديق",
+                    "language": "ar"
+                },
+            ],
+            "code": "112102",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Activity Receivables",
+                    "language": "en"
+                },
+                {
+                    "name": "عملاء النشاط",
+                    "language": "ar"
+                },
+            ],
+            "code": "112201",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Activity Receivables (Yemeni Rial)",
+                    "language": "en"
+                },
+                {
+                    "name": "عملاء النشاط - ريال يمني",
+                    "language": "ar"
+                },
+            ],
+            "code": "112202",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Pledges and Advances",
+                    "language": "en"
+                },
+                {
+                    "name": "العهد والسلف",
+                    "language": "ar"
+                },
+            ],
+            "code": "112301",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Advance Payments",
+                    "language": "en"
+                },
+                {
+                    "name": "المصروفات المقدمة",
+                    "language": "ar"
+                },
+            ],
+            "code": "112402",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            },
+        },
+        {
+            "names": [
+                {
+                    "name": "Accrued Revenues",
+                    "language": "en"
+                },
+                {
+                    "name": "الإيرادات المستحقة",
+                    "language": "ar"
+                },
+            ],
+            "code": "112403",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            },
+        }
+    ]
+}

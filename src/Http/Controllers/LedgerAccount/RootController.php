@@ -170,7 +170,7 @@ class RootController extends LedgerAccountController
     {
         $root = new LedgerAccount();
         $root->code = '';
-        $root->parentUuid = null;
+        $root->parentUuid = -1;
         $root->category = true;
 
         // Commit the boot rules and a revision salt into the flex property.

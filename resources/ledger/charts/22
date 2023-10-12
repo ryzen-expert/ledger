@@ -1,0 +1,146 @@
+{
+    "accounts": [
+        {
+            "names": [
+                {
+                    "name": "Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "المصروفات",
+                    "language": "ar"
+                },
+            ],
+            "code": "3",
+            "category": true,
+            "debit": true,
+        },
+        {
+            "names": [
+                {
+                    "name": "Activity Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصروفات النشاط",
+                    "language": "ar"
+                },
+            ],
+            "code": "31",
+            "category": true,
+            "debit": true,
+            "parent": {
+                "code": "3"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Activity Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصروفات النشاط الجاري",
+                    "language": "ar"
+                },
+            ],
+            "code": "3111",
+            "category": true,
+            "debit": true,
+            "parent": {
+                "code": "31"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Ticket Sales Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصروفات نشاط مبيعات التذاكر",
+                    "language": "ar"
+                },
+            ],
+            "code": "311101",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "3111"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Sales Commissions",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف وعمولات البيع",
+                    "language": "ar"
+                },
+            ],
+            "code": "311102",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "3111"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Allowed Discounts",
+                    "language": "en"
+                },
+                {
+                    "name": "الخصم المسموح به",
+                    "language": "ar"
+                },
+            ],
+            "code": "311103",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "3111"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Sales Discounts",
+                    "language": "en"
+                },
+                {
+                    "name": "Sales Dis",
+                    "language": "ar"
+                },
+            ],
+            "code": "3112",
+            "category": true,
+            "debit": true,
+            "parent": {
+                "code": "31"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Service-Related Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "المصاريف المصاحبة",
+                    "language": "ar"
+                },
+            ],
+            "code": "3113",
+            "category": true,
+            "debit": true,
+            "parent": {
+                "code": "31"
+            }
+        },
+        // Continue adding more accounts and their parent information as needed
+    ]
+}

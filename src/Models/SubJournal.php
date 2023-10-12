@@ -3,7 +3,6 @@
 namespace Abivia\Ledger\Models;
 
 use Abivia\Ledger\Exceptions\Breaker;
-use Abivia\Ledger\Helpers\Revision;
 use Abivia\Ledger\Messages\EntityRef;
 use Abivia\Ledger\Messages\SubJournal as JournalMessage;
 use Abivia\Ledger\Traits\CommonResponseProperties;
@@ -21,7 +20,7 @@ use Illuminate\Support\HigherOrderCollectionProxy;
  *
  * @method static SubJournal create(array $attributes) Provided by model.
  *
- * @property string $code Unique identifier for the sub-journal.
+ * @property string|int $code Unique identifier for the sub-journal.
  * @property Carbon $created_at When the record was created.
  * @property string $extra Application defined information.
  * @property LedgerName[] $names
@@ -35,6 +34,10 @@ class SubJournal extends Model
 {
     use CommonResponseProperties, HasFactory, HasRevisions;
 
+    //    public $incrementing = false;
+
+    public $primaryKey = 'subJournalUuid';
+
     protected $casts = [
         'revision' => 'datetime',
     ];
@@ -43,34 +46,7 @@ class SubJournal extends Model
 
     protected $fillable = ['code', 'extra'];
 
-    public $incrementing = false;
-
     protected $keyType = 'int';
-
-    public $primaryKey = 'subJournalUuid';
-
-    /**
-     * The revision Hash is computationally expensive, only calculated when required.
-     *
-     * @return HigherOrderCollectionProxy|mixed|string|null
-     *
-     * @throws Exception
-     */
-    public function __get($key)
-    {
-        if ($key === 'revisionHash') {
-            return $this->getRevisionHash();
-        }
-
-        return parent::__get($key);
-    }
-
-    protected static function booted()
-    {
-        static::saved(function ($model) {
-            $model->clearRevisionCache();
-        });
-    }
 
     public static function createFromMessage(JournalMessage $message): self
     {
@@ -81,6 +57,7 @@ class SubJournal extends Model
             }
         }
         $instance->save();
+        //        dd($instance);
         $instance->refresh();
 
         return $instance;
@@ -106,6 +83,29 @@ class SubJournal extends Model
         }
 
         return $finder;
+    }
+
+    protected static function booted()
+    {
+        static::saved(function ($model) {
+            $model->clearRevisionCache();
+        });
+    }
+
+    /**
+     * The revision Hash is computationally expensive, only calculated when required.
+     *
+     * @return HigherOrderCollectionProxy|mixed|string|null
+     *
+     * @throws Exception
+     */
+    public function __get($key)
+    {
+        if ($key === 'revisionHash') {
+            return $this->getRevisionHash();
+        }
+
+        return parent::__get($key);
     }
 
     public function names(): HasMany

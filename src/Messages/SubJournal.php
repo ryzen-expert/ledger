@@ -26,27 +26,16 @@ class SubJournal extends Message
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
+
         $subJournal = new static();
         $subJournal->copy($data, $opFlags);
         $subJournal->loadNames($data, $opFlags);
         if ($opFlags & self::F_VALIDATE) {
             $subJournal->validate($opFlags);
         }
+        //        dd($subJournal);
 
         return $subJournal;
-    }
-
-    public function run(): array
-    {
-        $controller = new SubJournalController();
-        $subJournal = $controller->run($this);
-        if ($this->opFlags & Message::OP_DELETE) {
-            $response = ['success' => true];
-        } else {
-            $response = ['journal' => $subJournal->toResponse()];
-        }
-
-        return $response;
     }
 
     /**
@@ -74,5 +63,18 @@ class SubJournal extends Message
         }
 
         return $this;
+    }
+
+    public function run(): array
+    {
+        $controller = new SubJournalController();
+        $subJournal = $controller->run($this);
+        if ($this->opFlags & Message::OP_DELETE) {
+            $response = ['success' => true];
+        } else {
+            $response = ['journal' => $subJournal->toResponse()];
+        }
+
+        return $response;
     }
 }

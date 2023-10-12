@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder as DbBuilder;
 use Illuminate\Support\HigherOrderCollectionProxy;
-use SolutionForest\FilamentTree\Concern\ModelTree;
 use Spatie\Translatable\HasTranslations;
 use stdClass;
 
@@ -54,7 +53,6 @@ class LedgerAccount extends Model
     use HasFactory;
     use HasNames;
     use HasRevisions;
-    use ModelTree;
     //    use UuidPrimaryKey;
 
     const CODE_SIZE = 32;
@@ -134,31 +132,6 @@ class LedgerAccount extends Model
      *
      * @throws Exception
      */
-    public function determineOrderColumnName(): string
-    {
-        return 'code';
-    }
-
-    public function determineParentColumnName(): string
-    {
-        return 'parentUuid';
-    }
-
-    public function determineTitleColumnName(): string
-    {
-        return 'lang_names';
-    }
-
-    public static function defaultParentKey()
-    {
-        return -1;
-    }
-
-    public static function defaultChildrenKeyName(): string
-    {
-        return 'children';
-    }
-
     public function __get($key)
     {
         if ($key === 'revisionHash') {
@@ -218,6 +191,10 @@ class LedgerAccount extends Model
         }
         $instance->lang_names = $result;
         // dd($result, $message, $message->names, $value->name);
+
+        if (! isset($message->code)) {
+            $instance->parentUuid = -1;
+        }
 
         if (isset($message->parent)) {
             $instance->parentUuid = $message->parent->uuid;
@@ -329,7 +306,7 @@ class LedgerAccount extends Model
      */
     public static function notInitializedError(): void
     {
-        dd(self::class, Breaker::RULE_VIOLATION);
+        // dd(self::class, Breaker::RULE_VIOLATION);
         throw Breaker::withCode(
             Breaker::RULE_VIOLATION, __('Ledger has not been initialized.')
         );

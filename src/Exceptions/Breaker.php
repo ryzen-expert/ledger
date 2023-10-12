@@ -108,6 +108,7 @@ class Breaker extends Exception
      */
     public static function withCode(int $code, mixed $errors = [], Throwable $previous = null): self
     {
+        dd($code, $errors);
         $message = __(self::$messages[$code] ?? self::$messages[0]);
         $exception = new static($message, $code, $previous);
         $exception->setErrors($errors);

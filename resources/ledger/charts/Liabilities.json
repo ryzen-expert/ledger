@@ -1,0 +1,419 @@
+{
+    "accounts": [
+        {
+            "names": [
+                {
+                    "name": "Liabilities",
+                    "language": "en"
+                },
+                {
+                    "name": "الخصوم",
+                    "language": "ar"
+                }
+            ],
+            "code": "21",
+            "category": true,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Non-Current Liabilities and Equity",
+                    "language": "en"
+                },
+                {
+                    "name": "الخصوم غير المتداولة وحقوق الملكية",
+                    "language": "ar"
+                }
+            ],
+            "code": "211",
+            "category": true,
+            "credit": true,
+            "parent": {
+                "code": "21"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Equity",
+                    "language": "en"
+                },
+                {
+                    "name": "حقوق الملكية",
+                    "language": "ar"
+                }
+            ],
+            "code": "211101",
+            "category": true,
+            "credit": true,
+            "parent": {
+                "code": "211"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Capital",
+                    "language": "en"
+                },
+                {
+                    "name": "رأس المال",
+                    "language": "ar"
+                }
+            ],
+            "code": "211102",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211101"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Owners",
+                    "language": "en"
+                },
+                {
+                    "name": "جاري الملاك",
+                    "language": "ar"
+                }
+            ],
+            "code": "211103",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211101"
+            }
+        },
+
+
+        {
+            "names": [
+                {
+                    "name": "Profits and Losses",
+                    "language": "en"
+                },
+                {
+                    "name": "الأرباح والخسائر",
+                    "language": "ar"
+                }
+            ],
+            "code": "211103",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "2111"
+            }
+        },
+
+        {
+            "names": [
+                {
+                    "name": "Profits and Losses",
+                    "language": "en"
+                },
+                {
+                    "name": "الأرباح والخسائر",
+                    "language": "ar"
+                }
+            ],
+            "code": "211103001",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211103"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Stage Profits and Losses",
+                    "language": "en"
+                },
+                {
+                    "name": "الأرباح والخسائر المرحلة",
+                    "language": "ar"
+                }
+            ],
+            "code": "211103002",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211103"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Cycle Profits and Losses",
+                    "language": "en"
+                },
+                {
+                    "name": "أرباح وخسائر الدورة الحالية",
+                    "language": "ar"
+                }
+            ],
+            "code": "211104",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211101"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Reserves",
+                    "language": "en"
+                },
+                {
+                    "name": "الإحتياطيات",
+                    "language": "ar"
+                }
+            ],
+            "code": "211104001",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211104"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Provisions",
+                    "language": "en"
+                },
+                {
+                    "name": "المخصصات",
+                    "language": "ar"
+                }
+            ],
+            "code": "211201",
+            "category": true,
+            "credit": true,
+            "parent": {
+                "code": "211"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Depreciation of Fixed Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصص اهلاك الأصول الثابتة",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211201"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Other Provisions",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصصات أخرى",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202001",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211202"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Provision for Doubtful Debts",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصص الديون المشكوك فيها",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202002",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211202"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Provision for Taxes",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصص الضرائب",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202003",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211202"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Provision for Employee Rights",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصص حقوق العاملين",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202004",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211202"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Provision for Zakat",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصص الزكاة",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202005",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211202"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Liabilities",
+                    "language": "en"
+                },
+                {
+                    "name": "الخصوم المتداولة",
+                    "language": "ar"
+                }
+            ],
+            "code": "212",
+            "category": true,
+            "credit": true,
+            "parent": {
+                "code": "21"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Accounts Payable",
+                    "language": "en"
+                },
+                {
+                    "name": "الدائنون",
+                    "language": "ar"
+                }
+            ],
+            "code": "2121",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "212"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Ticket Sales Receivables",
+                    "language": "en"
+                },
+                {
+                    "name": "دائني تذاكر السفر",
+                    "language": "ar"
+                }
+            ],
+            "code": "212101",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "2121"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Ancillary Services Receivables",
+                    "language": "en"
+                },
+                {
+                    "name": "دائني الخدمات المصاحبة",
+                    "language": "ar"
+                }
+            ],
+            "code": "212102",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "2121"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Transitional Accounts Receivable",
+                    "language": "en"
+                },
+                {
+                    "name": "الحسابات الانتقالية الدائنة",
+                    "language": "ar"
+                }
+            ],
+            "code": "212201",
+            "category": true,
+            "credit": true,
+            "parent": {
+                "code": "212"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Advance Revenues",
+                    "language": "en"
+                },
+                {
+                    "name": "الإيرادات المقدمة",
+                    "language": "ar"
+                }
+            ],
+            "code": "21220101",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "212201"
+            }
+        }
+
+    ]
+}

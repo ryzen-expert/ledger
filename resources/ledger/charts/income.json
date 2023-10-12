@@ -1,0 +1,221 @@
+{
+    "accounts": [
+
+        {
+            "names": [
+                {
+                    "name": "Revenue",
+                    "language": "en"
+                },
+                {
+                    "name": "الإيرادات",
+                    "language": "ar"
+                }
+            ],
+            "code": "4",
+            "category": true,
+            "credit": true
+        },
+
+        {
+            "names": [
+                {
+                    "name": "Revenue",
+                    "language": "en"
+                },
+                {
+                    "name": "الإيرادات",
+                    "language": "ar"
+                }
+            ],
+            "code": "41",
+            "parent": {
+                "code": "4"
+            },
+
+            "category": true,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Activity Revenues",
+                    "language": "en"
+                },
+                {
+                    "name": "إيرادات النشاط",
+                    "language": "ar"
+                }
+            ],
+            "code": "411",
+            "parent": {
+                "code": "41"
+            },
+            "category": true,
+
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Activity Revenues",
+                    "language": "en"
+                },
+                {
+                    "name": "إيرادات النشاط الجاري",
+                    "language": "ar"
+                }
+            ],
+            "code": "4111",
+            "parent": {
+                "code": "411"
+            },
+            "category": true,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Sales Revenues",
+                    "language": "en"
+                },
+                {
+                    "name": "إيرادات مبيعات الخدمات",
+                    "language": "ar"
+                }
+            ],
+            "code": "411101",
+            "parent": {
+                "code": "4111"
+            },
+            "category": false,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Ticket Sales Revenues",
+                    "language": "en"
+                },
+                {
+                    "name": "إيرادات مبيعات التذاكر",
+                    "language": "ar"
+                }
+            ],
+            "code": "4113",
+            "parent": {
+                "code": "411"
+            },
+            "category": false,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Ancillary Services Revenues",
+                    "language": "en"
+                },
+                {
+                    "name": "إيرادات الخدمات المصاحبة",
+                    "language": "ar"
+                }
+            ],
+            "code": "411301",
+            "parent": {
+                "code": "4113"
+            },
+            "category": false,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Other Revenues and Miscellaneous",
+                    "language": "en"
+                },
+                {
+                    "name": "إيرادات أخرى ومتنوعة",
+                    "language": "ar"
+                }
+            ],
+            "code": "4114",
+            "parent": {
+                "code": "411"
+            },
+            "category": false,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Bank Deposits Revenues",
+                    "language": "en"
+                },
+                {
+                    "name": "إيرادات الودائع البنكية",
+                    "language": "ar"
+                }
+            ],
+            "code": "411401",
+            "parent": {
+                "code": "4114"
+            },
+            "category": false,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Capital Gains",
+                    "language": "en"
+                },
+                {
+                    "name": "أرباح رأسمالية",
+                    "language": "ar"
+                }
+            ],
+            "code": "411402",
+            "parent": {
+                "code": "4114"
+            },
+            "category": false,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Acquired Discounts",
+                    "language": "en"
+                },
+                {
+                    "name": "خصم مكتسب",
+                    "language": "ar"
+                }
+            ],
+            "code": "411403",
+            "parent": {
+                "code": "4114"
+            },
+            "category": false,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Currency Exchange Differences",
+                    "language": "en"
+                },
+                {
+                    "name": "فروق تقييم عملة",
+                    "language": "ar"
+                }
+            ],
+            "code": "411404",
+            "parent": {
+                "code": "4114"
+            },
+            "category": false,
+            "credit": true
+        }
+    ]
+}

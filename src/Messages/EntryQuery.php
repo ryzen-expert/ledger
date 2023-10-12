@@ -92,6 +92,7 @@ class EntryQuery extends Message
      */
     public static function fromArray(array $data, int $opFlags = self::OP_ADD): self
     {
+
         $query = new self();
         $query->copy($data, $opFlags);
         foreach (['afterDate', 'date', 'dateEnding'] as $dateProperty) {
@@ -116,6 +117,8 @@ class EntryQuery extends Message
             $query->reference = new Reference();
             $query->reference->code = $data['reference'];
         }
+
+        //        dd('sdd');
 
         return $query;
     }
@@ -144,12 +147,14 @@ class EntryQuery extends Message
         if (isset($this->reviewed)) {
             $query = $query->where('reviewed', '=', $this->reviewed);
         }
+        $query->with('details');
         $this->queryAmount($query);
         $this->queryDate($query);
         $this->queryDescription($query);
         $this->queryDomain($query);
         $this->queryPagination($query);
         $this->queryReference($query);
+//        dd($query->with('details')->get());
 
         return $query;
     }

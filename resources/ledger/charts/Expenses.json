@@ -1,0 +1,578 @@
+{
+    "accounts": [
+        {
+
+            "names": [
+                {
+                    "name": "Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "المصروفات",
+                    "language": "ar"
+                }
+            ],
+            "code": "3",
+            "category": true,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Activity Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصروفات النشاط",
+                    "language": "ar"
+                }
+            ],
+            "code": "31",
+            "category": true,
+            "parent": {
+                "code": "3"
+            },
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Activity Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصروفات النشاط الجاري",
+                    "language": "ar"
+                }
+            ],
+            "code": "3111",
+            "category": true,
+            "parent": {
+                "code": "311"
+            },
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Ticket Sales Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصروفات نشاط مبيعات التذاكر",
+                    "language": "ar"
+                }
+            ],
+            "code": "311101",
+            "category": false,
+            "parent": {
+                "code": "3111"
+            },
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Sales Commissions",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف وعمولات البيع",
+                    "language": "ar"
+                }
+            ],
+            "code": "311102",
+            "parent": {
+                "code": "3111"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Allowed Discounts",
+                    "language": "en"
+                },
+                {
+                    "name": "الخصم المسموح به",
+                    "language": "ar"
+                }
+            ],
+            "code": "311103",
+            "parent": {
+                "code": "3111"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Sales Discounts",
+                    "language": "en"
+                },
+                {
+                    "name": "Sales Dis",
+                    "language": "ar"
+                }
+            ],
+            "code": "3112",
+            "parent": {
+                "code": "311"
+            },
+            "category": true,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Service-Related Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "المصاريف المصاحبة",
+                    "language": "ar"
+                }
+            ],
+            "code": "3113",
+            "parent": {
+                "code": "311"
+            },
+            "category": true,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Administrative and General Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "المصاريف الإدارية والعمومية",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301",
+            "parent": {
+                "code": "3113"
+            },
+            "category": true,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Administrative Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف إدارية",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301001",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Salaries and Wages",
+                    "language": "en"
+                },
+                {
+                    "name": "الرواتب والأجور",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301002",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Allowances",
+                    "language": "en"
+                },
+                {
+                    "name": "البدلات",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301003",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Bonuses and Incentives",
+                    "language": "en"
+                },
+                {
+                    "name": "المكافئات والإكراميات",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301004",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Telephone and Fax Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف الهاتف والفاكس",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301005",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Internet Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف الأنترنت",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301006",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Fuel and Oil Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "قود والزيوت مصاريف الوقود",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301007",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Electricity and Water Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف الكهرباء والمياه",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301008",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Rent Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "الإيجارات",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301009",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Stationery and Printing Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف القرطاسية والمطبوعات",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301010",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Advertising and Promotion Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف الدعاية والإعلان",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301011",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Maintenance and Repairs Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف الصيانة والإصلاحات",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301012",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Bank Charges and Commissions Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "المصاريف والعمولات البنكية",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301013",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Professional Consultancy Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصـــاريف إستشارات مهنية",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301014",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Cleaning Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف النظافة",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301015",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Government Fees and Bonds Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف رسوم وسندات حكومية",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301016",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Zakat and Donations Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف زكاة ومساعدات",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301017",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Hospitality and Entertainment Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف الضيافة والإستقبال",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301018",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Facilities Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف تسهيلات",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301019",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Travel and Transportation Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف السفر والتنقلات",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301020",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Depreciation of Fixed Assets Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصاريف اهلاك الاصول الثابتة",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301021",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Other Non-Recurring Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مـــصـــاريف نثــريــة أخرى",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301022",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Currency Exchange Differences",
+                    "language": "en"
+                },
+                {
+                    "name": "فروق عملة مدينة",
+                    "language": "ar"
+                }
+            ],
+            "code": "311301023",
+            "parent": {
+                "code": "31130100"
+            },
+            "category": false,
+            "debit": true
+        }
+    ]
+}

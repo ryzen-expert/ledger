@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Abivia\Ledger\Models;
 
 use Abivia\Ledger\Exceptions\Breaker;
-use Abivia\Ledger\Helpers\Revision;
 use Abivia\Ledger\Messages\Entry;
 use Abivia\Ledger\Messages\Message;
 use Abivia\Ledger\Traits\CommonResponseProperties;
@@ -36,7 +35,7 @@ use Illuminate\Support\HigherOrderCollectionProxy;
  * @property string $language The language this description is written in.
  * @property bool $locked Set when this transaction is not to be modified.
  * @property bool $opening Set if this is the opening balance entry.
- * @property string $journalReferenceUuid Optional reference to an associated entity.
+ * @property string|int $journalReferenceUuid Optional reference to an associated entity.
  * @property bool $reviewed Set when the transaction has been reviewed.
  * @property Carbon $revision Revision timestamp to detect race condition on update.
  * @property string $subJournalUuid UUID of the sub-journal (if any)
@@ -49,6 +48,11 @@ use Illuminate\Support\HigherOrderCollectionProxy;
 class JournalEntry extends Model
 {
     use CommonResponseProperties, HasFactory, HasRevisions;
+
+    /**
+     * @var string The date format for response messages.
+     */
+    protected static $dateFormatJson = 'Y-m-d\TH:i:s.u\Z';
 
     protected $attributes = [
         'opening' => false,
@@ -65,11 +69,6 @@ class JournalEntry extends Model
     ];
 
     protected $dateFormat = 'Y-m-d H:i:s.u';
-
-    /**
-     * @var string The date format for response messages.
-     */
-    protected static $dateFormatJson = 'Y-m-d\TH:i:s.u\Z';
 
     protected $fillable = [
         'arguments', 'clearing', 'createdBy', 'currency', 'description', 'domainUuid',
@@ -88,6 +87,13 @@ class JournalEntry extends Model
 
     //$by = Auth::id() ? 'User id ' . Auth::id() : 'unknown';
 
+    protected static function booted()
+    {
+        static::saved(function ($model) {
+            $model->clearRevisionCache();
+        });
+    }
+
     /**
      * The revision Hash is computationally expensive, only calculated when required.
      *
@@ -102,13 +108,6 @@ class JournalEntry extends Model
         }
 
         return parent::__get($key);
-    }
-
-    protected static function booted()
-    {
-        static::saved(function ($model) {
-            $model->clearRevisionCache();
-        });
     }
 
     /**
@@ -141,20 +140,24 @@ class JournalEntry extends Model
      */
     public function fillFromMessage(Entry $message): self
     {
+
         foreach ($this->fillable as $property) {
             if (isset($message->{$property})) {
                 $this->{$property} = $message->{$property};
             }
         }
+
         if (isset($message->reference)) {
             $this->journalReferenceUuid = $message->reference->journalReferenceUuid;
         }
         if ($message->domain->uuid ?? false) {
             $this->domainUuid = $message->domain->uuid;
         }
+
         if ($message->journal->uuid ?? false) {
             $this->subJournalUuid = $message->journal->uuid;
         }
+        //        dd($this, $message->journal, $message);
 
         return $this;
     }

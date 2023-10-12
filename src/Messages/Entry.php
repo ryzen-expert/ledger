@@ -12,16 +12,6 @@ use Carbon\Carbon;
 
 class Entry extends Message
 {
-    /**
-     * @var string[] Arguments to be passed to a string translation function.
-     */
-    public array $arguments = [];
-
-    /**
-     * @var bool This is explicitly a clearing transaction (multiple debit/credits).
-     */
-    public bool $clearing = false;
-
     protected static array $copyable = [
         ['clearing', self::OP_ADD | self::OP_UPDATE],
         ['currency', self::OP_ADD],
@@ -37,6 +27,16 @@ class Entry extends Message
         ['revision', self::OP_DELETE | self::OP_LOCK | self::OP_UPDATE],
         //[['date', 'transDate'], self::OP_ADD | self::OP_UPDATE],
     ];
+
+    /**
+     * @var string[] Arguments to be passed to a string translation function.
+     */
+    public array $arguments = [];
+
+    /**
+     * @var bool This is explicitly a clearing transaction (multiple debit/credits).
+     */
+    public bool $clearing = false;
 
     /**
      * @var string Currency code. If not provided, the domain's default is used.
@@ -124,7 +124,9 @@ class Entry extends Message
                 if (! is_array($data['reference'])) {
                     $data['reference'] = ['uuid' => $data['reference']];
                 }
+
                 $entry->reference = Reference::fromArray($data['reference'], $opFlags);
+                //                dd($entry->reference, $data['reference']);
             }
             if (isset($data['transDate'])) {
                 $entry->transDate = new Carbon($data['transDate']);
@@ -141,22 +143,6 @@ class Entry extends Message
         }
 
         return $entry;
-    }
-
-    /**
-     * @throws Breaker
-     */
-    public function run(): array
-    {
-        $controller = new JournalEntryController();
-        $journalEntry = $controller->run($this);
-        if ($this->opFlags & (Message::OP_DELETE)) {
-            $response = ['success' => true];
-        } else {
-            $response = ['entry' => $journalEntry->toResponse($this->opFlags)];
-        }
-
-        return $response;
     }
 
     /**
@@ -203,6 +189,7 @@ class Entry extends Message
             $this->requireRevision($errors);
         }
         if (isset($this->reference)) {
+            //            dd($this->reference);
             $this->reference->validate($opFlags);
         }
         if ($opFlags & self::OP_LOCK) {
@@ -240,10 +227,27 @@ class Entry extends Message
                 }
             }
         }
+        //        dd($errors);
         if (count($errors) !== 0) {
             throw Breaker::withCode(Breaker::BAD_REQUEST, $errors);
         }
 
         return $this;
+    }
+
+    /**
+     * @throws Breaker
+     */
+    public function run(): array
+    {
+        $controller = new JournalEntryController();
+        $journalEntry = $controller->run($this);
+        if ($this->opFlags & (Message::OP_DELETE)) {
+            $response = ['success' => true];
+        } else {
+            $response = ['entry' => $journalEntry->toResponse($this->opFlags)];
+        }
+
+        return $response;
     }
 }
