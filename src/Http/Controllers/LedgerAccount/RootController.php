@@ -553,6 +553,7 @@ class RootController extends LedgerAccountController
                 ];
                 LedgerAccount::setRules($ruleUpdate);
             }
+//            dd($template);
             foreach ($template['accounts'] as $account) {
                 try {
                     // Pass OP_CREATE because we're in the boot process

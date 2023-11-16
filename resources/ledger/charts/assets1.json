@@ -1,0 +1,312 @@
+{
+
+
+    "accounts": [
+        {
+            "names": [
+                {
+                    "name": "Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول",
+                    "language": "ar"
+                }
+            ],
+            "code": "1",
+            "category": true,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Assets",
+                    "language": "en"
+                },
+
+                {
+                    "name": "أصول متداولة",
+                    "language": "ar"
+                }
+
+            ],
+            "code": "11",
+            "category": true,
+            "parent": {
+                "code": "1"
+            },
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Cash and equivalents",
+                    "language": "en"
+                },
+                {
+                    "name": "النقد ومايعادله",
+                    "language": "ar"
+                }
+            ],
+            "code": "1101",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Cash on hand",
+                    "language": "en"
+                },
+                {
+                    "name": "النقدية في الخزينة",
+                    "language": "ar"
+                }
+            ],
+            "code": "110101",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Petty cash",
+                    "language": "en"
+                },
+                {
+                    "name": "العهد النقدية",
+                    "language": "ar"
+                }
+            ],
+            "code": "110102",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Cash in bank",
+                    "language": "en"
+                },
+                {
+                    "name": "النقدية في البنك",
+                    "language": "ar"
+                }
+            ],
+            "code": "1102",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Bank Current Account - Bank Name",
+                    "language": "en"
+                },
+                {
+                    "name": "حساب البنك الجاري - اسم البنك",
+                    "language": "ar"
+                }
+            ],
+            "code": "110201",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Accounts receivable",
+                    "language": "en"
+                },
+                {
+                    "name": "المدينون",
+                    "language": "ar"
+                }
+            ],
+            "code": "1103",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Prepaid expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "مصروفات مقدمة",
+                    "language": "ar"
+                }
+            ],
+            "code": "1104",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Prepaid medical insurance",
+                    "language": "en"
+                },
+                {
+                    "name": "تأمين طبي مقدم",
+                    "language": "ar"
+                }
+            ],
+            "code": "110401",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Prepaid rent",
+                    "language": "en"
+                },
+                {
+                    "name": "إيجار مقدم",
+                    "language": "ar"
+                }
+            ],
+            "code": "110402",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Staff advances",
+                    "language": "en"
+                },
+                {
+                    "name": "مدفوعات مقدمة للموظفين",
+                    "language": "ar"
+                }
+            ],
+            "code": "1105",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Inventory",
+                    "language": "en"
+                },
+                {
+                    "name": "المخزون",
+                    "language": "ar"
+                }
+            ],
+            "code": "1106",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Non-current assets",
+                    "language": "en"
+                },
+                {
+                    "name": "أصول غير متداولة",
+                    "language": "ar"
+                }
+            ],
+            "code": "12",
+            "category": true,
+            "parent": {
+                "code": "1"
+            },
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "PPE",
+                    "language": "en"
+                },
+                {
+                    "name": "عقارات وآلات ومعدات",
+                    "language": "ar"
+                }
+            ],
+            "code": "1201",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Lands",
+                    "language": "en"
+                },
+                {
+                    "name": "الأراضي",
+                    "language": "ar"
+                }
+            ],
+            "code": "120101",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Buildings",
+                    "language": "en"
+                },
+                {
+                    "name": "المباني",
+                    "language": "ar"
+                }
+            ],
+            "code": "120102",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Equipment",
+                    "language": "en"
+                },
+                {
+                    "name": "المعدات",
+                    "language": "ar"
+                }
+            ],
+            "code": "120103",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Computers & Printers",
+                    "language": "en"
+                },
+                {
+                    "name": "أجهزة مكتبية وطابعات",
+                    "language": "ar"
+                }
+            ],
+            "code": "120104",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Intangible assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول غير الملموسة",
+                    "language": "ar"
+                }
+            ],
+            "code": "1202",
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Investment property",
+                    "language": "en"
+                },
+                {
+                    "name": "العقارات الاستثمارية",
+                    "language": "ar"
+                }
+            ],
+            "code": "1203",
+            "debit": true
+        }
+    ]
+
+}

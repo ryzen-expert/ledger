@@ -1,0 +1,1572 @@
+{
+    "title": "Major Accounting Sections",
+    "accounts": [
+        {
+            "names": [
+                {
+                    "name": "Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول",
+                    "language": "ar"
+                }
+            ],
+            "code": "1",
+            "category": true,
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول",
+                    "language": "ar"
+                }
+            ],
+            "code": "11",
+            "category": true,
+            "parent": {
+                "code": "1"
+            },
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Non-Current Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول غير المتداولة",
+                    "language": "ar"
+                }
+            ],
+            "code": "111",
+            "category": true,
+            "parent": {
+                "code": "11"
+            },
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Fixed Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول الثابتة",
+                    "language": "ar"
+                }
+            ],
+            "code": "1111",
+            "category": true,
+            "parent": {
+                "code": "111"
+            },
+            "debit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Land and Buildings",
+                    "language": "en"
+                },
+                {
+                    "name": "الأراضي والمباني",
+                    "language": "ar"
+                }
+            ],
+            "code": "111101",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Machinery and Equipment",
+                    "language": "en"
+                },
+                {
+                    "name": "الآلات والمعدات",
+                    "language": "ar"
+                }
+            ],
+            "code": "111102",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Vehicles and Transportation",
+                    "language": "en"
+                },
+                {
+                    "name": "السيارات ووسائل النقل",
+                    "language": "ar"
+                }
+            ],
+            "code": "111103",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Furniture and Office Equipment",
+                    "language": "en"
+                },
+                {
+                    "name": "الأثاث والتجهيزات المكتبية",
+                    "language": "ar"
+                }
+            ],
+            "code": "111104",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Electrical Appliances",
+                    "language": "en"
+                },
+                {
+                    "name": "الأجهزة الكهربائية",
+                    "language": "ar"
+                }
+            ],
+            "code": "111105",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Software and Systems",
+                    "language": "en"
+                },
+                {
+                    "name": "البرامج والأنظمة",
+                    "language": "ar"
+                }
+            ],
+            "code": "111106",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Other Tools and Equipment",
+                    "language": "en"
+                },
+                {
+                    "name": "العدد والأدوات الأخرى",
+                    "language": "ar"
+                }
+            ],
+            "code": "111107",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1111"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Other Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول الأخرى",
+                    "language": "ar"
+                }
+            ],
+            "code": "112",
+            "category": true,
+            "debit": true,
+            "parent": {
+                "code": "1"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "الأصول المتداولة",
+                    "language": "ar"
+                }
+            ],
+            "code": "1121",
+            "category": true,
+            "debit": true,
+            "parent": {
+                "code": "112"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Cash in Boxes and Banks",
+                    "language": "en"
+                },
+                {
+                    "name": "النقدية في الصناديق والبنوك",
+                    "language": "ar"
+                }
+            ],
+            "code": "112101",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Cash in Boxes",
+                    "language": "en"
+                },
+                {
+                    "name": "النقدية في الصناديق",
+                    "language": "ar"
+                }
+            ],
+            "code": "112102",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Activity Receivables",
+                    "language": "en"
+                },
+                {
+                    "name": "عملاء النشاط",
+                    "language": "ar"
+                }
+            ],
+            "code": "112201",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Activity Receivables (Yemeni Rial)",
+                    "language": "en"
+                },
+                {
+                    "name": "عملاء النشاط - ريال يمني",
+                    "language": "ar"
+                }
+            ],
+            "code": "112202",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Pledges and Advances",
+                    "language": "en"
+                },
+                {
+                    "name": "العهد والسلف",
+                    "language": "ar"
+                }
+            ],
+            "code": "112301",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Advance Payments",
+                    "language": "en"
+                },
+                {
+                    "name": "المصروفات المقدمة",
+                    "language": "ar"
+                }
+            ],
+            "code": "112402",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Accrued Revenues",
+                    "language": "en"
+                },
+                {
+                    "name": "الإيرادات المستحقة",
+                    "language": "ar"
+                }
+            ],
+            "code": "112403",
+            "category": false,
+            "debit": true,
+            "parent": {
+                "code": "1121"
+            }
+        },
+
+
+        {
+            "names": [
+                {
+                    "name": "Liabilities",
+                    "language": "en"
+                },
+                {
+                    "name": "الخصوم",
+                    "language": "ar"
+                }
+            ],
+            "code": "21",
+            "category": true,
+            "credit": true
+        },
+        {
+            "names": [
+                {
+                    "name": "Non-Current Liabilities and Equity",
+                    "language": "en"
+                },
+                {
+                    "name": "الخصوم غير المتداولة وحقوق الملكية",
+                    "language": "ar"
+                }
+            ],
+            "code": "211",
+            "category": true,
+            "credit": true,
+            "parent": {
+                "code": "21"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Equity",
+                    "language": "en"
+                },
+                {
+                    "name": "حقوق الملكية",
+                    "language": "ar"
+                }
+            ],
+            "code": "211101",
+            "category": true,
+            "credit": true,
+            "parent": {
+                "code": "211"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Capital",
+                    "language": "en"
+                },
+                {
+                    "name": "رأس المال",
+                    "language": "ar"
+                }
+            ],
+            "code": "211102",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211101"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Owners",
+                    "language": "en"
+                },
+                {
+                    "name": "جاري الملاك",
+                    "language": "ar"
+                }
+            ],
+            "code": "211103",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211101"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Profits and Losses",
+                    "language": "en"
+                },
+                {
+                    "name": "الأرباح والخسائر",
+                    "language": "ar"
+                }
+            ],
+            "code": "211103001",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211103"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Stage Profits and Losses",
+                    "language": "en"
+                },
+                {
+                    "name": "الأرباح والخسائر المرحلة",
+                    "language": "ar"
+                }
+            ],
+            "code": "211103002",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211103"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Cycle Profits and Losses",
+                    "language": "en"
+                },
+                {
+                    "name": "أرباح وخسائر الدورة الحالية",
+                    "language": "ar"
+                }
+            ],
+            "code": "211104",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211101"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Reserves",
+                    "language": "en"
+                },
+                {
+                    "name": "الإحتياطيات",
+                    "language": "ar"
+                }
+            ],
+            "code": "211104001",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211104"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Provisions",
+                    "language": "en"
+                },
+                {
+                    "name": "المخصصات",
+                    "language": "ar"
+                }
+            ],
+            "code": "211201",
+            "category": true,
+            "credit": true,
+            "parent": {
+                "code": "211"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Depreciation of Fixed Assets",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصص اهلاك الأصول الثابتة",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211201"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Other Provisions",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصصات أخرى",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202001",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211202"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Provision for Doubtful Debts",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصص الديون المشكوك فيها",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202002",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211202"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Provision for Taxes",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصص الضرائب",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202003",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211202"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Provision for Employee Rights",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصص حقوق العاملين",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202004",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211202"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Provision for Zakat",
+                    "language": "en"
+                },
+                {
+                    "name": "مخصص الزكاة",
+                    "language": "ar"
+                }
+            ],
+            "code": "211202005",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "211202"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Current Liabilities",
+                    "language": "en"
+                },
+                {
+                    "name": "الخصوم المتداولة",
+                    "language": "ar"
+                }
+            ],
+            "code": "212",
+            "category": true,
+            "credit": true,
+            "parent": {
+                "code": "21"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Accounts Payable",
+                    "language": "en"
+                },
+                {
+                    "name": "الدائنون",
+                    "language": "ar"
+                }
+            ],
+            "code": "2121",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "212"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Ticket Sales Receivables",
+                    "language": "en"
+                },
+                {
+                    "name": "دائني تذاكر السفر",
+                    "language": "ar"
+                }
+            ],
+            "code": "212101",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "2121"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Ancillary Services Receivables",
+                    "language": "en"
+                },
+                {
+                    "name": "دائني الخدمات المصاحبة",
+                    "language": "ar"
+                }
+            ],
+            "code": "212102",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "2121"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Transitional Accounts Receivable",
+                    "language": "en"
+                },
+                {
+                    "name": "الحسابات الانتقالية الدائنة",
+                    "language": "ar"
+                }
+            ],
+            "code": "212201",
+            "category": true,
+            "credit": true,
+            "parent": {
+                "code": "212"
+            }
+        },
+        {
+            "names": [
+                {
+                    "name": "Advance Revenues",
+                    "language": "en"
+                },
+                {
+                    "name": "الإيرادات المقدمة",
+                    "language": "ar"
+                }
+            ],
+            "code": "21220101",
+            "category": false,
+            "credit": true,
+            "parent": {
+                "code": "212201"
+            }
+        },
+
+            {
+
+                "names": [
+                    {
+                        "name": "Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "المصروفات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "3",
+                "category": true,
+                "debit": true
+            },
+        {
+
+            "names": [
+                {
+                    "name": "Expenses",
+                    "language": "en"
+                },
+                {
+                    "name": "المصروفات",
+                    "language": "ar"
+                }
+            ],
+            "code": "31",
+            "parent": {
+                "code": "3"
+            },
+            "category": true,
+            "debit": true
+        },
+
+            {
+                "names": [
+                    {
+                        "name": "Activity Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصروفات النشاط",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311",
+                "category": true,
+                "parent": {
+                    "code": "31"
+                },
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Current Activity Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصروفات النشاط الجاري",
+                        "language": "ar"
+                    }
+                ],
+                "code": "3111",
+                "category": true,
+                "parent": {
+                    "code": "311"
+                },
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Ticket Sales Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصروفات نشاط مبيعات التذاكر",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311101",
+                "category": false,
+                "parent": {
+                    "code": "3111"
+                },
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Sales Commissions",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف وعمولات البيع",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311102",
+                "parent": {
+                    "code": "3111"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Allowed Discounts",
+                        "language": "en"
+                    },
+                    {
+                        "name": "الخصم المسموح به",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311103",
+                "parent": {
+                    "code": "3111"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Sales Discounts",
+                        "language": "en"
+                    },
+                    {
+                        "name": "Sales Dis",
+                        "language": "ar"
+                    }
+                ],
+                "code": "3112",
+                "parent": {
+                    "code": "311"
+                },
+                "category": true,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Service-Related Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "المصاريف المصاحبة",
+                        "language": "ar"
+                    }
+                ],
+                "code": "3112",
+                "parent": {
+                    "code": "311"
+                },
+                "category": true,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Administrative and General Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "المصاريف الإدارية والعمومية",
+                        "language": "ar"
+                    }
+                ],
+                "code": "3113",
+                "parent": {
+                    "code": "311"
+                },
+                "category": true,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Administrative Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف إدارية",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301",
+                "parent": {
+                    "code": "3113"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Salaries and Wages",
+                        "language": "en"
+                    },
+                    {
+                        "name": "الرواتب والأجور",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301002",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Allowances",
+                        "language": "en"
+                    },
+                    {
+                        "name": "البدلات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301003",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Bonuses and Incentives",
+                        "language": "en"
+                    },
+                    {
+                        "name": "المكافئات والإكراميات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301004",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Telephone and Fax Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف الهاتف والفاكس",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301005",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Internet Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف الأنترنت",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301006",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Fuel and Oil Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "قود والزيوت مصاريف الوقود",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301007",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Electricity and Water Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف الكهرباء والمياه",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301008",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Rent Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "الإيجارات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301009",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Stationery and Printing Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف القرطاسية والمطبوعات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301010",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Advertising and Promotion Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف الدعاية والإعلان",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301011",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Maintenance and Repairs Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف الصيانة والإصلاحات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301012",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Bank Charges and Commissions Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "المصاريف والعمولات البنكية",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301013",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Professional Consultancy Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصـــاريف إستشارات مهنية",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301014",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Cleaning Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف النظافة",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301015",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Government Fees and Bonds Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف رسوم وسندات حكومية",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301016",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Zakat and Donations Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف زكاة ومساعدات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301017",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Hospitality and Entertainment Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف الضيافة والإستقبال",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301018",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Facilities Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف تسهيلات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301019",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Travel and Transportation Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف السفر والتنقلات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301020",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Depreciation of Fixed Assets Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مصاريف اهلاك الاصول الثابتة",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301021",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Other Non-Recurring Expenses",
+                        "language": "en"
+                    },
+                    {
+                        "name": "مـــصـــاريف نثــريــة أخرى",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301022",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Currency Exchange Differences",
+                        "language": "en"
+                    },
+                    {
+                        "name": "فروق عملة مدينة",
+                        "language": "ar"
+                    }
+                ],
+                "code": "311301023",
+                "parent": {
+                    "code": "311301"
+                },
+                "category": false,
+                "debit": true
+            },
+
+
+
+            {
+                "names": [
+                    {
+                        "name": "Revenue",
+                        "language": "en"
+                    },
+                    {
+                        "name": "الإيرادات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "4",
+                "category": true,
+                "credit": true
+            },
+
+            {
+                "names": [
+                    {
+                        "name": "Revenue",
+                        "language": "en"
+                    },
+                    {
+                        "name": "الإيرادات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "41",
+                "parent": {
+                    "code": "4"
+                },
+
+                "category": true,
+                "credit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Activity Revenues",
+                        "language": "en"
+                    },
+                    {
+                        "name": "إيرادات النشاط",
+                        "language": "ar"
+                    }
+                ],
+                "code": "411",
+                "parent": {
+                    "code": "41"
+                },
+                "category": true,
+
+                "credit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Current Activity Revenues",
+                        "language": "en"
+                    },
+                    {
+                        "name": "إيرادات النشاط الجاري",
+                        "language": "ar"
+                    }
+                ],
+                "code": "4111",
+                "parent": {
+                    "code": "411"
+                },
+                "category": true,
+                "credit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Sales Revenues",
+                        "language": "en"
+                    },
+                    {
+                        "name": "إيرادات مبيعات الخدمات",
+                        "language": "ar"
+                    }
+                ],
+                "code": "411101",
+                "parent": {
+                    "code": "4111"
+                },
+                "category": false,
+                "credit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Ticket Sales Revenues",
+                        "language": "en"
+                    },
+                    {
+                        "name": "إيرادات مبيعات التذاكر",
+                        "language": "ar"
+                    }
+                ],
+                "code": "4113",
+                "parent": {
+                    "code": "411"
+                },
+                "category": false,
+                "credit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Ancillary Services Revenues",
+                        "language": "en"
+                    },
+                    {
+                        "name": "إيرادات الخدمات المصاحبة",
+                        "language": "ar"
+                    }
+                ],
+                "code": "411301",
+                "parent": {
+                    "code": "4113"
+                },
+                "category": false,
+                "credit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Other Revenues and Miscellaneous",
+                        "language": "en"
+                    },
+                    {
+                        "name": "إيرادات أخرى ومتنوعة",
+                        "language": "ar"
+                    }
+                ],
+                "code": "4114",
+                "parent": {
+                    "code": "411"
+                },
+                "category": false,
+                "credit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Bank Deposits Revenues",
+                        "language": "en"
+                    },
+                    {
+                        "name": "إيرادات الودائع البنكية",
+                        "language": "ar"
+                    }
+                ],
+                "code": "411401",
+                "parent": {
+                    "code": "4114"
+                },
+                "category": false,
+                "credit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Capital Gains",
+                        "language": "en"
+                    },
+                    {
+                        "name": "أرباح رأسمالية",
+                        "language": "ar"
+                    }
+                ],
+                "code": "411402",
+                "parent": {
+                    "code": "4114"
+                },
+                "category": false,
+                "credit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Acquired Discounts",
+                        "language": "en"
+                    },
+                    {
+                        "name": "خصم مكتسب",
+                        "language": "ar"
+                    }
+                ],
+                "code": "411403",
+                "parent": {
+                    "code": "4114"
+                },
+                "category": false,
+                "credit": true
+            },
+            {
+                "names": [
+                    {
+                        "name": "Currency Exchange Differences",
+                        "language": "en"
+                    },
+                    {
+                        "name": "فروق تقييم عملة",
+                        "language": "ar"
+                    }
+                ],
+                "code": "411404",
+                "parent": {
+                    "code": "4114"
+                },
+                "category": false,
+                "credit": true
+            }
+    ],
+"codeFormat": "/^[a-z0-9\\-]+$/i"
+}
